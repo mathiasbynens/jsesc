@@ -83,6 +83,13 @@
 			'foo"bar\\\'baz',
 			'Invalid `quotes` setting'
 		);
+		equal(
+			stringEscape('lolwat"foo\'bar', {
+				'escapeEverything': true
+			}),
+			'\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72',
+			'escapeEverything'
+		);
 		ok(
 			eval('\'' + stringEscape(allSymbols) + '\'') == allSymbols,
 			'All Unicode symbols, space-separated, default quote type (single quotes)'

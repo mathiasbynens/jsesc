@@ -47,7 +47,9 @@
 		'\v': '\\x0B', // In IE < 9, '\v' == 'v'
 		'\f': '\\f',
 		'\r': '\\r',
-		'\\': '\\\\'
+		'\\': '\\\\',
+		'"': '\\"',
+		'\'': '\\\''
 	};
 
 	var regexAnyCodeUnit = /[\s\S]/g;
@@ -57,7 +59,8 @@
 	var stringEscape = function(string, options) {
 		var defaults = {
 			'quotes': 'single',
-			'wrap': false
+			'wrap': false,
+			'escapeEverything': false
 		};
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
@@ -69,16 +72,18 @@
 			var hexadecimal = charCode.toString(16).toUpperCase();
 			var longhand = hexadecimal.length > 2;
 			var result;
-			if (regexWhitelist.test(character)) {
-				// It’s a printable ASCII character that is not `"`, `'` or `\`,
-				// so don’t escape it.
-				return character;
-			}
-			if (character == '"') {
-				return quote == character ? '\\"' : character;
-			}
-			if (character == '\'') {
-				return quote == character ? '\\\'' : character;
+			if (!options.escapeEverything) {
+				if (regexWhitelist.test(character)) {
+					// It’s a printable ASCII character that is not `"`, `'` or `\`,
+					// so don’t escape it.
+					return character;
+				}
+				if (character == '"') {
+					return quote == character ? '\\"' : character;
+				}
+				if (character == '\'') {
+					return quote == character ? '\\\'' : character;
+				}
 			}
 			if (hasKey(cache, character)) {
 				return cache[character];
