@@ -349,12 +349,12 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">10812989</span>
+<span class="cline-any cline-yes">10812990</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-yes">6</span>
@@ -386,48 +386,48 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">12</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">11</span>
-<span class="cline-any cline-yes">16384038</span>
-<span class="cline-any cline-yes">16384038</span>
-<span class="cline-any cline-yes">16384038</span>
-<span class="cline-any cline-yes">16384038</span>
-<span class="cline-any cline-yes">16384038</span>
-<span class="cline-any cline-yes">16384024</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-yes">16384043</span>
+<span class="cline-any cline-yes">16384043</span>
+<span class="cline-any cline-yes">16384043</span>
+<span class="cline-any cline-yes">16384043</span>
+<span class="cline-any cline-yes">16384043</span>
+<span class="cline-any cline-yes">16384029</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5571037</span>
+<span class="cline-any cline-yes">5571041</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10812987</span>
+<span class="cline-any cline-yes">10812988</span>
 <span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10812981</span>
+<span class="cline-any cline-yes">10812982</span>
 <span class="cline-any cline-yes">6</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10812989</span>
-<span class="cline-any cline-yes">10747546</span>
+<span class="cline-any cline-yes">10812990</span>
+<span class="cline-any cline-yes">10747547</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">65443</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">65443</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">12</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">12</span>
 <span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">12</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -455,7 +455,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! http://mths.be/stringescape v0.1.3 by @mathias */
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*! http://mths.be/stringescape v0.1.4 by @mathias */
 ;(function(root) {
 &nbsp;
 	// Detect free variables `exports`
@@ -510,7 +510,7 @@
 	};
 &nbsp;
 	var regexAnyCodeUnit = /[\s\S]/g;
-	var regexNull = /(?:[^\\]|^)\\x00([^01234567]|$)/g;
+	var regexNull = /([^\\]|^)\\x00([^01234567]|$)/g;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
 &nbsp;
 	var stringEscape = function(string, options) {
@@ -550,7 +550,7 @@
 			return result;
 		});
 		// Use `\0` instead of `\x00` where possible
-		escaped = escaped.replace(regexNull, '\\0$1');
+		escaped = escaped.replace(regexNull, '$1\\0$2');
 		// Wrap output in quotes if needed
 		if (options.wrap) {
 			escaped = quote + escaped + quote;
@@ -558,7 +558,7 @@
 		return escaped;
 	};
 &nbsp;
-	stringEscape.version = '0.1.3';
+	stringEscape.version = '0.1.4';
 &nbsp;
 	/*--------------------------------------------------------------------------*/
 &nbsp;
@@ -588,7 +588,7 @@
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 05 2013 22:51:18 GMT+0200 (CEST)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 05 2013 23:25:53 GMT+0200 (CEST)</div>
 </div>
 
 <script src="../prettify.js"></script>
