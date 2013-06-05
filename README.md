@@ -87,6 +87,26 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 // → "Lorem ipsum \\\"dolor\\\" sit 'amet' etc."
 ```
 
+#### `wrap`
+
+The `wrap` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output will be a valid JavaScript string literal wrapped in quotes. The type of quotes can be specified through the `quotes` setting.
+
+```js
+stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
+  'quotes': 'single',
+  'wrap': true
+});
+// → '\'Lorem ipsum "dolor" sit \\\'amet\\\' etc.\''
+// → "\'Lorem ipsum \"dolor\" sit \\\'amet\\\' etc.\'"
+
+stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
+  'quotes': 'double',
+  'wrap': true
+});
+// → '"Lorem ipsum \\"dolor\\" sit \'amet\' etc."'
+// → "\"Lorem ipsum \\\"dolor\\\" sit \'amet\' etc.\""
+```
+
 ### `stringEscape.version`
 
 A string representing the semantic version number.
