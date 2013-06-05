@@ -64,6 +64,7 @@ module.exports = function(grunt) {
 	]);
 
 	grunt.registerTask('default', [
+		'template',
 		'shell:test-node',
 		'cover'
 	]);
