@@ -1,6 +1,6 @@
 {
 	"name": "javascript-string-escape",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"main": "string-escape.js",
 	"ignore": [
 		"coverage",
