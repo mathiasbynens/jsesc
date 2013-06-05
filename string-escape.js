@@ -1,4 +1,4 @@
-/*! http://mths.be/stringescape v0.1.3 by @mathias */
+/*! http://mths.be/stringescape v0.1.4 by @mathias */
 ;(function(root) {
 
 	// Detect free variables `exports`
@@ -101,7 +101,7 @@
 		return escaped;
 	};
 
-	stringEscape.version = '0.1.3';
+	stringEscape.version = '0.1.4';
 
 	/*--------------------------------------------------------------------------*/
 
