@@ -1,0 +1,15 @@
+{
+	"name": "string-escape",
+	"version": "0.1.1",
+	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
+	"repo": "mathiasbynens/javascript-string-escape",
+	"license": "MIT/GPL",
+	"scripts": [
+		"string-escape.js"
+	],
+	"keywords": [
+		"string",
+		"escape",
+		"tool"
+	]
+}
