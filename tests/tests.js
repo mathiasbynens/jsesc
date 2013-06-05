@@ -94,10 +94,24 @@
 			'All Unicode symbols, space-separated, single quotes'
 		);
 		ok(
+			eval(stringEscape(allSymbols, {
+				'quotes': 'single',
+				'wrap': true
+			})) == allSymbols,
+			'All Unicode symbols, space-separated, single quotes, auto-wrap'
+		);
+		ok(
 			eval('"' + stringEscape(allSymbols, {
 				'quotes': 'double'
 			}) + '"') == allSymbols,
 			'All Unicode symbols, space-separated, double quotes'
+		);
+		ok(
+			eval(stringEscape(allSymbols, {
+				'quotes': 'double',
+				'wrap': true
+			})) == allSymbols,
+			'All Unicode symbols, space-separated, double quotes, auto-wrap'
 		);
 	});
 
