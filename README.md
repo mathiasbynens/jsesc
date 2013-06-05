@@ -119,6 +119,18 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 // → "\"Lorem ipsum \\\"dolor\\\" sit \'amet\' etc.\""
 ```
 
+#### `escapeEverything`
+
+The `escapeEverything` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, all the symbols in the output will be escaped, even printable ASCII symbols.
+
+```js
+stringEscape('lolwat"foo\'bar', {
+  'escapeEverything': true
+});
+// → '\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72'
+// → "\\x6C\\x6F\\x6C\\x77\\x61\\x74\\\"\\x66\\x6F\\x6F\\'\\x62\\x61\\x72"
+```
+
 ### `stringEscape.version`
 
 A string representing the semantic version number.
