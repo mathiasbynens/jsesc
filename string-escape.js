@@ -50,19 +50,20 @@
 		'\\': '\\\\'
 	};
 
-	var defaults = {
-		'quotes': 'single'
-	};
-
 	var regexAnyCodeUnit = /[\s\S]/g;
 	var regexNull = /\\x00([^01234567]|$)/g;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
 
 	var stringEscape = function(string, options) {
+		var defaults = {
+			'quotes': 'single',
+			'wrap': false
+		};
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
 			options.quotes = 'single';
 		}
+		var quote = options.quotes == 'double' ? '"' : '\'';
 		var escaped = String(string).replace(regexAnyCodeUnit, function(character) {
 			var charCode = character.charCodeAt(0);
 			var hexadecimal = charCode.toString(16).toUpperCase();
@@ -74,10 +75,10 @@
 				return character;
 			}
 			if (character == '"') {
-				return options.quotes == 'double' ? '\\"' : character;
+				return quote == character ? '\\"' : character;
 			}
 			if (character == '\'') {
-				return options.quotes == 'single' ? '\\\'' : character;
+				return quote == character ? '\\\'' : character;
 			}
 			if (hasKey(cache, character)) {
 				return cache[character];
@@ -88,10 +89,16 @@
 		});
 		// Use `\0` instead of `\x00` where possible
 		escaped = escaped.replace(regexNull, '\\0$1');
+		// Wrap output in quotes if needed
+		if (options.wrap) {
+			escaped = quote + escaped + quote;
+		}
 		return escaped;
 	};
 
 	stringEscape.version = '0.1.0';
+
+	/*--------------------------------------------------------------------------*/
 
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
