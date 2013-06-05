@@ -1,0 +1,13 @@
+{
+	"name": "javascript-string-escape",
+	"version": "0.1.0",
+	"main": "string-escape.js",
+	"ignore": [
+		"coverage",
+		"tests",
+		".*",
+		"Gruntfile.js",
+		"package.json",
+		"node_modules"
+	]
+}
