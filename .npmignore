@@ -1,0 +1,6 @@
+.*
+*.md
+coverage
+tests
+bower.json
+Gruntfile.js
