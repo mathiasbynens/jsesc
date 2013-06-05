@@ -4,6 +4,7 @@
 	"main": "string-escape.js",
 	"ignore": [
 		"coverage",
+		"src",
 		"tests",
 		".*",
 		"Gruntfile.js",
