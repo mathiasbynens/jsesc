@@ -6,16 +6,28 @@ Feel free to fork if you see possible improvements!
 
 ## Installation
 
-In a browser:
+Via [Bower](http://bower.io/):
 
-```html
-<script src="string-escape.js"></script>
+```bash
+bower install string-escape
+```
+
+Via [Component](https://github.com/component/component):
+
+```bash
+component install mathiasbynens/javascript-string-escape
 ```
 
 Via [npm](http://npmjs.org/):
 
 ```bash
 npm install string-escape
+```
+
+In a browser:
+
+```html
+<script src="string-escape.js"></script>
 ```
 
 In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
