@@ -53,14 +53,14 @@
 	};
 
 	var regexAnyCodeUnit = /[\s\S]/g;
-	var regexNull = /\\x00([^01234567]|$)/g;
+	var regexNull = /(?:[^\\]|^)\\x00([^01234567]|$)/g;
 	var regexWhitelist = /<%= whitelist %>/;
 
 	var stringEscape = function(string, options) {
 		var defaults = {
+			'escapeEverything': false,
 			'quotes': 'single',
-			'wrap': false,
-			'escapeEverything': false
+			'wrap': false
 		};
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {

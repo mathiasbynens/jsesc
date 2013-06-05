@@ -53,7 +53,7 @@
 	};
 
 	var regexAnyCodeUnit = /[\s\S]/g;
-	var regexNull = /\\x00([^01234567]|$)/g;
+	var regexNull = /(?:[^\\]|^)\\x00([^01234567]|$)/g;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
 
 	var stringEscape = function(string, options) {
