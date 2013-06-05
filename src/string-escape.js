@@ -53,7 +53,7 @@
 	};
 
 	var regexAnyCodeUnit = /[\s\S]/g;
-	var regexNull = /(?:[^\\]|^)\\x00([^01234567]|$)/g;
+	var regexNull = /([^\\]|^)\\x00([^01234567]|$)/g;
 	var regexWhitelist = /<%= whitelist %>/;
 
 	var stringEscape = function(string, options) {
@@ -93,7 +93,7 @@
 			return result;
 		});
 		// Use `\0` instead of `\x00` where possible
-		escaped = escaped.replace(regexNull, '\\0$1');
+		escaped = escaped.replace(regexNull, '$1\\0$2');
 		// Wrap output in quotes if needed
 		if (options.wrap) {
 			escaped = quote + escaped + quote;
