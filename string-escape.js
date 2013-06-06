@@ -52,7 +52,6 @@
 		'\'': '\\\''
 	};
 
-	var regexAnyCodeUnit = /[\s\S]/g;
 	var regexOctalDigit = /[0-7]/g;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
 
