@@ -52,7 +52,6 @@
 		'\'': '\\\''
 	};
 
-	var regexAnyCodeUnit = /[\s\S]/g;
 	var regexOctalDigit = /[0-7]/g;
 	var regexWhitelist = /<%= whitelist %>/;
 
