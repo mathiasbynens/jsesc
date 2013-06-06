@@ -1,6 +1,6 @@
 # JavaScript string escape [![Build status](https://travis-ci.org/mathiasbynens/javascript-string-escape.png?branch=master)](https://travis-ci.org/mathiasbynens/javascript-string-escape) [![Dependency status](https://gemnasium.com/mathiasbynens/javascript-string-escape.png)](https://gemnasium.com/mathiasbynens/javascript-string-escape)
 
-This is a JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.
+This is a JavaScript library for escaping JavaScript strings while generating the shortest possible valid output. [Here’s an online demo.](http://mothereff.in/js-escapes)
 
 Feel free to fork if you see possible improvements!
 
