@@ -94,6 +94,11 @@
 			'`a\\\\x00` shouldn’t be changed to `\\\\0`'
 		);
 		equal(
+			stringEscape('\\\x00'),
+			'\\\\\\0',
+			'`\\\\\\x00` should be changed to `\\\\\\0`'
+		);
+		equal(
 			stringEscape('\\\\x00'),
 			'\\\\\\\\x00',
 			'`\\\\\\\\x00` shouldn’t be changed to `\\\\\\\\0`'
