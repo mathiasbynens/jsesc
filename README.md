@@ -145,7 +145,7 @@ After cloning this repository, run `npm install` to install the dependencies nee
 
 Once that’s done, you can run the unit tests in Node using `npm test` or `node tests/tests.js`. To run the tests in Rhino, Ringo, Narwhal, and web browsers as well, use `grunt test`.
 
-To generate [the code coverage report](http://rawgithub.com/mathiasbynens/javascript-string-escape/master/coverage/string-escape/string-escape.js.html), use `grunt cover`.
+To generate [the code coverage report](http://rawgithub.com/mathiasbynens/javascript-string-escape/master/coverage/javascript-string-escape/string-escape.js.html), use `grunt cover`.
 
 ## Author
 
