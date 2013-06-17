@@ -52,7 +52,7 @@
 		'\'': '\\\''
 	};
 
-	var regexDigit = /[0-9]/g;
+	var regexDigit = /[0-9]/;
 	var regexWhitelist = /<%= whitelist %>/;
 
 	var stringEscape = function(string, options) {
