@@ -129,7 +129,7 @@
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
 			freeModule.exports = stringEscape;
 		} else { // in Narwhal or RingoJS v0.7.0-
-			extend(freeExports, stringEscape);
+			freeExports.stringEscape = stringEscape;
 		}
 	} else { // in Rhino or a web browser
 		root.stringEscape = stringEscape;

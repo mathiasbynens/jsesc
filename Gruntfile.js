@@ -54,12 +54,15 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-template');
 
 	grunt.registerTask('cover', 'shell:cover');
-	grunt.registerTask('test', [
+	grunt.registerTask('travis', [
 		'shell:test-narwhal',
 		'shell:test-phantomjs',
 		'shell:test-rhino',
 		'shell:test-ringo',
 		'shell:test-node',
+	]);
+	grunt.registerTask('test', [
+		'travis',
 		'shell:test-browser'
 	]);
 
