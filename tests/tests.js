@@ -28,42 +28,19 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	var map = function(array, fn) {
-		var length = array.length;
-		while (length--) {
-			array[length] = fn(array[length]);
-		}
-		return array;
-	};
+	// Quick and dirty test to see if we’re in PhantomJS or Node
+	var runExtendedTests = (function() {
+		try {
+			return root.phantom || process.argv[0] == 'node';
+		} catch(error) { }
+	}());
 
-	// taken from http://mths.be/punycode
-	var stringFromCharCode = String.fromCharCode;
-	var ucs2encode = function(value) {
-		var output = '';
-		if (value > 0xFFFF) {
-			value -= 0x10000;
-			output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
-			value = 0xDC00 | value & 0x3FF;
-		}
-		output += stringFromCharCode(value);
-		return output;
-	};
-
-	var allSymbols = '';
-	var codePoint;
-	var symbol = '';
-	// Generate strings based on code points. Trickier than it seems:
-	// http://mathiasbynens.be/notes/javascript-encoding
-	for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint++) {
-		symbol = ucs2encode(codePoint);
-		// ok(
-		// 	eval('\'' + stringEscape(symbol) + '\'') == symbol,
-		// 	'U+' + codePoint.toString(16).toUpperCase()
-		// );
-		allSymbols += symbol + ' ';
-	}
-
-	test('stringEscape', function() {
+	test('stringEscape: common usage', function() {
+		equal(
+			typeof stringEscape.version,
+			'string',
+			'`stringEscape.version` must be a string'
+		);
 		equal(
 			stringEscape('\0\x31'),
 			'\\x001',
@@ -118,37 +95,77 @@
 			'\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72',
 			'escapeEverything'
 		);
-		ok(
-			eval('\'' + stringEscape(allSymbols) + '\'') == allSymbols,
-			'All Unicode symbols, space-separated, default quote type (single quotes)'
-		);
-		ok(
-			eval('\'' + stringEscape(allSymbols, {
-				'quotes': 'single'
-			}) + '\'') == allSymbols,
-			'All Unicode symbols, space-separated, single quotes'
-		);
-		ok(
-			eval(stringEscape(allSymbols, {
-				'quotes': 'single',
-				'wrap': true
-			})) == allSymbols,
-			'All Unicode symbols, space-separated, single quotes, auto-wrap'
-		);
-		ok(
-			eval('"' + stringEscape(allSymbols, {
-				'quotes': 'double'
-			}) + '"') == allSymbols,
-			'All Unicode symbols, space-separated, double quotes'
-		);
-		ok(
-			eval(stringEscape(allSymbols, {
-				'quotes': 'double',
-				'wrap': true
-			})) == allSymbols,
-			'All Unicode symbols, space-separated, double quotes, auto-wrap'
-		);
 	});
+
+	if (runExtendedTests) {
+		test('stringEscape: advanced tests', function() {
+			var map = function(array, fn) {
+				var length = array.length;
+				while (length--) {
+					array[length] = fn(array[length]);
+				}
+				return array;
+			};
+
+			// taken from http://mths.be/punycode
+			var stringFromCharCode = String.fromCharCode;
+			var ucs2encode = function(value) {
+				var output = '';
+				if (value > 0xFFFF) {
+					value -= 0x10000;
+					output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
+					value = 0xDC00 | value & 0x3FF;
+				}
+				output += stringFromCharCode(value);
+				return output;
+			};
+
+			var allSymbols = '';
+			var codePoint;
+			var symbol = '';
+			// Generate strings based on code points. Trickier than it seems:
+			// http://mathiasbynens.be/notes/javascript-encoding
+			for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint++) {
+				symbol = ucs2encode(codePoint);
+				// ok(
+				// 	eval('\'' + stringEscape(symbol) + '\'') == symbol,
+				// 	'U+' + codePoint.toString(16).toUpperCase()
+				// );
+				allSymbols += symbol + ' ';
+			}
+
+			ok(
+				eval('\'' + stringEscape(allSymbols) + '\'') == allSymbols,
+				'All Unicode symbols, space-separated, default quote type (single quotes)'
+			);
+			ok(
+				eval('\'' + stringEscape(allSymbols, {
+					'quotes': 'single'
+				}) + '\'') == allSymbols,
+				'All Unicode symbols, space-separated, single quotes'
+			);
+			ok(
+				eval(stringEscape(allSymbols, {
+					'quotes': 'single',
+					'wrap': true
+				})) == allSymbols,
+				'All Unicode symbols, space-separated, single quotes, auto-wrap'
+			);
+			ok(
+				eval('"' + stringEscape(allSymbols, {
+					'quotes': 'double'
+				}) + '"') == allSymbols,
+				'All Unicode symbols, space-separated, double quotes'
+			);
+			ok(
+				eval(stringEscape(allSymbols, {
+					'quotes': 'double',
+					'wrap': true
+				})) == allSymbols,
+				'All Unicode symbols, space-separated, double quotes, auto-wrap'
+			);
+		});
+	}
 
 	/*--------------------------------------------------------------------------*/
 

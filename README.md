@@ -30,10 +30,16 @@ In a browser:
 <script src="string-escape.js"></script>
 ```
 
-In [Narwhal](http://narwhaljs.org/), [Node.js](http://nodejs.org/), and [RingoJS](http://ringojs.org/):
+In [Node.js](http://nodejs.org/) and [RingoJS](http://ringojs.org/):
 
 ```js
 var stringEscape = require('string-escape');
+```
+
+In [Narwhal](http://narwhaljs.org/):
+
+```js
+var stringEscape = require('string-escape').stringEscape;
 ```
 
 In [Rhino](http://www.mozilla.org/rhino/):
