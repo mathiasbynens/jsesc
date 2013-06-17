@@ -52,7 +52,7 @@
 		'\'': '\\\''
 	};
 
-	var regexOctalDigit = /[0-7]/g;
+	var regexDigit = /[0-9]/g;
 	var regexWhitelist = /<%= whitelist %>/;
 
 	var stringEscape = function(string, options) {
@@ -90,7 +90,7 @@
 					continue;
 				}
 			}
-			if (character == '\0' && !regexOctalDigit.test(string.charAt(index + 1))) {
+			if (character == '\0' && !regexDigit.test(string.charAt(index + 1))) {
 				result += '\\0';
 				continue;
 			}

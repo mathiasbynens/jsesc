@@ -38,29 +38,27 @@
 
 	// taken from http://mths.be/punycode
 	var stringFromCharCode = String.fromCharCode;
-	var ucs2encode = function(array) {
-		return map(array, function(value) {
-			var output = '';
-			if (value > 0xFFFF) {
-				value -= 0x10000;
-				output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
-				value = 0xDC00 | value & 0x3FF;
-			}
-			output += stringFromCharCode(value);
-			return output;
-		}).join('');
+	var ucs2encode = function(value) {
+		var output = '';
+		if (value > 0xFFFF) {
+			value -= 0x10000;
+			output += stringFromCharCode(value >>> 10 & 0x3FF | 0xD800);
+			value = 0xDC00 | value & 0x3FF;
+		}
+		output += stringFromCharCode(value);
+		return output;
 	};
 
 	var allSymbols = '';
-	var index;
+	var codePoint;
 	var symbol = '';
 	// Generate strings based on code points. Trickier than it seems:
 	// http://mathiasbynens.be/notes/javascript-encoding
-	for (index = 0x000000; index <= 0x10FFFF; index++) {
-		symbol = ucs2encode([ index ]);
+	for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint++) {
+		symbol = ucs2encode(codePoint);
 		// ok(
 		// 	eval('\'' + stringEscape(symbol) + '\'') == symbol,
-		// 	'U+' + index.toString(16).toUpperCase()
+		// 	'U+' + codePoint.toString(16).toUpperCase()
 		// );
 		allSymbols += symbol + ' ';
 	}
@@ -70,6 +68,16 @@
 			stringEscape('\0\x31'),
 			'\\x001',
 			'`\\0` followed by `1`'
+		);
+		equal(
+			stringEscape('\0\x38'),
+			'\\x008',
+			'`\\0` followed by `8`'
+		);
+		equal(
+			stringEscape('\0\x39'),
+			'\\x009',
+			'`\\0` followed by `9`'
 		);
 		equal(
 			stringEscape('\0a'),
