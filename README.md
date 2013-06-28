@@ -68,7 +68,7 @@ require(
 
 ### `stringEscape(value, options)`
 
-This function takes a string and returns an escaped version of the string where any characters that are not printable ASCII symbols are escaped using the shortest possible (but valid) [escape sequences for use in JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes).
+This function takes a value and returns an escaped version of the value where any characters that are not printable ASCII symbols are escaped using the shortest possible (but valid) [escape sequences for use in JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes). The first supported value type is strings:
 
 ```js
 stringEscape('Ich ♥ Bücher');
@@ -85,6 +85,15 @@ stringEscape({
   'Ich ♥ Bücher': 'foo 𝌆 bar'
 });
 // → '{\'Ich \\u2665 B\\xFCcher\':\'foo \\uD834\\uDF06 bar\'}'
+```
+
+Instead of a string or an object, the `value` can also be a flat array containing only string values. In that case, `stringEscape` will return a stringified version of the array where any characters that are not printable ASCII symbols are escaped in the same way.
+
+```js
+stringEscape([
+  'Ich ♥ Bücher': 'foo 𝌆 bar'
+]);
+// → '[\'Ich \\u2665 B\\xFCcher\',\'foo \\uD834\\uDF06 bar\']'
 ```
 
 The optional `options` argument accepts an object with the following options:
@@ -155,7 +164,7 @@ stringEscape('lolwat"foo\'bar', {
 // → "\\x6C\\x6F\\x6C\\x77\\x61\\x74\\\"\\x66\\x6F\\x6F\\'\\x62\\x61\\x72"
 ```
 
-This setting also affects the output for objects:
+This setting also affects the output for arrays and objects:
 
 ```js
 stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
@@ -163,11 +172,16 @@ stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
 });
 // → '{\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\':\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\'}'
 // → "{'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72':'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72'}"
+
+stringEscape([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
+  'escapeEverything': true
+});
+// → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
 ```
 
 #### `compact`
 
-The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for objects will be as compact as possible; it won’t be formatted nicely.
+The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for arrays and objects will be as compact as possible; it won’t be formatted nicely.
 
 ```js
 stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
@@ -179,6 +193,11 @@ stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'compact': false
 });
 // → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+
+stringEscape(['Ich ♥ Bücher', 'foo 𝌆 bar'], {
+  'compact': false
+});
+// → '[\n\t\'Ich \u2665 B\xFCcher\',\n\t\'foo \uD834\uDF06 bar\'\n]'
 ```
 
 This setting has no effect on the output for strings.
