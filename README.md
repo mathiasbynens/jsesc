@@ -66,7 +66,7 @@ require(
 
 ## API
 
-### `stringEscape(string, options)`
+### `stringEscape(value, options)`
 
 This function takes a string and returns an escaped version of the string where any characters that are not printable ASCII symbols are escaped using the shortest possible (but valid) [escape sequences for use in JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes).
 
@@ -76,6 +76,15 @@ stringEscape('Ich ♥ Bücher');
 
 stringEscape('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
+```
+
+Instead of a string, the `value` can also be a flat object containing only string values. In that case, `stringEscape` will return a stringified version of the object where any characters that are not printable ASCII symbols are escaped in the same way.
+
+```js
+stringEscape({
+  'Ich ♥ Bücher': 'foo 𝌆 bar'
+});
+// → '{\'Ich \\u2665 B\\xFCcher\':\'foo \\uD834\\uDF06 bar\'}'
 ```
 
 The optional `options` argument accepts an object with the following options:
@@ -103,6 +112,15 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 });
 // → 'Lorem ipsum \\"dolor\\" sit \'amet\' etc.'
 // → "Lorem ipsum \\\"dolor\\\" sit 'amet' etc."
+```
+
+This setting also affects the output for objects:
+
+```js
+stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'quotes': 'double'
+});
+// → '{"Ich \\u2665 B\\xFCcher":"foo \\uD834\\uDF06 bar"}'
 ```
 
 #### `wrap`
@@ -136,6 +154,54 @@ stringEscape('lolwat"foo\'bar', {
 // → '\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72'
 // → "\\x6C\\x6F\\x6C\\x77\\x61\\x74\\\"\\x66\\x6F\\x6F\\'\\x62\\x61\\x72"
 ```
+
+This setting also affects the output for objects:
+
+```js
+stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'escapeEverything': true
+});
+// → '{\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\':\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\'}'
+// → "{'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72':'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72'}"
+```
+
+#### `compact`
+
+The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for objects will be as compact as possible; it won’t be formatted nicely.
+
+```js
+stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'compact': true // this is the default
+});
+// → '{\'Ich \u2665 B\xFCcher\':\'foo \uD834\uDF06 bar\'}'
+
+stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'compact': false
+});
+// → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+```
+
+This setting has no effect on the output for strings.
+
+#### `indent`
+
+The `indent` option takes a string value, and defaults to `'\t'`. When the `compact` setting is enabled (`true`), the value of the `indent` option is used to format the output for objects.
+
+```js
+stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'compact': false,
+  'indent': '\t' // this is the default
+});
+// → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+
+stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'compact': false,
+  'indent': '  '
+});
+// → '{\n  \'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+```
+
+This setting has no effect on the output for strings.
 
 ### `stringEscape.version`
 

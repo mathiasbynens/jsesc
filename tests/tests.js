@@ -110,6 +110,21 @@
 		);
 		equal(
 			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+				'compact': false
+			}),
+			'{\n\t\'foo\\0bar\\uFFFDbaz\': \'foo\\0bar\\uFFFDbaz\'\n}',
+			'Stringifying a flat object with `compact: false`'
+		);
+		equal(
+			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+				'compact': false,
+				'indent': '  '
+			}),
+			'{\n  \'foo\\0bar\\uFFFDbaz\': \'foo\\0bar\\uFFFDbaz\'\n}',
+			'Stringifying a flat object with `compact: false, indent: \'  \'`'
+		);
+		equal(
+			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'escapeEverything': true
 			}),
 			'{\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\':\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\'}',
