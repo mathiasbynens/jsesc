@@ -236,7 +236,6 @@ stringEscape({ 'foo\x00bar\xFF\uFFFDbaz': 'foo\x00bar\xFF\uFFFDbaz' }, {
   'json': true
 });
 // → '{"foo\\u0000bar\\u00FF\\uFFFDbaz":"foo\\u0000bar\\u00FF\\uFFFDbaz"}'
-
 ```
 
 ### `stringEscape.version`
