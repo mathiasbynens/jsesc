@@ -19,10 +19,6 @@
 
 	var object = {};
 	var hasOwnProperty = object.hasOwnProperty;
-	var hasKey = function(object, key) {
-		return hasOwnProperty.call(object, key);
-	};
-
 	var forOwn = function(object, callback) {
 		var key;
 		for (key in object) {
@@ -50,19 +46,20 @@
 
 	/*--------------------------------------------------------------------------*/
 
-	var cache = {
-		// http://es5.github.com/x7.html#x7.8.4
-		// Table 4 — String Single Character Escape Sequences
-		'\b': '\\b',
-		'\t': '\\t',
-		'\n': '\\n',
-		'\v': '\\x0B', // In IE < 9, '\v' == 'v'
-		'\f': '\\f',
-		'\r': '\\r',
-		'\\': '\\\\',
+	// http://mathiasbynens.be/notes/javascript-escapes#single
+	var singleEscapes = {
 		'"': '\\"',
-		'\'': '\\\''
+		'\'': '\\\'',
+		'\\': '\\\\',
+		'\b': '\\b',
+		'\f': '\\f',
+		'\n': '\\n',
+		'\r': '\\r',
+		'\t': '\\t'
+		// `\v` is omitted intentionally, because in IE < 9, '\v' == 'v'
+		// '\v': '\\x0B'
 	};
+	var regexSingleEscape = /["'\\\b\f\n\r\t]/;
 
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /<%= whitelist %>/;
@@ -80,6 +77,11 @@
 		if (options.quotes != 'single' && options.quotes != 'double') {
 			options.quotes = 'single';
 		}
+		var json = options.json;
+		if (json) {
+			options.quotes = 'double';
+			options.wrap = true;
+		}
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
 		var indent = options.indent;
@@ -89,12 +91,14 @@
 		if (!isString(argument)) {
 			// assume it’s a flat object with only string values
 			result = [];
+			options.wrap = true;
 			forOwn(argument, function(key, value) {
 				result.push(
 					(compact ? '' : indent) +
-					quote + stringEscape(key, options) + quote + ':' +
+					stringEscape(key, options) + ':' +
 					(compact ? '' : ' ') +
-					quote + stringEscape(value, options) + quote);
+					stringEscape(value, options)
+				);
 			});
 			return '{' + newLine + result.join(',' + newLine) + newLine + '}';
 		}
@@ -122,19 +126,25 @@
 					continue;
 				}
 			}
-			if (character == '\0' && !regexDigit.test(string.charAt(index + 1))) {
+			if (
+				character == '\0' &&
+				!json &&
+				!regexDigit.test(string.charAt(index + 1))
+			) {
 				result += '\\0';
 				continue;
 			}
-			if (hasKey(cache, character)) {
-				result += cache[character];
+			if (regexSingleEscape.test(character)) {
+				// no need for a `hasOwnProperty` check here
+				result += singleEscapes[character];
 				continue;
 			}
 			var charCode = character.charCodeAt(0);
 			var hexadecimal = charCode.toString(16).toUpperCase();
-			var longhand = hexadecimal.length > 2;
-			result += cache[character] = '\\' + (longhand ? 'u' : 'x') +
+			var longhand = hexadecimal.length > 2 || json;
+			var escaped = '\\' + (longhand ? 'u' : 'x') +
 				('0000' + hexadecimal).slice(longhand ? -4 : -2);
+			result += escaped;
 			continue;
 		}
 		if (options.wrap) {
