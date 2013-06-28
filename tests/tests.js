@@ -130,6 +130,21 @@
 			'{\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\':\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\'}',
 			'Stringifying a flat object with `escapeEverything: true`'
 		);
+		// Stringifying flat arrays containing only string values
+		equal(
+			stringEscape(['foo\x00bar\uFFFDbaz', '\xA9'], {
+				'escapeEverything': true
+			}),
+			'[\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\',\'\\xA9\']',
+			'Stringifying a flat array with `escapeEverything: true`'
+		);
+		equal(
+			stringEscape(['foo\x00bar\uFFFDbaz', '\xA9'], {
+				'compact': false
+			}),
+			'[\n\t\'foo\\0bar\\uFFFDbaz\',\n\t\'\\xA9\'\n]',
+			'Stringifying a flat array with `compact: false`'
+		);
 		// JSON
 		equal(
 			stringEscape('foo\x00bar\xFF\uFFFDbaz', {
@@ -155,6 +170,15 @@
 			}),
 			'{"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A":"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"}',
 			'JSON-stringifying a flat object with `escapeEverything: true`'
+		);
+		equal(
+			stringEscape(['foo\x00bar\uFFFDbaz', 'foo\x00bar\uFFFDbaz'], {
+				'escapeEverything': true,
+				'json': true,
+				'quotes': 'single' // `json: true` should override this setting
+			}),
+			'["\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A","\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"]',
+			'JSON-stringifying a flat array with `escapeEverything: true`'
 		);
 	});
 

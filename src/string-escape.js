@@ -38,7 +38,18 @@
 		return destination;
 	};
 
+	var forEach = function(array, callback) {
+		var length = array.length;
+		var index = -1;
+		while (++index < length) {
+			callback(array[index]);
+		}
+	};
+
 	var toString = object.toString;
+	var isArray = function(value) {
+		return toString.call(value) == '[object Array]';
+	};
 	var isString = function(value) {
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
@@ -89,18 +100,31 @@
 		var result;
 
 		if (!isString(argument)) {
-			// assume it’s a flat object with only string values
-			result = [];
-			options.wrap = true;
-			forOwn(argument, function(key, value) {
-				result.push(
-					(compact ? '' : indent) +
-					stringEscape(key, options) + ':' +
-					(compact ? '' : ' ') +
-					stringEscape(value, options)
-				);
-			});
-			return '{' + newLine + result.join(',' + newLine) + newLine + '}';
+			if (isArray(argument)) {
+				// assume it’s a flat array with only string values
+				result = [];
+				options.wrap = true;
+				forEach(argument, function(value) {
+					result.push(
+						(compact ? '' : indent) +
+						stringEscape(value, options)
+					);
+				});
+				return '[' + newLine + result.join(',' + newLine) + newLine + ']';
+			} else {
+				// assume it’s a flat object with only string values
+				result = [];
+				options.wrap = true;
+				forOwn(argument, function(key, value) {
+					result.push(
+						(compact ? '' : indent) +
+						stringEscape(key, options) + ':' +
+						(compact ? '' : ' ') +
+						stringEscape(value, options)
+					);
+				});
+				return '{' + newLine + result.join(',' + newLine) + newLine + '}';
+			}
 		}
 
 		var string = argument;
