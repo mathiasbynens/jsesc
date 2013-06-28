@@ -72,24 +72,31 @@
 		var defaults = {
 			'escapeEverything': false,
 			'quotes': 'single',
-			'wrap': false
+			'wrap': false,
+			'compact': true,
+			'indent': '\t'
 		};
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
 			options.quotes = 'single';
 		}
 		var quote = options.quotes == 'double' ? '"' : '\'';
-
+		var compact = options.compact;
+		var indent = options.indent;
+		var newLine = compact ? '' : '\n';
 		var result;
 
 		if (!isString(argument)) {
-			// assume it’s an flat object with only strings as values
+			// assume it’s a flat object with only string values
 			result = [];
 			forOwn(argument, function(key, value) {
-				result.push(quote + stringEscape(key, options) + quote + ':' +
+				result.push(
+					(compact ? '' : indent) +
+					quote + stringEscape(key, options) + quote + ':' +
+					(compact ? '' : ' ') +
 					quote + stringEscape(value, options) + quote);
 			});
-			return '{' + result.join(',') + '}';
+			return '{' + newLine + result.join(',' + newLine) + newLine + '}';
 		}
 
 		var string = argument;
