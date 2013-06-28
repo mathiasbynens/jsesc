@@ -95,6 +95,26 @@
 			'\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72',
 			'escapeEverything'
 		);
+		// Stringifying flat objects containing only string values
+		equal(
+			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }),
+			'{\'foo\\0bar\\uFFFDbaz\':\'foo\\0bar\\uFFFDbaz\'}',
+			'Stringifying a flat object with default settings`'
+		);
+		equal(
+			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+				'quotes': 'double'
+			}),
+			'{"foo\\0bar\\uFFFDbaz":"foo\\0bar\\uFFFDbaz"}',
+			'Stringifying a flat object with `quotes: \'double\'`'
+		);
+		equal(
+			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+				'escapeEverything': true
+			}),
+			'{\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\':\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\'}',
+			'Stringifying a flat object with `escapeEverything: true`'
+		);
 	});
 
 	if (runExtendedTests) {
