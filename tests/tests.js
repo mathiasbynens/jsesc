@@ -130,6 +130,32 @@
 			'{\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\':\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\'}',
 			'Stringifying a flat object with `escapeEverything: true`'
 		);
+		// JSON
+		equal(
+			stringEscape('foo\x00bar\xFF\uFFFDbaz', {
+				'json': true
+			}),
+			'"foo\\u0000bar\\u00FF\\uFFFDbaz"',
+			'JSON-stringifying a string'
+		);
+		equal(
+			stringEscape('foo\x00bar\uFFFDbaz', {
+				'escapeEverything': true,
+				'json': true,
+				'quotes': 'single' // `json: true` should override this setting
+			}),
+			'"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"',
+			'JSON-stringifying a string with `escapeEverything: true`'
+		);
+		equal(
+			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+				'escapeEverything': true,
+				'json': true,
+				'quotes': 'single' // `json: true` should override this setting
+			}),
+			'{"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A":"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"}',
+			'JSON-stringifying a flat object with `escapeEverything: true`'
+		);
 	});
 
 	if (runExtendedTests) {
