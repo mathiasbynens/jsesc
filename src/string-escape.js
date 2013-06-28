@@ -23,17 +23,29 @@
 		return hasOwnProperty.call(object, key);
 	};
 
+	var forOwn = function(object, callback) {
+		var key;
+		for (key in object) {
+			if (hasOwnProperty.call(object, key)) {
+				callback(key, object[key]);
+			}
+		}
+	};
+
 	var extend = function(destination, source) {
 		if (!source) {
 			return destination;
 		}
-		var key;
-		for (key in source) {
-			if (hasOwnProperty.call(source, key)) {
-				destination[key] = source[key];
-			}
-		}
+		forOwn(source, function(key, value) {
+			destination[key] = value;
+		});
 		return destination;
+	};
+
+	var toString = object.toString;
+	var isString = function(value) {
+		return typeof value == 'string' ||
+			toString.call(value) == '[object String]';
 	};
 
 	/*--------------------------------------------------------------------------*/
@@ -55,7 +67,7 @@
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /<%= whitelist %>/;
 
-	var stringEscape = function(string, options) {
+	var stringEscape = function(argument, options) {
 		// Handle options
 		var defaults = {
 			'escapeEverything': false,
@@ -68,10 +80,23 @@
 		}
 		var quote = options.quotes == 'double' ? '"' : '\'';
 
+		var result;
+
+		if (!isString(argument)) {
+			// assume it’s an flat object with only strings as values
+			result = [];
+			forOwn(argument, function(key, value) {
+				result.push(quote + stringEscape(key, options) + quote + ':' +
+					quote + stringEscape(value, options) + quote);
+			});
+			return '{' + result.join(',') + '}';
+		}
+
+		var string = argument;
 		// Loop over each code unit in the string and escape it
 		var index = -1;
 		var length = string.length;
-		var result = '';
+		result = '';
 		while (++index < length) {
 			var character = string.charAt(index);
 			if (!options.escapeEverything) {
