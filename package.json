@@ -1,6 +1,6 @@
 {
 	"name": "string-escape",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
 	"homepage": "http://mths.be/stringescape",
 	"main": "string-escape.js",
