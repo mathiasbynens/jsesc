@@ -123,13 +123,18 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 // → "Lorem ipsum \\\"dolor\\\" sit 'amet' etc."
 ```
 
-This setting also affects the output for objects:
+This setting also affects the output for arrays and objects:
 
 ```js
 stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'quotes': 'double'
 });
 // → '{"Ich \\u2665 B\\xFCcher":"foo \\uD834\\uDF06 bar"}'
+
+stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
+  'quotes': 'double'
+});
+// → '["Ich \\u2665 B\\xFCcher","foo \\uD834\\uDF06 bar"]'
 ```
 
 #### `wrap`
@@ -194,7 +199,7 @@ stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
 });
 // → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
 
-stringEscape(['Ich ♥ Bücher', 'foo 𝌆 bar'], {
+stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
   'compact': false
 });
 // → '[\n\t\'Ich \u2665 B\xFCcher\',\n\t\'foo \uD834\uDF06 bar\'\n]'
@@ -204,7 +209,7 @@ This setting has no effect on the output for strings.
 
 #### `indent`
 
-The `indent` option takes a string value, and defaults to `'\t'`. When the `compact` setting is enabled (`true`), the value of the `indent` option is used to format the output for objects.
+The `indent` option takes a string value, and defaults to `'\t'`. When the `compact` setting is enabled (`true`), the value of the `indent` option is used to format the output for arrays and objects.
 
 ```js
 stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
@@ -218,6 +223,12 @@ stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'indent': '  '
 });
 // → '{\n  \'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+
+stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
+  'compact': false,
+  'indent': '  '
+});
+// → '[\n  \'Ich \u2665 B\xFCcher\',\n\  t\'foo \uD834\uDF06 bar\'\n]'
 ```
 
 This setting has no effect on the output for strings.
@@ -236,6 +247,11 @@ stringEscape({ 'foo\x00bar\xFF\uFFFDbaz': 'foo\x00bar\xFF\uFFFDbaz' }, {
   'json': true
 });
 // → '{"foo\\u0000bar\\u00FF\\uFFFDbaz":"foo\\u0000bar\\u00FF\\uFFFDbaz"}'
+
+stringEscape([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
+  'json': true
+});
+// → '["foo\\u0000bar\\u00FF\\uFFFDbaz","foo\\u0000bar\\u00FF\\uFFFDbaz"]'
 ```
 
 ### `stringEscape.version`
