@@ -3,7 +3,7 @@
 	"version": "0.2.2",
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
 	"repo": "mathiasbynens/javascript-string-escape",
-	"license": "MIT/GPL",
+	"license": "MIT",
 	"scripts": [
 		"string-escape.js"
 	],

@@ -13,10 +13,6 @@
 		{
 			"type": "MIT",
 			"url": "http://mths.be/mit"
-		},
-		{
-			"type": "GPL",
-			"url": "http://mths.be/gpl"
 		}
 	],
 	"author": {
@@ -30,6 +26,10 @@
 	"bugs": {
 		"url": "https://github.com/mathiasbynens/javascript-string-escape/issues"
 	},
+	"files": [
+		"LICENSE-MIT.txt",
+		"string-escape.js"
+	],
 	"directories": {
 		"test": "tests"
 	},

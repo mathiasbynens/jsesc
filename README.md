@@ -278,4 +278,4 @@ To generate [the code coverage report](http://rawgithub.com/mathiasbynens/javasc
 
 ## License
 
-This library is dual licensed under the [MIT](http://mths.be/mit) and [GPL](http://mths.be/gpl) licenses.
+This library is available under the [MIT](http://mths.be/mit) license.
