@@ -1,0 +1,82 @@
+#!/usr/bin/env node
+(function() {
+
+	var fs = require('fs');
+	var stringEscape = require('../string-escape.js');
+	var strings = process.argv.splice(2);
+	var stdin = process.stdin;
+	var data;
+	var log = console.log;
+	var main = function() {
+
+		var option = strings[0];
+
+		if (/^(?:-h|--help|undefined)$/.test(option)) {
+			log(
+				'javascript-string-escape v%s - http://mths.be/stringescape',
+				stringEscape.version
+			);
+			log([
+				'\nUsage:\n',
+				'\tjsesc [string ...]',
+				'\tjsesc [-v | --version]',
+				'\tjsesc [-h | --help]',
+				'\nExamples:\n',
+				'\tjsesc \'f\xF6o \u2665 b\xE5r \uD834\uDF06 baz\'',
+				'\techo \'f\xF6o \u2665 b\xE5r \uD834\uDF06 baz\' | jsesc'
+			].join('\n'));
+			return process.exit(1);
+		}
+
+		if (/^(?:-v|--version)$/.test(option)) {
+			log('v%s', stringEscape.version);
+			return process.exit(1);
+		}
+
+		if (!strings.length) {
+			log('Error: jsesc requires an argument.');
+			log('Try `jsesc --help` for more information.');
+			return process.exit(1);
+		}
+
+		strings.forEach(function(snippet) {
+			var result;
+			try {
+				result = stringEscape(snippet);
+				log(result);
+			} catch(error) {
+				log(error.message + '\n');
+				log('Error: failed to escape.');
+				log('If you think this is a bug in javascript-string-escape, please report it:');
+				log('https://github.com/mathiasbynens/javascript-string-escape/issues/new');
+				log(
+					'\nStack trace using javascript-string-escape@%s:\n',
+					stringEscape.version
+				);
+				log(error.stack);
+				return process.exit(1);
+			}
+		});
+		// Return with exit status 0 outside of the `forEach` loop, in case
+		// multiple strings were passed in.
+		return process.exit(0);
+
+	};
+
+	if (stdin.isTTY) {
+		// handle shell arguments
+		main();
+	} else {
+		// handle pipe
+		data = '';
+		stdin.on('data', function(chunk) {
+			data += chunk;
+		});
+		stdin.on('end', function() {
+			strings.push(data.trim());
+			main();
+		});
+		stdin.resume();
+	}
+
+}());
