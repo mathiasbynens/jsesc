@@ -258,6 +258,23 @@ stringEscape([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
 
 A string representing the semantic version number.
 
+### Using the `jsesc` binary
+
+To use the `jsesc` binary in your shell, simply install javascript-string-escape globally using npm:
+
+```bash
+npm install -g javascript-string-escape
+```
+
+After that you will be able to escape strings from the command line:
+
+```bash
+$ jsesc 'föo ♥ bår 𝌆 baz'
+f\xF6o \u2665 b\xE5r \uD834\uDF06 baz
+```
+
+See `jsesc --help` for the full list of options.
+
 ## Support
 
 This library has been tested in at least Chrome 27-29, Firefox 3-22, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, PhantomJS 1.9.0, and Rhino 1.7RC4.
