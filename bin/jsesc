@@ -117,10 +117,12 @@
 	} else {
 		// Either the script is called from within a non-TTY context,
 		// or `stdin` content is being piped in.
-		timeout = setTimeout(function() {
-			// if no piped data arrived after 250 milliseconds, handle shell arguments
-			main();
-		}, 250);
+		if (!process.stdout.isTTY) { // called from a non-TTY context
+			timeout = setTimeout(function() {
+				// if no piped data arrived after a while, handle shell arguments
+				main();
+			}, 250);
+		}
 
 		data = '';
 		stdin.on('data', function(chunk) {
