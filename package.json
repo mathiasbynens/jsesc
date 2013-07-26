@@ -4,7 +4,9 @@
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
 	"homepage": "http://mths.be/stringescape",
 	"main": "string-escape.js",
-	"bin": "bin/jsesc",
+	"bin": {
+		"jsesc": "bin/jsesc"
+	},
 	"man": "man/jsesc.1",
 	"keywords": [
 		"string",
@@ -30,7 +32,9 @@
 	},
 	"files": [
 		"LICENSE-MIT.txt",
-		"string-escape.js"
+		"string-escape.js",
+		"bin/",
+		"man/"
 	],
 	"directories": {
 		"test": "tests"
