@@ -178,6 +178,25 @@
 			'["\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A","\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"]',
 			'JSON-stringifying a flat array with `escapeEverything: true`'
 		);
+		equal(
+			stringEscape(/foo©bar𝌆[a-z0-9]ö/ig),
+			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gi',
+			'Escaping a regular expression'
+		);
+		equal(
+			stringEscape(/foo©bar𝌆[a-z0-9]ö/ig, {
+				'escapeEverything': true // should ignore the setting for the regex source part
+			}),
+			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gi',
+			'Escaping a regular expression with `escapeEverything: true`'
+		);
+		equal(
+			stringEscape(['abc', /foo©bar𝌆[a-z0-9]ö/mig], {
+				'escapeEverything': true // should ignore the setting for the regex source part
+			}),
+			'[\'\\x61\\x62\\x63\',/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gim]',
+			'Escaping an array containing a regular expression with `escapeEverything: true`'
+		);
 	});
 
 	if (runExtendedTests) {
@@ -249,36 +268,38 @@
 			);
 
 			// Some of these depend on `JSON.parse()`, so only test them in Node
-			var testArray = [
-				undefined, Infinity, new Number(Infinity), -Infinity,
-				new Number(-Infinity), 0, new Number(0), -0, new Number(-0), +0,
-				new Number(+0), /foo[z-©]/g, new RegExp(/foo[z-©]/g), new Function(),
-				'str', function zomg() { return 'desu'; }, null, true, new Boolean(true),
-				false, new Boolean(false),
-				{ "foo": 42, "baz": /löl/g, "hah": [ 1, 2, 3, { "foo" : 42 } ] }
-			];
-			equal(
-				stringEscape(testArray, {
-					'json': false
-				}),
-				'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,/foo[z-\\xA9]/g,/foo[z-\\xA9]/g,function anonymous() {\n\n},\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'baz\':/l\\xF6l/g,\'hah\':[1,2,3,{\'foo\':42}]}]',
-				'Escaping a non-flat array with all kinds of values'
-			);
-			equal(
-				stringEscape(testArray, {
-					'json': true
-				}),
-				'[null,null,null,null,null,0,0,0,0,0,0,{},{},null,"str",null,null,true,true,false,false,{"foo":42,"baz":{},"hah":[1,2,3,{"foo":42}]}]',
-				'Escaping a non-flat array with all kinds of values, with `json: true`'
-			);
-			equal(
-				stringEscape(testArray, {
-					'json': true,
-					'compact': false
-				}),
-				'[\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t{},\n\t{},\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"baz": {},\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
-				'Escaping a non-flat array with all kinds of values, with `json: true, compact: false`'
-			);
+			if (isNode) {
+				var testArray = [
+					undefined, Infinity, new Number(Infinity), -Infinity,
+					new Number(-Infinity), 0, new Number(0), -0, new Number(-0), +0,
+					new Number(+0), /foo[z-©]/g, new RegExp(/foo[z-©]/g), new Function(),
+					'str', function zomg() { return 'desu'; }, null, true, new Boolean(true),
+					false, new Boolean(false),
+					{ "foo": 42, "baz": /löl/g, "hah": [ 1, 2, 3, { "foo" : 42 } ] }
+				];
+				equal(
+					stringEscape(testArray, {
+						'json': false
+					}),
+					'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,/foo[z-\\xA9]/g,/foo[z-\\xA9]/g,function anonymous() {\n\n},\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'baz\':/l\\xF6l/g,\'hah\':[1,2,3,{\'foo\':42}]}]',
+					'Escaping a non-flat array with all kinds of values'
+				);
+				equal(
+					stringEscape(testArray, {
+						'json': true
+					}),
+					'[null,null,null,null,null,0,0,0,0,0,0,{},{},null,"str",null,null,true,true,false,false,{"foo":42,"baz":{},"hah":[1,2,3,{"foo":42}]}]',
+					'Escaping a non-flat array with all kinds of values, with `json: true`'
+				);
+				equal(
+					stringEscape(testArray, {
+						'json': true,
+						'compact': false
+					}),
+					'[\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t{},\n\t{},\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"baz": {},\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
+					'Escaping a non-flat array with all kinds of values, with `json: true, compact: false`'
+				);
+			}
 		});
 	}
 

@@ -128,9 +128,11 @@
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
 			} else if (!json && isRegExp(argument)) {
-				return stringEscape(String(argument), extend(options, {
-					'wrap': false
-				}));
+				return '/' + stringEscape(argument.source, extend(options, {
+					'wrap': false,
+					'escapeEverything': false
+				})) + '/' + (argument.global ? 'g' : '') +
+				(argument.ignoreCase ? 'i' : '') + (argument.multiline ? 'm' : '');
 			} else if (!isObject(argument)) {
 				if (json) {
 					// For some values (e.g. `undefined`, `function` objects),
