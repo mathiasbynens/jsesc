@@ -50,14 +50,6 @@
 	var isArray = function(value) {
 		return toString.call(value) == '[object Array]';
 	};
-	var isString = function(value) {
-		return typeof value == 'string' ||
-			toString.call(value) == '[object String]';
-	};
-
-	var isRegExp = function(value) {
-		return toString.call(value) == '[object RegExp]';
-	};
 	var isNumber = function(value) {
 		return typeof value == 'number' ||
 			toString.call(value) == '[object Number]';
@@ -65,6 +57,13 @@
 	var isObject = function(value) {
 		// simple, but good enough for what we need
 		return toString.call(value) == '[object Object]';
+	};
+	var isRegExp = function(value) {
+		return toString.call(value) == '[object RegExp]';
+	};
+	var isString = function(value) {
+		return typeof value == 'string' ||
+			toString.call(value) == '[object String]';
 	};
 
 	/*--------------------------------------------------------------------------*/
@@ -129,9 +128,11 @@
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
 			} else if (!json && isRegExp(argument)) {
-				return stringEscape(String(argument), extend(options, {
-					'wrap': false
-				}));
+				return '/' + stringEscape(argument.source, extend(options, {
+					'wrap': false,
+					'escapeEverything': false
+				})) + '/' + (argument.global ? 'g' : '') +
+				(argument.ignoreCase ? 'i' : '') + (argument.multiline ? 'm' : '');
 			} else if (!isObject(argument)) {
 				if (json) {
 					// For some values (e.g. `undefined`, `function` objects),
