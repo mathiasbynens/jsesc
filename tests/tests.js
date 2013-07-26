@@ -29,11 +29,9 @@
 	/*--------------------------------------------------------------------------*/
 
 	// Quick and dirty test to see if we’re in PhantomJS or Node
-	var runExtendedTests = (function() {
-		try {
-			return root.phantom || process.argv[0] == 'node';
-		} catch(error) { }
-	}());
+	var isNode = typeof process != 'undefined' && process.argv &&
+		process.argv[0] == 'node';
+	var runExtendedTests = root.phantom || isNode;
 
 	test('stringEscape: common usage', function() {
 		equal(
@@ -249,6 +247,347 @@
 				})) == allSymbols,
 				'All Unicode symbols, space-separated, double quotes, auto-wrap'
 			);
+		});
+	}
+
+	// Test binary
+	if (isNode) {
+		asyncTest('jsesc binary', function() {
+
+			var exec = require('child_process').exec;
+
+			var shellTest = function(command, callback) {
+				exec(command, function(error, stdout, stderr) {
+					callback({
+						'stdout': stdout,
+						'stderr': stderr,
+						'exitStatus': error ? error.code : 0
+					});
+				});
+			};
+
+			var tests = [
+				{
+					'description': 'No arguments',
+					'command': './bin/jsesc',
+					'expected': {
+						'exitStatus': 1
+					}
+				},
+				{
+					'description': '-h option',
+					'command': './bin/jsesc -h',
+					'expected': {
+						'exitStatus': 1
+					}
+				},
+				{
+					'description': '--help option',
+					'command': './bin/jsesc --help',
+					'expected': {
+						'exitStatus': 1
+					}
+				},
+				{
+					'description': '-v option',
+					'command': './bin/jsesc -v',
+					'expected': {
+						'exitStatus': 1
+					}
+				},
+				{
+					'description': '--version option',
+					'command': './bin/jsesc --version',
+					'expected': {
+						'exitStatus': 1
+					}
+				},
+				{
+					'description': 'No options',
+					'command': './bin/jsesc "f\xF6o \u2665 b\xE5r \uD834\uDF06 baz"',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': 'No options, piping content',
+					'command': 'echo "f\xF6o \u2665 b\xE5r \uD834\uDF06 baz" | ./bin/jsesc',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-s option',
+					'command': './bin/jsesc -s f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-s option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc -s',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--single-quotes option',
+					'command': './bin/jsesc --single-quotes f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--single-quotes option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --single-quotes',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-d option',
+					'command': './bin/jsesc -d f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \'\\"\'\\" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-d option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc -d',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \'\\"\'\\" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--double-quotes option',
+					'command': './bin/jsesc --double-quotes f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \'\\"\'\\" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--double-quotes option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --double-quotes',
+					'expected': {
+						'stdout': 'f\\xF6o \\u2665 \'\\"\'\\" b\\xE5r \\uD834\\uDF06 baz\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-w option',
+					'command': './bin/jsesc -w f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': '\'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\'\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-w option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc -w',
+					'expected': {
+						'stdout': '\'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\'\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--wrap option',
+					'command': './bin/jsesc --wrap f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': '\'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\'\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--wrap option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --wrap',
+					'expected': {
+						'stdout': '\'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\'\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-e option',
+					'command': './bin/jsesc -e f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': '\\x66\\xF6\\x6F\\x20\\u2665\\x20\\\'\\"\\\'\\"\\x20\\x62\\xE5\\x72\\x20\\uD834\\uDF06\\x20\\x62\\x61\\x7A\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-e option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc -e',
+					'expected': {
+						'stdout': '\\x66\\xF6\\x6F\\x20\\u2665\\x20\\\'\\"\\\'\\"\\x20\\x62\\xE5\\x72\\x20\\uD834\\uDF06\\x20\\x62\\x61\\x7A\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--escape-everything option',
+					'command': './bin/jsesc --escape-everything f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': '\\x66\\xF6\\x6F\\x20\\u2665\\x20\\\'\\"\\\'\\"\\x20\\x62\\xE5\\x72\\x20\\uD834\\uDF06\\x20\\x62\\x61\\x7A\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--escape-everything option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --escape-everything',
+					'expected': {
+						'stdout': '\\x66\\xF6\\x6F\\x20\\u2665\\x20\\\'\\"\\\'\\"\\x20\\x62\\xE5\\x72\\x20\\uD834\\uDF06\\x20\\x62\\x61\\x7A\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-j option',
+					'command': './bin/jsesc -j f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': '"f\\u00F6o \\u2665 \'\\"\'\\" b\\u00E5r \\uD834\\uDF06 baz"\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-j option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc -j',
+					'expected': {
+						'stdout': '"f\\u00F6o \\u2665 \'\\"\'\\" b\\u00E5r \\uD834\\uDF06 baz"\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--json option',
+					'command': './bin/jsesc --json f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz',
+					'expected': {
+						'stdout': '"f\\u00F6o \\u2665 \'\\"\'\\" b\\u00E5r \\uD834\\uDF06 baz"\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--json option, piping content',
+					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --json',
+					'expected': {
+						'stdout': '"f\\u00F6o \\u2665 \'\\"\'\\" b\\u00E5r \\uD834\\uDF06 baz"\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-o option',
+					'command': './bin/jsesc -o \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\}',
+					'expected': {
+						'stdout': '{\'f\\xF6o\':\'b\\xE5r \\uD834\\uDF06 baz\'}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-o option, piping content',
+					'command': 'echo \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\} | ./bin/jsesc -o',
+					'expected': {
+						'stdout': '{\'f\\xF6o\':\'b\\xE5r \\uD834\\uDF06 baz\'}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--object option',
+					'command': './bin/jsesc --object \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\}',
+					'expected': {
+						'stdout': '{\'f\\xF6o\':\'b\\xE5r \\uD834\\uDF06 baz\'}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--object option, piping content',
+					'command': 'echo \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\} | ./bin/jsesc --object',
+					'expected': {
+						'stdout': '{\'f\\xF6o\':\'b\\xE5r \\uD834\\uDF06 baz\'}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-p option',
+					'command': './bin/jsesc --json -p \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\}',
+					'expected': {
+						'stdout': '{\n\t"f\\u00F6o": "b\\u00E5r \\uD834\\uDF06 baz"\n}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-p option, piping content',
+					'command': 'echo \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\} | ./bin/jsesc --json -p',
+					'expected': {
+						'stdout': '{\n\t"f\\u00F6o": "b\\u00E5r \\uD834\\uDF06 baz"\n}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--pretty option',
+					'command': './bin/jsesc --json --pretty \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\}',
+					'expected': {
+						'stdout': '{\n\t"f\\u00F6o": "b\\u00E5r \\uD834\\uDF06 baz"\n}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--pretty option, piping content',
+					'command': 'echo \\{\\"f\xF6o\\":\\"b\xE5r\\ \uD834\uDF06\\ baz\\"\\} | ./bin/jsesc --json --pretty',
+					'expected': {
+						'stdout': '{\n\t"f\\u00F6o": "b\\u00E5r \\uD834\\uDF06 baz"\n}\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				}
+			];
+			var counter = tests.length;
+			function done() {
+				--counter || QUnit.start();
+			}
+
+			tests.forEach(function(object) {
+				shellTest(object.command, function(data) {
+					// We can’t use `deepEqual` since sometimes not all expected values are provided
+					Object.keys(object.expected).forEach(function(key) {
+						equal(object.expected[key], data[key], object.description);
+					});
+					done();
+				});
+			});
+
 		});
 	}
 
