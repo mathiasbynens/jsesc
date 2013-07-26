@@ -184,10 +184,15 @@
 			'Escaping a regular expression'
 		);
 		equal(
-			stringEscape(/foo©bar𝌆[a-z0-9]ö/ig, {
+			stringEscape(/foo\xA9bar\uD834\uDF06[a-z0-9]\xF6/ig),
+			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gi',
+			'Escaping an already-escaped regular expression'
+		);
+		equal(
+			stringEscape(/foo©bar𝌆[a-z0-9]ö/, {
 				'escapeEverything': true // should ignore the setting for the regex source part
 			}),
-			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gi',
+			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/',
 			'Escaping a regular expression with `escapeEverything: true`'
 		);
 		equal(

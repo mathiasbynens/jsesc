@@ -1,5 +1,5 @@
 /*! http://mths.be/stringescape v0.2.3 by @mathias */
-;(function(root) {
+;(function(root, evil) {
 
 	// Detect free variables `exports`
 	var freeExports = typeof exports == 'object' && exports;
@@ -50,10 +50,6 @@
 	var isArray = function(value) {
 		return toString.call(value) == '[object Array]';
 	};
-	var isNumber = function(value) {
-		return typeof value == 'number' ||
-			toString.call(value) == '[object Number]';
-	};
 	var isObject = function(value) {
 		// simple, but good enough for what we need
 		return toString.call(value) == '[object Object]';
@@ -82,6 +78,7 @@
 		// '\v': '\\x0B'
 	};
 	var regexSingleEscape = /["'\\\b\f\n\r\t]/;
+	var regexEval = /['\n\r\u2028\u2029]/g;
 
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
@@ -128,10 +125,15 @@
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
 			} else if (!json && isRegExp(argument)) {
-				return '/' + stringEscape(argument.source, extend(options, {
-					'wrap': false,
-					'escapeEverything': false
-				})) + '/' + (argument.global ? 'g' : '') +
+				return '/' + stringEscape(
+					evil(
+						'\'' + argument.source.replace(regexEval, stringEscape) + '\''
+					),
+					extend(options, {
+						'wrap': false,
+						'escapeEverything': false
+					}
+				)) + '/' + (argument.global ? 'g' : '') +
 				(argument.ignoreCase ? 'i' : '') + (argument.multiline ? 'm' : '');
 			} else if (!isObject(argument)) {
 				if (json) {
@@ -233,4 +235,4 @@
 		root.stringEscape = stringEscape;
 	}
 
-}(this));
+}(this, eval));
