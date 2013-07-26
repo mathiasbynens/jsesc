@@ -1,6 +1,6 @@
 {
 	"name": "string-escape",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
 	"repo": "mathiasbynens/javascript-string-escape",
 	"license": "MIT",
