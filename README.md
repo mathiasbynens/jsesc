@@ -263,7 +263,7 @@ A string representing the semantic version number.
 To use the `jsesc` binary in your shell, simply install javascript-string-escape globally using npm:
 
 ```bash
-npm install -g javascript-string-escape
+npm install -g string-escape
 ```
 
 After that you will be able to escape strings from the command line:
@@ -271,6 +271,39 @@ After that you will be able to escape strings from the command line:
 ```bash
 $ jsesc 'föo ♥ bår 𝌆 baz'
 f\xF6o \u2665 b\xE5r \uD834\uDF06 baz
+```
+
+To escape flat arrays containing only string values or flat objects containing only string values, use the `-o`/`--object` option:
+
+```bash
+$ jsesc --object '{ "föo": "♥", "bår": "𝌆 baz" }'
+{'f\xF6o':'\u2665','b\xE5r':'\uD834\uDF06 baz'}
+```
+
+To prettify the output in such cases, use the `-p`/`--pretty` option:
+
+```bash
+$ jsesc --pretty '{ "föo": "♥", "bår": "𝌆 baz" }'
+{
+  'f\xF6o': '\u2665',
+  'b\xE5r': '\uD834\uDF06 baz'
+}
+```
+
+For valid JSON output, use the `-j`/`--json` option:
+
+```bash
+$ jsesc --json --pretty '{ "föo": "♥", "bår": "𝌆 baz" }'
+{
+  "f\u00F6o": "\u2665",
+  "b\u00E5r": "\uD834\uDF06 baz"
+}
+```
+
+To create a version of a JSON file (representing a flat array containing only string values or a flat object containing only string values) where any non-ASCII symbols are escaped:
+
+```bash
+$ cat data-raw.json | jsesc --json --object > data-escaped.json
 ```
 
 See `jsesc --help` for the full list of options.
