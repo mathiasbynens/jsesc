@@ -78,22 +78,20 @@ stringEscape('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
 ```
 
-Instead of a string, the `value` can also be a flat object containing only string values. In that case, `stringEscape` will return a stringified version of the object where any characters that are not printable ASCII symbols are escaped in the same way.
+Instead of a string, the `value` can also be an array or an object. In such cases, `stringEscape` will return a stringified version of the object or array where any characters that are not printable ASCII symbols are escaped in the same way.
 
 ```js
-stringEscape({
-  'Ich ♥ Bücher': 'foo 𝌆 bar'
-});
-// → '{\'Ich \\u2665 B\\xFCcher\':\'foo \\uD834\\uDF06 bar\'}'
-```
-
-Instead of a string or an object, the `value` can also be a flat array containing only string values. In that case, `stringEscape` will return a stringified version of the array where any characters that are not printable ASCII symbols are escaped in the same way.
-
-```js
+// Escaping an array
 stringEscape([
   'Ich ♥ Bücher': 'foo 𝌆 bar'
 ]);
 // → '[\'Ich \\u2665 B\\xFCcher\',\'foo \\uD834\\uDF06 bar\']'
+
+// Escaping an object
+stringEscape({
+  'Ich ♥ Bücher': 'foo 𝌆 bar'
+});
+// → '{\'Ich \\u2665 B\\xFCcher\':\'foo \\uD834\\uDF06 bar\'}'
 ```
 
 The optional `options` argument accepts an object with the following options:
@@ -254,6 +252,8 @@ stringEscape([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
 // → '["foo\\u0000bar\\u00FF\\uFFFDbaz","foo\\u0000bar\\u00FF\\uFFFDbaz"]'
 ```
 
+**Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, you may want to use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
+
 ### `stringEscape.version`
 
 A string representing the semantic version number.
@@ -273,7 +273,7 @@ $ jsesc 'föo ♥ bår 𝌆 baz'
 f\xF6o \u2665 b\xE5r \uD834\uDF06 baz
 ```
 
-To escape flat arrays containing only string values or flat objects containing only string values, use the `-o`/`--object` option:
+To escape arrays or objects containing string values, use the `-o`/`--object` option:
 
 ```bash
 $ jsesc --object '{ "föo": "♥", "bår": "𝌆 baz" }'
@@ -300,10 +300,16 @@ $ jsesc --json --pretty '{ "föo": "♥", "bår": "𝌆 baz" }'
 }
 ```
 
-To create a version of a JSON file (representing a flat array containing only string values or a flat object containing only string values) where any non-ASCII symbols are escaped:
+Read a local JSON file, escape any non-ASCII symbols, and save the result to a new file:
 
 ```bash
-$ cat data-raw.json | jsesc --json --object > data-escaped.json
+$ jsesc --json --object < data-raw.json > data-escaped.json
+```
+
+Or do the same with an online JSON file:
+
+```bash
+$ curl -sL "http://git.io/aorKgQ" | jsesc --json --object > data-escaped.json
 ```
 
 See `jsesc --help` for the full list of options.

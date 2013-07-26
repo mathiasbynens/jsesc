@@ -50,6 +50,17 @@
 	var isArray = function(value) {
 		return toString.call(value) == '[object Array]';
 	};
+	var isNumber = function(value) {
+		return typeof value == 'number' ||
+			toString.call(value) == '[object Number]';
+	};
+	var isObject = function(value) {
+		// simple, but good enough for what we need
+		return toString.call(value) == '[object Object]';
+	};
+	var isRegExp = function(value) {
+		return toString.call(value) == '[object RegExp]';
+	};
 	var isString = function(value) {
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
@@ -82,7 +93,8 @@
 			'quotes': 'single',
 			'wrap': false,
 			'compact': true,
-			'indent': '\t'
+			'indent': '\t',
+			'__indent': '',
 		};
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
@@ -96,25 +108,42 @@
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
 		var indent = options.indent;
+		var oldIndent;
 		var newLine = compact ? '' : '\n';
 		var result;
 
 		if (!isString(argument)) {
 			if (isArray(argument)) {
-				// assume it’s a flat array with only string values
 				result = [];
 				options.wrap = true;
+				oldIndent = options.__indent;
+				indent += oldIndent;
+				options.__indent = indent;
 				forEach(argument, function(value) {
 					result.push(
 						(compact ? '' : indent) +
 						stringEscape(value, options)
 					);
 				});
-				return '[' + newLine + result.join(',' + newLine) + newLine + ']';
-			} else {
-				// assume it’s a flat object with only string values
+				return '[' + newLine + result.join(',' + newLine) + newLine +
+					(compact ? '' : oldIndent) + ']';
+			} else if (!json && isRegExp(argument)) {
+				return stringEscape(String(argument), extend(options, {
+					'wrap': false
+				}));
+			} else if (!isObject(argument)) {
+				if (json) {
+					// For some values (e.g. `undefined`, `function` objects),
+					// `JSON.stringify(value)` returns `undefined` instead of `'null'`,
+					return JSON.stringify(argument) || 'null';
+				}
+				return String(argument);
+			} else { // it’s an object
 				result = [];
 				options.wrap = true;
+				oldIndent = options.__indent;
+				indent += oldIndent;
+				options.__indent = indent;
 				forOwn(argument, function(key, value) {
 					result.push(
 						(compact ? '' : indent) +
@@ -123,7 +152,8 @@
 						stringEscape(value, options)
 					);
 				});
-				return '{' + newLine + result.join(',' + newLine) + newLine + '}';
+				return '{' + newLine + result.join(',' + newLine) + newLine +
+					(compact ? '' : oldIndent) + '}';
 			}
 		}
 
