@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 				'failOnError': true
 			},
 			'cover': {
-				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "tests/tests.js"; istanbul report --root "coverage" --format "html"'
+				'command': 'istanbul cover --report "html" --verbose --dir "coverage" "tests/tests.js"'
 			},
 			'test-narwhal': {
 				'command': 'echo "Testing in Narwhal..."; export NARWHAL_OPTIMIZATION=-1; narwhal "tests/tests.js"'
