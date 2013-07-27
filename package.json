@@ -1,12 +1,10 @@
 {
-	"name": "string-escape",
+	"name": "jsesc",
 	"version": "0.3.0",
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
-	"homepage": "http://mths.be/stringescape",
-	"main": "string-escape.js",
-	"bin": {
-		"jsesc": "bin/jsesc"
-	},
+	"homepage": "http://mths.be/jsesc",
+	"main": "jsesc.js",
+	"bin": "bin/jsesc",
 	"man": "man/jsesc.1",
 	"keywords": [
 		"string",
@@ -25,14 +23,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/mathiasbynens/javascript-string-escape.git"
+		"url": "https://github.com/mathiasbynens/jsesc.git"
 	},
 	"bugs": {
-		"url": "https://github.com/mathiasbynens/javascript-string-escape/issues"
+		"url": "https://github.com/mathiasbynens/jsesc/issues"
 	},
 	"files": [
 		"LICENSE-MIT.txt",
-		"string-escape.js",
+		"jsesc.js",
 		"bin/",
 		"man/"
 	],
