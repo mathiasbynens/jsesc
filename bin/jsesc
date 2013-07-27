@@ -21,14 +21,14 @@
 			);
 			log([
 				'\nUsage:\n',
-				'\tjsesc [string ...]',
-				'\tjsesc [-s | --single-quotes]',
-				'\tjsesc [-d | --double-quotes]',
-				'\tjsesc [-w | --wrap]',
-				'\tjsesc [-e | --escape-everything]',
-				'\tjsesc [-j | --json]',
-				'\tjsesc [-o | --object]', // `JSON.parse()` the argument
-				'\tjsesc [-p | --pretty]', // `compact: false`
+				'\tjsesc [string]',
+				'\tjsesc [-s | --single-quotes] [string]',
+				'\tjsesc [-d | --double-quotes] [string]',
+				'\tjsesc [-w | --wrap] [string]',
+				'\tjsesc [-e | --escape-everything] [string]',
+				'\tjsesc [-j | --json] [string]',
+				'\tjsesc [-o | --object] [stringified_object]', // `JSON.parse()` the argument
+				'\tjsesc [-p | --pretty] [string]', // `compact: false`
 				'\tjsesc [-v | --version]',
 				'\tjsesc [-h | --help]',
 				'\nExamples:\n',
@@ -43,12 +43,6 @@
 
 		if (/^(?:-v|--version)$/.test(option)) {
 			log('v%s', stringEscape.version);
-			return process.exit(1);
-		}
-
-		if (!strings.length) {
-			log('Error: jsesc requires an argument.');
-			log('Try `jsesc --help` for more information.');
 			return process.exit(1);
 		}
 
