@@ -1,6 +1,6 @@
 # JavaScript string escape [![Build status](https://travis-ci.org/mathiasbynens/javascript-string-escape.png?branch=master)](https://travis-ci.org/mathiasbynens/javascript-string-escape) [![Dependency status](https://gemnasium.com/mathiasbynens/javascript-string-escape.png)](https://gemnasium.com/mathiasbynens/javascript-string-escape)
 
-This is a JavaScript library for escaping JavaScript strings while generating the shortest possible valid output. [Here’s an online demo.](http://mothereff.in/js-escapes)
+This is a JavaScript library for [escaping JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes) while generating the shortest possible valid ASCII-only output. [Here’s an online demo.](http://mothereff.in/js-escapes)
 
 Feel free to fork if you see possible improvements!
 
@@ -186,6 +186,8 @@ stringEscape([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
 // → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
 ```
 
+This setting has no effect on the output for regular expressions. Those only use escape sequences for non-printable ASCII symbols and non-ASCII symbols, regardless of the value of the `escapeEverything` setting.
+
 #### `compact`
 
 The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for arrays and objects will be as compact as possible; it won’t be formatted nicely.
@@ -233,11 +235,11 @@ stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 // → '[\n  \'Ich \u2665 B\xFCcher\',\n\  t\'foo \uD834\uDF06 bar\'\n]'
 ```
 
-This setting has no effect on the output for strings.
+This setting has no effect on the output for strings or regular expressions.
 
 #### `json`
 
-The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output will always be valid JSON. [Hexadecimal character escape sequences](http://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and the `\v` or `\0` escape sequences will not be used. Setting `json: true` implies `quotes: 'double', wrap: true`.
+The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is always valid JSON. [Hexadecimal character escape sequences](http://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](http://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true`.
 
 ```js
 stringEscape('foo\x00bar\xFF\uFFFDbaz', {
@@ -254,9 +256,16 @@ stringEscape([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
   'json': true
 });
 // → '["foo\\u0000bar\\u00FF\\uFFFDbaz","foo\\u0000bar\\u00FF\\uFFFDbaz"]'
+
+// Values that aren’t strings, regular expressions, arrays, or object literals
+// can’t be escaped, so they’ll just be preserved:
+stringEscape([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
+  'json': true
+});
+// → '["foo\\u0000bar",[1,"\\u00A9",{"foo":true,"qux":null}],42]'
 ```
 
-**Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, you may want to use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
+**Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
 
 ### `stringEscape.version`
 
@@ -321,6 +330,8 @@ See `jsesc --help` for the full list of options.
 ## Support
 
 This library has been tested in at least Chrome 27-29, Firefox 3-22, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, PhantomJS 1.9.0, and Rhino 1.7RC4.
+
+**Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
 
 ## Unit tests & code coverage
 
