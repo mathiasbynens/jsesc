@@ -1,4 +1,4 @@
-# JavaScript string escape [![Build status](https://travis-ci.org/mathiasbynens/javascript-string-escape.png?branch=master)](https://travis-ci.org/mathiasbynens/javascript-string-escape) [![Dependency status](https://gemnasium.com/mathiasbynens/javascript-string-escape.png)](https://gemnasium.com/mathiasbynens/javascript-string-escape)
+# jsesc [![Build status](https://travis-ci.org/mathiasbynens/jsesc.png?branch=master)](https://travis-ci.org/mathiasbynens/jsesc) [![Dependency status](https://gemnasium.com/mathiasbynens/jsesc.png)](https://gemnasium.com/mathiasbynens/jsesc)
 
 This is a JavaScript library for [escaping JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes) while generating the shortest possible valid ASCII-only output. [Here’s an online demo.](http://mothereff.in/js-escapes)
 
@@ -9,43 +9,43 @@ Feel free to fork if you see possible improvements!
 Via [Bower](http://bower.io/):
 
 ```bash
-bower install string-escape
+bower install jsesc
 ```
 
 Via [Component](https://github.com/component/component):
 
 ```bash
-component install mathiasbynens/javascript-string-escape
+component install mathiasbynens/jsesc
 ```
 
 Via [npm](http://npmjs.org/):
 
 ```bash
-npm install string-escape
+npm install jsesc
 ```
 
 In a browser:
 
 ```html
-<script src="string-escape.js"></script>
+<script src="jsesc.js"></script>
 ```
 
 In [Node.js](http://nodejs.org/) and [RingoJS](http://ringojs.org/):
 
 ```js
-var stringEscape = require('string-escape');
+var stringEscape = require('jsesc');
 ```
 
 In [Narwhal](http://narwhaljs.org/):
 
 ```js
-var stringEscape = require('string-escape').stringEscape;
+var stringEscape = require('jsesc').stringEscape;
 ```
 
 In [Rhino](http://www.mozilla.org/rhino/):
 
 ```js
-load('string-escape.js');
+load('jsesc.js');
 ```
 
 Using an AMD loader like [RequireJS](http://requirejs.org/):
@@ -54,10 +54,10 @@ Using an AMD loader like [RequireJS](http://requirejs.org/):
 require(
   {
     'paths': {
-      'string-escape': 'path/to/string-escape'
+      'jsesc': 'path/to/jsesc'
     }
   },
-  ['string-escape'],
+  ['jsesc'],
   function(stringEscape) {
     console.log(stringEscape);
   }
@@ -273,10 +273,10 @@ A string representing the semantic version number.
 
 ### Using the `jsesc` binary
 
-To use the `jsesc` binary in your shell, simply install javascript-string-escape globally using npm:
+To use the `jsesc` binary in your shell, simply install jsesc globally using npm:
 
 ```bash
-npm install -g string-escape
+npm install -g jsesc
 ```
 
 After that you will be able to escape strings from the command line:
@@ -339,7 +339,7 @@ After cloning this repository, run `npm install` to install the dependencies nee
 
 Once that’s done, you can run the unit tests in Node using `npm test` or `node tests/tests.js`. To run the tests in Rhino, Ringo, Narwhal, and web browsers as well, use `grunt test`.
 
-To generate [the code coverage report](http://rawgithub.com/mathiasbynens/javascript-string-escape/master/coverage/javascript-string-escape/string-escape.js.html), use `grunt cover`.
+To generate [the code coverage report](http://rawgithub.com/mathiasbynens/jsesc/master/coverage/jsesc/jsesc.js.html), use `grunt cover`.
 
 ## Author
 

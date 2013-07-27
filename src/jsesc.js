@@ -1,4 +1,4 @@
-/*! http://mths.be/stringescape v<%= version %> by @mathias */
+/*! http://mths.be/jsesc v<%= version %> by @mathias */
 ;(function(root, evil) {
 
 	// Detect free variables `exports`

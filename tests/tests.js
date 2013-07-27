@@ -22,7 +22,7 @@
 
 	/** The `regenerate` object to test */
 	var stringEscape = root.stringEscape || (root.stringEscape = (
-		stringEscape = load('../string-escape.js') || root.stringEscape,
+		stringEscape = load('../jsesc.js') || root.stringEscape,
 		stringEscape = stringEscape.stringEscape || stringEscape
 	));
 

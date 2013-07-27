@@ -1,7 +1,7 @@
 {
-	"name": "javascript-string-escape",
+	"name": "jsesc",
 	"version": "0.3.0",
-	"main": "string-escape.js",
+	"main": "jsesc.js",
 	"ignore": [
 		"coverage",
 		"src",

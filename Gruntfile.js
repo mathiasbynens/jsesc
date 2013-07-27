@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 					'data': require('./src/data.js')
 				},
 				'files': {
-					'string-escape.js': ['src/string-escape.js']
+					'jsesc.js': ['src/jsesc.js']
 				}
 			}
 		}

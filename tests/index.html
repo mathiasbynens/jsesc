@@ -2,13 +2,13 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>javascript-string-escape test suite</title>
+		<title>jsesc test suite</title>
 		<link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
 	</head>
 	<body>
 		<div id="qunit"></div>
 		<script src="../node_modules/qunitjs/qunit/qunit.js"></script>
-		<script src="../string-escape.js"></script>
+		<script src="../jsesc.js"></script>
 		<script>
 			// populate `QUnit.urlParams`
 			QUnit.urlParams.norequire = /[?&]norequire=true(?:&|$)/.test(location.search);
@@ -24,10 +24,10 @@
 				'baseUrl': '../node_modules/requirejs/',
 				'urlArgs': 't=' + (+new Date),
 				'paths': {
-					'string-escape': '../../string-escape'
+					'jsesc': '../../jsesc'
 				}
 			},
-			['string-escape'], function(stringEscape) {
+			['jsesc'], function(stringEscape) {
 				require(['tests.js']);
 			});
 		</script>
