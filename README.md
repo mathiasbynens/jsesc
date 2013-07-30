@@ -87,7 +87,7 @@ jsesc(/©𝌆/g);
 
 // Escaping an array
 jsesc([
-  'Ich ♥ Bücher': 'foo 𝌆 bar'
+  'Ich ♥ Bücher', 'foo 𝌆 bar'
 ]);
 // → '[\'Ich \\u2665 B\\xFCcher\',\'foo \\uD834\\uDF06 bar\']'
 
