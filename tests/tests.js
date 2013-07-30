@@ -21,9 +21,9 @@
 	Object.prototype['♥'] = '...';
 
 	/** The `regenerate` object to test */
-	var stringEscape = root.stringEscape || (root.stringEscape = (
-		stringEscape = load('../jsesc.js') || root.stringEscape,
-		stringEscape = stringEscape.stringEscape || stringEscape
+	var jsesc = root.jsesc || (root.jsesc = (
+		jsesc = load('../jsesc.js') || root.jsesc,
+		jsesc = jsesc.jsesc || jsesc
 	));
 
 	/*--------------------------------------------------------------------------*/
@@ -33,61 +33,61 @@
 		process.argv[0] == 'node';
 	var runExtendedTests = root.phantom || isNode;
 
-	test('stringEscape: common usage', function() {
+	test('jsesc: common usage', function() {
 		equal(
-			typeof stringEscape.version,
+			typeof jsesc.version,
 			'string',
-			'`stringEscape.version` must be a string'
+			'`jsesc.version` must be a string'
 		);
 		equal(
-			stringEscape('\0\x31'),
+			jsesc('\0\x31'),
 			'\\x001',
 			'`\\0` followed by `1`'
 		);
 		equal(
-			stringEscape('\0\x38'),
+			jsesc('\0\x38'),
 			'\\x008',
 			'`\\0` followed by `8`'
 		);
 		equal(
-			stringEscape('\0\x39'),
+			jsesc('\0\x39'),
 			'\\x009',
 			'`\\0` followed by `9`'
 		);
 		equal(
-			stringEscape('\0a'),
+			jsesc('\0a'),
 			'\\0a',
 			'`\\0` followed by `a`'
 		);
 		equal(
-			stringEscape('foo"bar\'baz', {
+			jsesc('foo"bar\'baz', {
 				'quotes': 'LOLWAT' // invalid setting
 			}),
 			'foo"bar\\\'baz',
 			'Invalid `quotes` setting'
 		);
 		equal(
-			stringEscape('\\x00'),
+			jsesc('\\x00'),
 			'\\\\x00',
 			'`\\\\x00` shouldn’t be changed to `\\\\0`'
 		);
 		equal(
-			stringEscape('a\\x00'),
+			jsesc('a\\x00'),
 			'a\\\\x00',
 			'`a\\\\x00` shouldn’t be changed to `\\\\0`'
 		);
 		equal(
-			stringEscape('\\\x00'),
+			jsesc('\\\x00'),
 			'\\\\\\0',
 			'`\\\\\\x00` should be changed to `\\\\\\0`'
 		);
 		equal(
-			stringEscape('\\\\x00'),
+			jsesc('\\\\x00'),
 			'\\\\\\\\x00',
 			'`\\\\\\\\x00` shouldn’t be changed to `\\\\\\\\0`'
 		);
 		equal(
-			stringEscape('lolwat"foo\'bar', {
+			jsesc('lolwat"foo\'bar', {
 				'escapeEverything': true
 			}),
 			'\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72',
@@ -95,26 +95,26 @@
 		);
 		// Stringifying flat objects containing only string values
 		equal(
-			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }),
+			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }),
 			'{\'foo\\0bar\\uFFFDbaz\':\'foo\\0bar\\uFFFDbaz\'}',
 			'Stringifying a flat object with default settings`'
 		);
 		equal(
-			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'quotes': 'double'
 			}),
 			'{"foo\\0bar\\uFFFDbaz":"foo\\0bar\\uFFFDbaz"}',
 			'Stringifying a flat object with `quotes: \'double\'`'
 		);
 		equal(
-			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'compact': false
 			}),
 			'{\n\t\'foo\\0bar\\uFFFDbaz\': \'foo\\0bar\\uFFFDbaz\'\n}',
 			'Stringifying a flat object with `compact: false`'
 		);
 		equal(
-			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'compact': false,
 				'indent': '  '
 			}),
@@ -122,7 +122,7 @@
 			'Stringifying a flat object with `compact: false, indent: \'  \'`'
 		);
 		equal(
-			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'escapeEverything': true
 			}),
 			'{\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\':\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\'}',
@@ -130,14 +130,14 @@
 		);
 		// Stringifying flat arrays containing only string values
 		equal(
-			stringEscape(['foo\x00bar\uFFFDbaz', '\xA9'], {
+			jsesc(['foo\x00bar\uFFFDbaz', '\xA9'], {
 				'escapeEverything': true
 			}),
 			'[\'\\x66\\x6F\\x6F\\0\\x62\\x61\\x72\\uFFFD\\x62\\x61\\x7A\',\'\\xA9\']',
 			'Stringifying a flat array with `escapeEverything: true`'
 		);
 		equal(
-			stringEscape(['foo\x00bar\uFFFDbaz', '\xA9'], {
+			jsesc(['foo\x00bar\uFFFDbaz', '\xA9'], {
 				'compact': false
 			}),
 			'[\n\t\'foo\\0bar\\uFFFDbaz\',\n\t\'\\xA9\'\n]',
@@ -145,14 +145,14 @@
 		);
 		// JSON
 		equal(
-			stringEscape('foo\x00bar\xFF\uFFFDbaz', {
+			jsesc('foo\x00bar\xFF\uFFFDbaz', {
 				'json': true
 			}),
 			'"foo\\u0000bar\\u00FF\\uFFFDbaz"',
 			'JSON-stringifying a string'
 		);
 		equal(
-			stringEscape('foo\x00bar\uFFFDbaz', {
+			jsesc('foo\x00bar\uFFFDbaz', {
 				'escapeEverything': true,
 				'json': true,
 				'quotes': 'single' // `json: true` should override this setting
@@ -161,7 +161,7 @@
 			'JSON-stringifying a string with `escapeEverything: true`'
 		);
 		equal(
-			stringEscape({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
+			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'escapeEverything': true,
 				'json': true,
 				'quotes': 'single' // `json: true` should override this setting
@@ -170,7 +170,7 @@
 			'JSON-stringifying a flat object with `escapeEverything: true`'
 		);
 		equal(
-			stringEscape(['foo\x00bar\uFFFDbaz', 'foo\x00bar\uFFFDbaz'], {
+			jsesc(['foo\x00bar\uFFFDbaz', 'foo\x00bar\uFFFDbaz'], {
 				'escapeEverything': true,
 				'json': true,
 				'quotes': 'single' // `json: true` should override this setting
@@ -179,24 +179,24 @@
 			'JSON-stringifying a flat array with `escapeEverything: true`'
 		);
 		equal(
-			stringEscape(/foo©bar𝌆[a-z0-9]ö/ig),
+			jsesc(/foo©bar𝌆[a-z0-9]ö/ig),
 			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gi',
 			'Escaping a regular expression'
 		);
 		equal(
-			stringEscape(/foo\xA9bar\uD834\uDF06[a-z0-9]\xF6/ig),
+			jsesc(/foo\xA9bar\uD834\uDF06[a-z0-9]\xF6/ig),
 			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gi',
 			'Escaping an already-escaped regular expression'
 		);
 		equal(
-			stringEscape(/foo©bar𝌆[a-z0-9]ö/, {
+			jsesc(/foo©bar𝌆[a-z0-9]ö/, {
 				'escapeEverything': true // should ignore the setting for the regex source part
 			}),
 			'/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/',
 			'Escaping a regular expression with `escapeEverything: true`'
 		);
 		equal(
-			stringEscape(['abc', /foo©bar𝌆[a-z0-9]ö/mig], {
+			jsesc(['abc', /foo©bar𝌆[a-z0-9]ö/mig], {
 				'escapeEverything': true // should ignore the setting for the regex source part
 			}),
 			'[\'\\x61\\x62\\x63\',/foo\\xA9bar\\uD834\\uDF06[a-z0-9]\\xF6/gim]',
@@ -205,7 +205,7 @@
 	});
 
 	if (runExtendedTests) {
-		test('stringEscape: advanced tests', function() {
+		test('jsesc: advanced tests', function() {
 			var map = function(array, fn) {
 				var length = array.length;
 				while (length--) {
@@ -235,37 +235,37 @@
 			for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint++) {
 				symbol = ucs2encode(codePoint);
 				// ok(
-				// 	eval('\'' + stringEscape(symbol) + '\'') == symbol,
+				// 	eval('\'' + jsesc(symbol) + '\'') == symbol,
 				// 	'U+' + codePoint.toString(16).toUpperCase()
 				// );
 				allSymbols += symbol + ' ';
 			}
 
 			ok(
-				eval('\'' + stringEscape(allSymbols) + '\'') == allSymbols,
+				eval('\'' + jsesc(allSymbols) + '\'') == allSymbols,
 				'All Unicode symbols, space-separated, default quote type (single quotes)'
 			);
 			ok(
-				eval('\'' + stringEscape(allSymbols, {
+				eval('\'' + jsesc(allSymbols, {
 					'quotes': 'single'
 				}) + '\'') == allSymbols,
 				'All Unicode symbols, space-separated, single quotes'
 			);
 			ok(
-				eval(stringEscape(allSymbols, {
+				eval(jsesc(allSymbols, {
 					'quotes': 'single',
 					'wrap': true
 				})) == allSymbols,
 				'All Unicode symbols, space-separated, single quotes, auto-wrap'
 			);
 			ok(
-				eval('"' + stringEscape(allSymbols, {
+				eval('"' + jsesc(allSymbols, {
 					'quotes': 'double'
 				}) + '"') == allSymbols,
 				'All Unicode symbols, space-separated, double quotes'
 			);
 			ok(
-				eval(stringEscape(allSymbols, {
+				eval(jsesc(allSymbols, {
 					'quotes': 'double',
 					'wrap': true
 				})) == allSymbols,
@@ -283,21 +283,21 @@
 					{ "foo": 42, "baz": /löl/g, "hah": [ 1, 2, 3, { "foo" : 42 } ] }
 				];
 				equal(
-					stringEscape(testArray, {
+					jsesc(testArray, {
 						'json': false
 					}),
 					'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,/foo[z-\\xA9]/g,/foo[z-\\xA9]/g,function anonymous() {\n\n},\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'baz\':/l\\xF6l/g,\'hah\':[1,2,3,{\'foo\':42}]}]',
 					'Escaping a non-flat array with all kinds of values'
 				);
 				equal(
-					stringEscape(testArray, {
+					jsesc(testArray, {
 						'json': true
 					}),
 					'[null,null,null,null,null,0,0,0,0,0,0,{},{},null,"str",null,null,true,true,false,false,{"foo":42,"baz":{},"hah":[1,2,3,{"foo":42}]}]',
 					'Escaping a non-flat array with all kinds of values, with `json: true`'
 				);
 				equal(
-					stringEscape(testArray, {
+					jsesc(testArray, {
 						'json': true,
 						'compact': false
 					}),

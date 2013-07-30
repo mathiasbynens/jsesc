@@ -33,13 +33,13 @@ In a browser:
 In [Node.js](http://nodejs.org/) and [RingoJS](http://ringojs.org/):
 
 ```js
-var stringEscape = require('jsesc');
+var jsesc = require('jsesc');
 ```
 
 In [Narwhal](http://narwhaljs.org/):
 
 ```js
-var stringEscape = require('jsesc').stringEscape;
+var jsesc = require('jsesc').jsesc;
 ```
 
 In [Rhino](http://www.mozilla.org/rhino/):
@@ -58,41 +58,41 @@ require(
     }
   },
   ['jsesc'],
-  function(stringEscape) {
-    console.log(stringEscape);
+  function(jsesc) {
+    console.log(jsesc);
   }
 );
 ```
 
 ## API
 
-### `stringEscape(value, options)`
+### `jsesc(value, options)`
 
 This function takes a value and returns an escaped version of the value where any characters that are not printable ASCII symbols are escaped using the shortest possible (but valid) [escape sequences for use in JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes). The first supported value type is strings:
 
 ```js
-stringEscape('Ich ♥ Bücher');
+jsesc('Ich ♥ Bücher');
 // → 'Ich \\u2665 B\\xFCcher'
 
-stringEscape('foo 𝌆 bar');
+jsesc('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
 ```
 
-Instead of a string, the `value` can also be a regular expression, an array, or an object. In such cases, `stringEscape` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
+Instead of a string, the `value` can also be a regular expression, an array, or an object. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
 
 ```js
 // Escaping a regular expression
-stringEscape(/©𝌆/g);
+jsesc(/©𝌆/g);
 // → '/\\xA9\\uD834\\uDF06/g'
 
 // Escaping an array
-stringEscape([
+jsesc([
   'Ich ♥ Bücher': 'foo 𝌆 bar'
 ]);
 // → '[\'Ich \\u2665 B\\xFCcher\',\'foo \\uD834\\uDF06 bar\']'
 
 // Escaping an object
-stringEscape({
+jsesc({
   'Ich ♥ Bücher': 'foo 𝌆 bar'
 });
 // → '{\'Ich \\u2665 B\\xFCcher\':\'foo \\uD834\\uDF06 bar\'}'
@@ -105,10 +105,10 @@ The optional `options` argument accepts an object with the following options:
 The default value for the `quotes` option is `'single'`. This means that any occurences of `'` in the input string will be escaped as `\'`, so that the output can be used in a string literal wrapped in single quotes.
 
 ```js
-stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.');
+jsesc('Lorem ipsum "dolor" sit \'amet\' etc.');
 // → 'Lorem ipsum "dolor" sit \\\'amet\\\' etc.'
 
-stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
+jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
   'quotes': 'single'
 });
 // → 'Lorem ipsum "dolor" sit \\\'amet\\\' etc.'
@@ -118,7 +118,7 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 If you want to use the output as part of a string literal wrapped in double quotes, set the `quotes` option to `'double'`.
 
 ```js
-stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
+jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
   'quotes': 'double'
 });
 // → 'Lorem ipsum \\"dolor\\" sit \'amet\' etc.'
@@ -128,12 +128,12 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 This setting also affects the output for arrays and objects:
 
 ```js
-stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'quotes': 'double'
 });
 // → '{"Ich \\u2665 B\\xFCcher":"foo \\uD834\\uDF06 bar"}'
 
-stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
+jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
   'quotes': 'double'
 });
 // → '["Ich \\u2665 B\\xFCcher","foo \\uD834\\uDF06 bar"]'
@@ -144,14 +144,14 @@ stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 The `wrap` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output will be a valid JavaScript string literal wrapped in quotes. The type of quotes can be specified through the `quotes` setting.
 
 ```js
-stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
+jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
   'quotes': 'single',
   'wrap': true
 });
 // → '\'Lorem ipsum "dolor" sit \\\'amet\\\' etc.\''
 // → "\'Lorem ipsum \"dolor\" sit \\\'amet\\\' etc.\'"
 
-stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
+jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
   'quotes': 'double',
   'wrap': true
 });
@@ -164,7 +164,7 @@ stringEscape('Lorem ipsum "dolor" sit \'amet\' etc.', {
 The `escapeEverything` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, all the symbols in the output will be escaped, even printable ASCII symbols.
 
 ```js
-stringEscape('lolwat"foo\'bar', {
+jsesc('lolwat"foo\'bar', {
   'escapeEverything': true
 });
 // → '\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72'
@@ -174,13 +174,13 @@ stringEscape('lolwat"foo\'bar', {
 This setting also affects the output for arrays and objects:
 
 ```js
-stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'escapeEverything': true
 });
 // → '{\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\':\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\'}'
 // → "{'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72':'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72'}"
 
-stringEscape([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
+jsesc([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
   'escapeEverything': true
 });
 // → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
@@ -193,17 +193,17 @@ This setting has no effect on the output for regular expressions. Those only use
 The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for arrays and objects will be as compact as possible; it won’t be formatted nicely.
 
 ```js
-stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'compact': true // this is the default
 });
 // → '{\'Ich \u2665 B\xFCcher\':\'foo \uD834\uDF06 bar\'}'
 
-stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'compact': false
 });
 // → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
 
-stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
+jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
   'compact': false
 });
 // → '[\n\t\'Ich \u2665 B\xFCcher\',\n\t\'foo \uD834\uDF06 bar\'\n]'
@@ -216,19 +216,19 @@ This setting has no effect on the output for strings.
 The `indent` option takes a string value, and defaults to `'\t'`. When the `compact` setting is enabled (`true`), the value of the `indent` option is used to format the output for arrays and objects.
 
 ```js
-stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'compact': false,
   'indent': '\t' // this is the default
 });
 // → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
 
-stringEscape({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
   'compact': false,
   'indent': '  '
 });
 // → '{\n  \'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
 
-stringEscape([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
+jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
   'compact': false,
   'indent': '  '
 });
@@ -242,24 +242,24 @@ This setting has no effect on the output for strings or regular expressions.
 The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is always valid JSON. [Hexadecimal character escape sequences](http://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](http://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true`.
 
 ```js
-stringEscape('foo\x00bar\xFF\uFFFDbaz', {
+jsesc('foo\x00bar\xFF\uFFFDbaz', {
   'json': true
 });
 // → '"foo\\u0000bar\\u00FF\\uFFFDbaz"'
 
-stringEscape({ 'foo\x00bar\xFF\uFFFDbaz': 'foo\x00bar\xFF\uFFFDbaz' }, {
+jsesc({ 'foo\x00bar\xFF\uFFFDbaz': 'foo\x00bar\xFF\uFFFDbaz' }, {
   'json': true
 });
 // → '{"foo\\u0000bar\\u00FF\\uFFFDbaz":"foo\\u0000bar\\u00FF\\uFFFDbaz"}'
 
-stringEscape([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
+jsesc([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
   'json': true
 });
 // → '["foo\\u0000bar\\u00FF\\uFFFDbaz","foo\\u0000bar\\u00FF\\uFFFDbaz"]'
 
 // Values that aren’t strings, regular expressions, arrays, or object literals
 // can’t be escaped, so they’ll just be preserved:
-stringEscape([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
+jsesc([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
   'json': true
 });
 // → '["foo\\u0000bar",[1,"\\u00A9",{"foo":true,"qux":null}],42]'
@@ -267,7 +267,7 @@ stringEscape([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
 
 **Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
 
-### `stringEscape.version`
+### `jsesc.version`
 
 A string representing the semantic version number.
 
