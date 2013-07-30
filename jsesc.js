@@ -83,7 +83,7 @@
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
 
-	var stringEscape = function(argument, options) {
+	var jsesc = function(argument, options) {
 		// Handle options
 		var defaults = {
 			'escapeEverything': false,
@@ -119,15 +119,15 @@
 				forEach(argument, function(value) {
 					result.push(
 						(compact ? '' : indent) +
-						stringEscape(value, options)
+						jsesc(value, options)
 					);
 				});
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
 			} else if (!json && isRegExp(argument)) {
-				return '/' + stringEscape(
+				return '/' + jsesc(
 					evil(
-						'\'' + argument.source.replace(regexEval, stringEscape) + '\''
+						'\'' + argument.source.replace(regexEval, jsesc) + '\''
 					),
 					extend(options, {
 						'wrap': false,
@@ -151,9 +151,9 @@
 				forOwn(argument, function(key, value) {
 					result.push(
 						(compact ? '' : indent) +
-						stringEscape(key, options) + ':' +
+						jsesc(key, options) + ':' +
 						(compact ? '' : ' ') +
-						stringEscape(value, options)
+						jsesc(value, options)
 					);
 				});
 				return '{' + newLine + result.join(',' + newLine) + newLine +
@@ -211,7 +211,7 @@
 		return result;
 	};
 
-	stringEscape.version = '0.3.0';
+	jsesc.version = '0.3.0';
 
 	/*--------------------------------------------------------------------------*/
 
@@ -223,16 +223,16 @@
 		define.amd
 	) {
 		define(function() {
-			return stringEscape;
+			return jsesc;
 		});
 	}	else if (freeExports && !freeExports.nodeType) {
 		if (freeModule) { // in Node.js or RingoJS v0.8.0+
-			freeModule.exports = stringEscape;
+			freeModule.exports = jsesc;
 		} else { // in Narwhal or RingoJS v0.7.0-
-			freeExports.stringEscape = stringEscape;
+			freeExports.jsesc = jsesc;
 		}
 	} else { // in Rhino or a web browser
-		root.stringEscape = stringEscape;
+		root.jsesc = jsesc;
 	}
 
 }(this, eval));
