@@ -257,8 +257,8 @@ jsesc([ 'foo\x00bar\xFF\uFFFDbaz', 'foo\x00bar\xFF\uFFFDbaz' ], {
 });
 // → '["foo\\u0000bar\\u00FF\\uFFFDbaz","foo\\u0000bar\\u00FF\\uFFFDbaz"]'
 
-// Values that aren’t strings, regular expressions, arrays, or object literals
-// can’t be escaped, so they’ll just be preserved:
+// Values that are acceptable in JSON but aren’t strings, arrays, or object
+// literals can’t be escaped, so they’ll just be preserved:
 jsesc([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
   'json': true
 });
