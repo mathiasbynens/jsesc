@@ -1,6 +1,6 @@
 {
 	"name": "jsesc",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible ASCII-only output.",
 	"repo": "mathiasbynens/jsesc",
 	"license": "MIT",
