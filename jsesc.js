@@ -108,6 +108,7 @@
 		var oldIndent;
 		var newLine = compact ? '' : '\n';
 		var result;
+		var isEmpty = true;
 
 		if (!isString(argument)) {
 			if (isArray(argument)) {
@@ -117,11 +118,15 @@
 				indent += oldIndent;
 				options.__indent = indent;
 				forEach(argument, function(value) {
+					isEmpty = false;
 					result.push(
 						(compact ? '' : indent) +
 						jsesc(value, options)
 					);
 				});
+				if (isEmpty) {
+					return '[]';
+				}
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
 			} else if (!json && isRegExp(argument)) {
@@ -149,6 +154,7 @@
 				indent += oldIndent;
 				options.__indent = indent;
 				forOwn(argument, function(key, value) {
+					isEmpty = false;
 					result.push(
 						(compact ? '' : indent) +
 						jsesc(key, options) + ':' +
@@ -156,6 +162,9 @@
 						jsesc(value, options)
 					);
 				});
+				if (isEmpty) {
+					return '{}';
+				}
 				return '{' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + '}';
 			}
