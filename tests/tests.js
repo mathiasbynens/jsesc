@@ -93,6 +93,34 @@
 			'\\x6C\\x6F\\x6C\\x77\\x61\\x74\\"\\x66\\x6F\\x6F\\\'\\x62\\x61\\x72',
 			'escapeEverything'
 		);
+		equal(
+			jsesc({}, {
+				'compact': true
+			}),
+			'{}',
+			'Stringifying an empty object with `compact: true`'
+		);
+		equal(
+			jsesc({}, {
+				'compact': false
+			}),
+			'{}',
+			'Stringifying an empty object with `compact: false`'
+		);
+		equal(
+			jsesc([], {
+				'compact': true
+			}),
+			'[]',
+			'Stringifying an empty array with `compact: true`'
+		);
+		equal(
+			jsesc([], {
+				'compact': false
+			}),
+			'[]',
+			'Stringifying an empty array with `compact: false`'
+		);
 		// Stringifying flat objects containing only string values
 		equal(
 			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }),
