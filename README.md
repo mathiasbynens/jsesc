@@ -239,7 +239,7 @@ This setting has no effect on the output for strings or regular expressions.
 
 #### `json`
 
-The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is always valid JSON. [Hexadecimal character escape sequences](http://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](http://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true`.
+The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is always valid JSON. [Hexadecimal character escape sequences](http://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](http://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true`. However, these values may be overridden in needed.
 
 ```js
 jsesc('foo\x00bar\xFF\uFFFDbaz', {

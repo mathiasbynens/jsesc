@@ -182,8 +182,7 @@
 		equal(
 			jsesc('foo\x00bar\uFFFDbaz', {
 				'escapeEverything': true,
-				'json': true,
-				'quotes': 'single' // `json: true` should override this setting
+				'json': true
 			}),
 			'"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"',
 			'JSON-stringifying a string with `escapeEverything: true`'
@@ -191,8 +190,7 @@
 		equal(
 			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'escapeEverything': true,
-				'json': true,
-				'quotes': 'single' // `json: true` should override this setting
+				'json': true
 			}),
 			'{"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A":"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"}',
 			'JSON-stringifying a flat object with `escapeEverything: true`'
@@ -200,11 +198,35 @@
 		equal(
 			jsesc(['foo\x00bar\uFFFDbaz', 'foo\x00bar\uFFFDbaz'], {
 				'escapeEverything': true,
-				'json': true,
-				'quotes': 'single' // `json: true` should override this setting
+				'json': true
 			}),
 			'["\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A","\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"]',
 			'JSON-stringifying a flat array with `escapeEverything: true`'
+		);
+		equal(
+			jsesc("foo\x00bar", {
+				'json':true,
+				'wrap':false	// can override json default wrap
+			}),
+			'foo\\u0000bar',
+			'escaping json without wrapping in quotes'
+		);
+		equal(
+			jsesc('foo "\x00" bar', {
+				'json':true,
+				'wrap':false	// can override json default wrap
+			}),
+			'foo \\"\\u0000\\" bar',
+			'escaping json without wrapping in quotes - with default double quote escape'
+		);
+		equal(
+			jsesc('foo "\x00" bar', {
+				'json':true,
+				'quotes':'single',	// can override json default quote and wrap
+				'wrap':false
+			}),
+			'foo "\\u0000" bar',
+			'escaping json, but override to escape single quotes'
 		);
 		equal(
 			jsesc(/foo©bar𝌆[a-z0-9]ö/ig),
