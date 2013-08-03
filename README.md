@@ -78,13 +78,9 @@ jsesc('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
 ```
 
-Instead of a string, the `value` can also be a regular expression, an array, or an object. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
+Instead of a string, the `value` can also be an array, or an object. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
 
 ```js
-// Escaping a regular expression
-jsesc(/©𝌆/g);
-// → '/\\xA9\\uD834\\uDF06/g'
-
 // Escaping an array
 jsesc([
   'Ich ♥ Bücher', 'foo 𝌆 bar'
@@ -186,8 +182,6 @@ jsesc([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
 // → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
 ```
 
-This setting has no effect on the output for regular expressions. Those only use escape sequences for non-printable ASCII symbols and non-ASCII symbols, regardless of the value of the `escapeEverything` setting.
-
 #### `compact`
 
 The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for arrays and objects will be as compact as possible; it won’t be formatted nicely.
@@ -235,7 +229,7 @@ jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 // → '[\n  \'Ich \u2665 B\xFCcher\',\n\  t\'foo \uD834\uDF06 bar\'\n]'
 ```
 
-This setting has no effect on the output for strings or regular expressions.
+This setting has no effect on the output for strings.
 
 #### `json`
 
@@ -263,9 +257,14 @@ jsesc([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
   'json': true
 });
 // → '["foo\\u0000bar",[1,"\\u00A9",{"foo":true,"qux":null}],42]'
+// Values that aren’t allowed in JSON are run through `JSON.stringify()`:
+jsesc([ undefined, -Infinity ], {
+  'json': true
+});
+// → '[null,null]'
 ```
 
-**Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
+**Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.stringify()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
 
 ### `jsesc.version`
 
