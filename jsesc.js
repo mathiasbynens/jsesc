@@ -1,5 +1,5 @@
 /*! http://mths.be/jsesc v0.4.1 by @mathias */
-;(function(root, evil) {
+;(function(root) {
 
 	// Detect free variables `exports`
 	var freeExports = typeof exports == 'object' && exports;
@@ -54,9 +54,6 @@
 		// simple, but good enough for what we need
 		return toString.call(value) == '[object Object]';
 	};
-	var isRegExp = function(value) {
-		return toString.call(value) == '[object RegExp]';
-	};
 	var isString = function(value) {
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
@@ -83,6 +80,19 @@
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
 
+	var stringFromCharCode = String.fromCharCode;
+	// Modified version of `ucs2encode`; see http://mths.be/punycode
+	var codePointToSymbol = function(codePoint, strict) {
+		var output = '';
+		if (codePoint > 0xFFFF) {
+			codePoint -= 0x10000;
+			output += stringFromCharCode(codePoint >>> 10 & 0x3FF | 0xD800);
+			codePoint = 0xDC00 | codePoint & 0x3FF;
+		}
+		output += stringFromCharCode(codePoint);
+		return output;
+	};
+
 	var jsesc = function(argument, options) {
 		// Handle options
 		var defaults = {
@@ -91,7 +101,7 @@
 			'wrap': false,
 			'compact': true,
 			'indent': '\t',
-			'__indent': '',
+			'__indent__': '',
 		};
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
@@ -114,9 +124,9 @@
 			if (isArray(argument)) {
 				result = [];
 				options.wrap = true;
-				oldIndent = options.__indent;
+				oldIndent = options.__indent__;
 				indent += oldIndent;
-				options.__indent = indent;
+				options.__indent__ = indent;
 				forEach(argument, function(value) {
 					isEmpty = false;
 					result.push(
@@ -129,17 +139,6 @@
 				}
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
-			} else if (!json && isRegExp(argument)) {
-				return '/' + jsesc(
-					evil(
-						'\'' + argument.source.replace(regexEval, jsesc) + '\''
-					),
-					extend(options, {
-						'wrap': false,
-						'escapeEverything': false
-					}
-				)) + '/' + (argument.global ? 'g' : '') +
-				(argument.ignoreCase ? 'i' : '') + (argument.multiline ? 'm' : '');
 			} else if (!isObject(argument)) {
 				if (json) {
 					// For some values (e.g. `undefined`, `function` objects),
@@ -150,9 +149,9 @@
 			} else { // it’s an object
 				result = [];
 				options.wrap = true;
-				oldIndent = options.__indent;
+				oldIndent = options.__indent__;
 				indent += oldIndent;
-				options.__indent = indent;
+				options.__indent__ = indent;
 				forOwn(argument, function(key, value) {
 					isEmpty = false;
 					result.push(
@@ -244,4 +243,4 @@
 		root.jsesc = jsesc;
 	}
 
-}(this, eval));
+}(this));
