@@ -103,15 +103,16 @@
 			'indent': '\t',
 			'__indent__': '',
 		};
+		if (options.json) {
+			defaults.quotes = 'double';
+			defaults.wrap = true;
+		}
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
 			options.quotes = 'single';
 		}
 		var json = options.json;
-		if (json) {
-			options.quotes = 'double';
-			options.wrap = true;
-		}
+		
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
 		var indent = options.indent;
