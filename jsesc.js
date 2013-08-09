@@ -75,7 +75,6 @@
 		// '\v': '\\x0B'
 	};
 	var regexSingleEscape = /["'\\\b\f\n\r\t]/;
-	var regexEval = /['\n\r\u2028\u2029]/g;
 
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /[\x20\x21\x23-\x26\x28-\x5B\x5D-\x7E]/;
