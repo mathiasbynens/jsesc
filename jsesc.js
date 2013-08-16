@@ -98,18 +98,19 @@
 			'escapeEverything': false,
 			'quotes': 'single',
 			'wrap': false,
+			'json': false,
 			'compact': true,
 			'indent': '\t',
-			'__indent__': '',
+			'__indent__': ''
 		};
+		var json = options && options.json;
+		if (json) {
+			defaults.quotes = 'double';
+			defaults.wrap = true;
+		}
 		options = extend(defaults, options);
 		if (options.quotes != 'single' && options.quotes != 'double') {
 			options.quotes = 'single';
-		}
-		var json = options.json;
-		if (json) {
-			options.quotes = 'double';
-			options.wrap = true;
 		}
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
