@@ -79,19 +79,6 @@
 	var regexDigit = /[0-9]/;
 	var regexWhitelist = /<%= whitelist %>/;
 
-	var stringFromCharCode = String.fromCharCode;
-	// Modified version of `ucs2encode`; see http://mths.be/punycode
-	var codePointToSymbol = function(codePoint, strict) {
-		var output = '';
-		if (codePoint > 0xFFFF) {
-			codePoint -= 0x10000;
-			output += stringFromCharCode(codePoint >>> 10 & 0x3FF | 0xD800);
-			codePoint = 0xDC00 | codePoint & 0x3FF;
-		}
-		output += stringFromCharCode(codePoint);
-		return output;
-	};
-
 	var jsesc = function(argument, options) {
 		// Handle options
 		var defaults = {
