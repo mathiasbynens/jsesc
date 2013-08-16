@@ -182,8 +182,7 @@
 		equal(
 			jsesc('foo\x00bar\uFFFDbaz', {
 				'escapeEverything': true,
-				'json': true,
-				'quotes': 'single' // `json: true` should override this setting
+				'json': true
 			}),
 			'"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"',
 			'JSON-stringifying a string with `escapeEverything: true`'
@@ -191,8 +190,7 @@
 		equal(
 			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'escapeEverything': true,
-				'json': true,
-				'quotes': 'single' // `json: true` should override this setting
+				'json': true
 			}),
 			'{"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A":"\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"}',
 			'JSON-stringifying a flat object with `escapeEverything: true`'
@@ -200,11 +198,35 @@
 		equal(
 			jsesc(['foo\x00bar\uFFFDbaz', 'foo\x00bar\uFFFDbaz'], {
 				'escapeEverything': true,
-				'json': true,
-				'quotes': 'single' // `json: true` should override this setting
+				'json': true
 			}),
 			'["\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A","\\u0066\\u006F\\u006F\\u0000\\u0062\\u0061\\u0072\\uFFFD\\u0062\\u0061\\u007A"]',
 			'JSON-stringifying a flat array with `escapeEverything: true`'
+		);
+		equal(
+			jsesc('foo\x00bar', {
+				'json': true,
+				'wrap': false // override default `wrap: true` when `json` is enabled
+			}),
+			'foo\\u0000bar',
+			'Escaping as JSON with `wrap: false`'
+		);
+		equal(
+			jsesc('foo "\x00" bar', {
+				'json': true,
+				'wrap': false // override default `wrap: true` when `json` is enabled
+			}),
+			'foo \\"\\u0000\\" bar',
+			'Escaping as JSON with `wrap: false` escapes double quotes correctly'
+		);
+		equal(
+			jsesc('foo "\x00" bar \' qux', {
+				'json': true,
+				'quotes': 'single', // override default `wrap: true, quotes: 'double'` when `json` is enabled
+				'wrap': false
+			}),
+			'foo "\\u0000" bar \\\' qux',
+			'Escaping as JSON with `wrap: false, quotes: \'single\'`'
 		);
 	});
 
