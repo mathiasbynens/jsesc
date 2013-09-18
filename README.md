@@ -2,6 +2,8 @@
 
 This is a JavaScript library for [escaping JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes) while generating the shortest possible valid ASCII-only output. [Here’s an online demo.](http://mothereff.in/js-escapes)
 
+This can be used to avoid [mojibake](http://en.wikipedia.org/wiki/Mojibake) and other encoding issues, or even to [avoid errors](https://twitter.com/annevk/status/380000829643571200) when passing JSON-formatted data (which may contain U+2028 LINE SEPARATOR, U+2029 PARAGRAPH SEPARATOR, or [lone surrogates](http://esdiscuss.org/topic/code-points-vs-unicode-scalar-values#content-14)) to a JavaScript parser or an UTF-8 encoder, respectively.
+
 Feel free to fork if you see possible improvements!
 
 ## Installation
