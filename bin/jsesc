@@ -26,6 +26,7 @@
 				'\tjsesc [-d | --double-quotes] [string]',
 				'\tjsesc [-w | --wrap] [string]',
 				'\tjsesc [-e | --escape-everything] [string]',
+				'\tjsesc [-6 | --es6] [string]',
 				'\tjsesc [-j | --json] [string]',
 				'\tjsesc [-o | --object] [stringified_object]', // `JSON.parse()` the argument
 				'\tjsesc [-p | --pretty] [string]', // `compact: false`
@@ -58,6 +59,10 @@
 			}
 			if (/^(?:-w|--wrap)$/.test(string)) {
 				options.wrap = true;
+				return;
+			}
+			if (/^(?:-6|--es6)$/.test(string)) {
+				options.es6 = true;
 				return;
 			}
 			if (/^(?:-e|--escape-everything)$/.test(string)) {

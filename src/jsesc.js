@@ -85,6 +85,7 @@
 			'escapeEverything': false,
 			'quotes': 'single',
 			'wrap': false,
+			'es6': false,
 			'json': false,
 			'compact': true,
 			'indent': '\t',
@@ -129,7 +130,8 @@
 			} else if (!isObject(argument)) {
 				if (json) {
 					// For some values (e.g. `undefined`, `function` objects),
-					// `JSON.stringify(value)` returns `undefined` instead of `'null'`,
+					// `JSON.stringify(value)` returns `undefined` (which isn’t valid
+					// JSON) instead of `'null'`.
 					return JSON.stringify(argument) || 'null';
 				}
 				return String(argument);
@@ -160,9 +162,28 @@
 		// Loop over each code unit in the string and escape it
 		var index = -1;
 		var length = string.length;
+		var first;
+		var second;
+		var codePoint;
 		result = '';
 		while (++index < length) {
 			var character = string.charAt(index);
+			if (options.es6) {
+				first = string.charCodeAt(index);
+				if ( // check if it’s the start of a surrogate pair
+					first >= 0xD800 && first <= 0xDBFF && // high surrogate
+					length > index + 1 // there is a next code unit
+				) {
+					second = string.charCodeAt(index + 1);
+					if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
+						// http://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+						codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
+						result += '\\u{' + codePoint.toString(16).toUpperCase() + '}';
+						index++;
+						continue;
+					}
+				}
+			}
 			if (!options.escapeEverything) {
 				if (regexWhitelist.test(character)) {
 					// It’s a printable ASCII character that is not `"`, `'` or `\`,

@@ -94,6 +94,28 @@
 			'escapeEverything'
 		);
 		equal(
+			jsesc('a\uD834\uDF06b', {
+				'es6': true
+			}),
+			'a\\u{1D306}b',
+			'es6'
+		);
+		equal(
+			jsesc('a\uD834\uDF06b\uD83D\uDCA9c', {
+				'es6': true
+			}),
+			'a\\u{1D306}b\\u{1F4A9}c',
+			'es6'
+		);
+		equal(
+			jsesc('a\uD834\uDF06b\uD83D\uDCA9c', {
+				'es6': true,
+				'escapeEverything': true
+			}),
+			'\\x61\\u{1D306}\\x62\\u{1F4A9}\\x63',
+			'es6 + escapeEverything'
+		);
+		equal(
 			jsesc({}, {
 				'compact': true
 			}),
@@ -509,6 +531,43 @@
 					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --wrap',
 					'expected': {
 						'stdout': '\'f\\xF6o \\u2665 \\\'"\\\'" b\\xE5r \\uD834\\uDF06 baz\'\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-6 option',
+					'command': './bin/jsesc -6 a\uD834\uDF06b\uD83D\uDCA9c',
+					'expected': {
+						'stdout': 'a\\u{1D306}b\\u{1F4A9}c\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-6 option, piping content',
+					'command': 'echo a\uD834\uDF06b\uD83D\uDCA9c | ./bin/jsesc -6',
+					'expected': {
+						'stdout': 'a\\u{1D306}b\\u{1F4A9}c\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+
+				{
+					'description': '--es6 option',
+					'command': './bin/jsesc --es6 a\uD834\uDF06b\uD83D\uDCA9c',
+					'expected': {
+						'stdout': 'a\\u{1D306}b\\u{1F4A9}c\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--es6 option, piping content',
+					'command': 'echo a\uD834\uDF06b\uD83D\uDCA9c | ./bin/jsesc --es6',
+					'expected': {
+						'stdout': 'a\\u{1D306}b\\u{1F4A9}c\n',
 						'stderr': '',
 						'exitStatus': 0
 					}

@@ -157,6 +157,28 @@ jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
 // → "\"Lorem ipsum \\\"dolor\\\" sit \'amet\' etc.\""
 ```
 
+#### `es6`
+
+The `es6` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, any astral Unicode symbols in the input will be escaped using [ECMAScript 6 Unicode code point escape sequences](http://mathiasbynens.be/notes/javascript-escapes#unicode-code-point) instead of using separate escape sequences for each surrogate half. If backwards compatibility with ES5 environments is a concern, don’t enable this setting.
+
+```js
+// By default, the `es6` option is disabled:
+jsesc('foo 𝌆 bar 💩 baz');
+// → 'foo \\uD834\\uDF06 bar \\uD83D\\uDCA9 baz'
+
+// To explicitly disable it:
+jsesc('foo 𝌆 bar 💩 baz', {
+  'es6': false
+});
+// → 'foo \\uD834\\uDF06 bar \\uD83D\\uDCA9 baz'
+
+// To enable it:
+jsesc('foo 𝌆 bar 💩 baz', {
+  'es6': true
+});
+// → 'foo \\u{1D306} bar \\u{1F4A9} baz'
+```
+
 #### `escapeEverything`
 
 The `escapeEverything` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, all the symbols in the output will be escaped, even printable ASCII symbols.

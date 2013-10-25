@@ -1,4 +1,4 @@
-.Dd July 27, 2013
+.Dd October 25, 2013
 .Dt jsesc 1
 .Sh NAME
 .Nm jsesc
@@ -10,6 +10,8 @@
 .Op Fl d | -double-quotes Ar string
 .br
 .Op Fl w | -wrap Ar string
+.br
+.Op Fl 6 | -es6 Ar string
 .br
 .Op Fl e | -escape-everything Ar string
 .br
@@ -37,6 +39,8 @@ Make sure the output is a valid JavaScript string literal wrapped in quotes. The
 or
 .Ar -d | --double-quotes
 settings.
+.It Sy "-6, --es6"
+Escape any astral Unicode symbols using ECMAScript 6 Unicode code point escape sequences.
 .It Sy "-e, --escape-everything"
 Escape all the symbols in the output, even printable ASCII symbols.
 .It Sy "-j, --json"
