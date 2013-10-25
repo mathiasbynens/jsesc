@@ -7,6 +7,7 @@
 	"scripts": [
 		"jsesc.js"
 	],
+	"main": "jsesc.js",
 	"keywords": [
 		"string",
 		"escape",
