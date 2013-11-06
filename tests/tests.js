@@ -244,11 +244,19 @@
 		equal(
 			jsesc('foo "\x00" bar \' qux', {
 				'json': true,
-				'quotes': 'single', // override default `wrap: true, quotes: 'double'` when `json` is enabled
-				'wrap': false
+				'quotes': 'single', // override default `quotes: 'double'` when `json` is enabled
+				'wrap': false // override default `wrap: true` when `json` is enabled
 			}),
 			'foo "\\u0000" bar \\\' qux',
 			'Escaping as JSON with `wrap: false, quotes: \'single\'`'
+		);
+		equal(
+			jsesc('foo\uD834\uDF06bar\xA9baz', {
+				'json': true,
+				'es6': true // override default `es6: false` when `json` is enabled
+			}),
+			'"foo\\u{1D306}bar\\u00A9baz"',
+			'Escaping as JSON with `es6: true`'
 		);
 	});
 
