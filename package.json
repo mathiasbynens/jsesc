@@ -9,6 +9,7 @@
 	"keywords": [
 		"string",
 		"escape",
+		"javascript",
 		"tool"
 	],
 	"licenses": [
@@ -41,13 +42,14 @@
 		"test": "node tests/tests.js"
 	},
 	"devDependencies": {
-		"grunt": "~0.4.4",
-		"grunt-shell": "~0.6.4",
-		"grunt-template": "~0.2.3",
-		"istanbul": "~0.2.7",
-		"qunit-extras": "~1.0.0",
+		"coveralls": "^2.10.0",
+		"grunt": "^0.4.4",
+		"grunt-shell": "^0.6.4",
+		"grunt-template": "^0.2.3",
+		"istanbul": "^0.2.7",
+		"qunit-extras": "^1.0.0",
 		"qunitjs": "~1.11.0",
-		"regenerate": "~0.6.0",
-		"requirejs": "~2.1.11"
+		"regenerate": "^0.6.0",
+		"requirejs": "^2.1.11"
 	}
 }
