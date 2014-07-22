@@ -263,6 +263,26 @@
 			'"foo\\u{1D306}bar\\u00A9baz"',
 			'Escaping as JSON with `es6: true`'
 		);
+		var tmp = {
+			'shouldn\u2019t be here': 10,
+			'toJSON': function() {
+				return {
+					'hello': 'world',
+					'\uD83D\uDCA9': 'foo',
+					'pile': '\uD83D\uDCA9'
+				};
+			}
+		};
+		equal(
+			jsesc(tmp, { 'json' : true }),
+			'{"hello":"world","\\uD83D\\uDCA9":"foo","pile":"\\uD83D\\uDCA9"}',
+			'`toJSON` methods are called when `json: true`'
+		);
+		notEqual(
+			jsesc(tmp),
+			'{"hello":"world","\\uD83D\\uDCA9":"foo","pile":"\\uD83D\\uDCA9"}',
+			'`toJSON` methods are not called when `json: false`'
+		);
 	});
 
 	if (runExtendedTests) {

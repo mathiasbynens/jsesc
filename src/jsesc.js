@@ -51,12 +51,19 @@
 		return toString.call(value) == '[object Array]';
 	};
 	var isObject = function(value) {
-		// simple, but good enough for what we need
+		// This is a very simple check, but it’s good enough for what we need.
 		return toString.call(value) == '[object Object]';
 	};
 	var isString = function(value) {
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
+	};
+	var isFunction = function(value) {
+		// In a perfect world, the `typeof` check would be sufficient. However,
+		// in Chrome 1–12, `typeof /x/ == 'object'`, and in IE 6–8
+		// `typeof alert == 'object'` and similar for other host objects.
+		return typeof value == 'function' ||
+			toString.call(value) == '[object Function]';
 	};
 
 	/*--------------------------------------------------------------------------*/
@@ -71,7 +78,7 @@
 		'\n': '\\n',
 		'\r': '\\r',
 		'\t': '\\t'
-		// `\v` is omitted intentionally, because in IE < 9, '\v' == 'v'
+		// `\v` is omitted intentionally, because in IE < 9, '\v' == 'v'.
 		// '\v': '\\x0B'
 	};
 	var regexSingleEscape = /["'\\\b\f\n\r\t]/;
@@ -107,6 +114,10 @@
 		var newLine = compact ? '' : '\n';
 		var result;
 		var isEmpty = true;
+
+		if (json && argument && isFunction(argument.toJSON)) {
+			argument = argument.toJSON();
+		}
 
 		if (!isString(argument)) {
 			if (isArray(argument)) {
