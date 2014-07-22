@@ -263,6 +263,17 @@
 			'"foo\\u{1D306}bar\\u00A9baz"',
 			'Escaping as JSON with `es6: true`'
 		);
+		equal(
+			jsesc('foo - \uD83D\uDCA9 - foo', {json: true}),
+			'"foo - \\uD83D\\uDCA9 - foo"',
+			'Escaping as JSON is same as JSON.stringify'
+		);
+		var objWithToJson = {'shouldnt be here': 10, toJSON: function() { return {'hello': 'world', 'cat': 'dog', 'pileof': '\uD83D\uDCA9'}; }};
+		equal(
+			jsesc(objWithToJson, {json: true}),
+			'{"hello":"world","cat":"dog","pileof":"\\uD83D\\uDCA9"}',
+			'Escaping obj with toJSON, as JSON, is same as JSON.stringify'
+		);
 	});
 
 	if (runExtendedTests) {
