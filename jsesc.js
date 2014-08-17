@@ -58,6 +58,9 @@
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
 	};
+	var isFunction = function(value) {
+		return typeof value == 'function';
+	};
 
 	/*--------------------------------------------------------------------------*/
 
@@ -107,6 +110,11 @@
 		var newLine = compact ? '' : '\n';
 		var result;
 		var isEmpty = true;
+
+		// convert argument to toJSON if needed.
+		if (json && argument && isObject(argument) && isFunction(argument.toJSON)) {
+			argument = argument.toJSON();
+		}
 
 		if (!isString(argument)) {
 			if (isArray(argument)) {
