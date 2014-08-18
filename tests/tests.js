@@ -23,7 +23,7 @@
 	}
 
 	// Extend `Object.prototype` to see if this library can handle it.
-	Object.prototype['♥'] = '...';
+	Object.prototype['\u2665'] = '...';
 
 	/** The `regenerate` object to test */
 	var jsesc = root.jsesc || (root.jsesc = (
@@ -38,7 +38,11 @@
 		process.argv[0] == 'node';
 	var runExtendedTests = root.phantom || isNode;
 
-	test('jsesc: common usage', function() {
+	// explicitly call `QUnit.module()` instead of `module()`
+	// in case we are in a CLI environment
+	QUnit.module('jsesc');
+
+	test('common usage', function() {
 		equal(
 			typeof jsesc.version,
 			'string',
@@ -286,7 +290,7 @@
 	});
 
 	if (runExtendedTests) {
-		test('jsesc: advanced tests', function() {
+		test('advanced tests', function() {
 			var map = function(array, fn) {
 				var length = array.length;
 				while (length--) {

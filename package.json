@@ -1,6 +1,6 @@
 {
 	"name": "jsesc",
-	"version": "0.4.3",
+	"version": "0.5.0",
 	"description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
 	"homepage": "http://mths.be/jsesc",
 	"main": "jsesc.js",
