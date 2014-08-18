@@ -9,5 +9,5 @@ var set = regenerate()
 
 module.exports = {
 	'whitelist': set.toString(),
-	'version': JSON.parse(fs.readFileSync('package.json', 'utf8')).version
+	'version': require('../package.json').version
 };
