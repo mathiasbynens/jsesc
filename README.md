@@ -1,6 +1,6 @@
 # jsesc [![Build status](https://travis-ci.org/mathiasbynens/jsesc.svg?branch=master)](https://travis-ci.org/mathiasbynens/jsesc) [![Code coverage status](http://img.shields.io/coveralls/mathiasbynens/jsesc/master.svg)](https://coveralls.io/r/mathiasbynens/jsesc) [![Dependency status](https://gemnasium.com/mathiasbynens/jsesc.svg)](https://gemnasium.com/mathiasbynens/jsesc)
 
-This is a JavaScript library for [escaping JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes) while generating the shortest possible valid ASCII-only output. [Here’s an online demo.](http://mothereff.in/js-escapes)
+This is a JavaScript library for [escaping JavaScript strings](https://mathiasbynens.be/notes/javascript-escapes) while generating the shortest possible valid ASCII-only output. [Here’s an online demo.](https://mothereff.in/js-escapes)
 
 This can be used to avoid [mojibake](http://en.wikipedia.org/wiki/Mojibake) and other encoding issues, or even to [avoid errors](https://twitter.com/annevk/status/380000829643571200) when passing JSON-formatted data (which may contain U+2028 LINE SEPARATOR, U+2029 PARAGRAPH SEPARATOR, or [lone surrogates](http://esdiscuss.org/topic/code-points-vs-unicode-scalar-values#content-14)) to a JavaScript parser or an UTF-8 encoder, respectively.
 
@@ -20,7 +20,7 @@ Via [Component](https://github.com/component/component):
 component install mathiasbynens/jsesc
 ```
 
-Via [npm](http://npmjs.org/):
+Via [npm](https://www.npmjs.org/):
 
 ```bash
 npm install jsesc
@@ -32,7 +32,7 @@ In a browser:
 <script src="jsesc.js"></script>
 ```
 
-In [Node.js](http://nodejs.org/) and [RingoJS](http://ringojs.org/):
+In [Node.js](https://nodejs.org/) and [RingoJS](http://ringojs.org/):
 
 ```js
 var jsesc = require('jsesc');
@@ -70,7 +70,7 @@ require(
 
 ### `jsesc(value, options)`
 
-This function takes a value and returns an escaped version of the value where any characters that are not printable ASCII symbols are escaped using the shortest possible (but valid) [escape sequences for use in JavaScript strings](http://mathiasbynens.be/notes/javascript-escapes). The first supported value type is strings:
+This function takes a value and returns an escaped version of the value where any characters that are not printable ASCII symbols are escaped using the shortest possible (but valid) [escape sequences for use in JavaScript strings](https://mathiasbynens.be/notes/javascript-escapes). The first supported value type is strings:
 
 ```js
 jsesc('Ich ♥ Bücher');
@@ -159,7 +159,7 @@ jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
 
 #### `es6`
 
-The `es6` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, any astral Unicode symbols in the input will be escaped using [ECMAScript 6 Unicode code point escape sequences](http://mathiasbynens.be/notes/javascript-escapes#unicode-code-point) instead of using separate escape sequences for each surrogate half. If backwards compatibility with ES5 environments is a concern, don’t enable this setting. If the `json` setting is enabled, the value for the `es6` setting is ignored (as if it was `false`).
+The `es6` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, any astral Unicode symbols in the input will be escaped using [ECMAScript 6 Unicode code point escape sequences](https://mathiasbynens.be/notes/javascript-escapes#unicode-code-point) instead of using separate escape sequences for each surrogate half. If backwards compatibility with ES5 environments is a concern, don’t enable this setting. If the `json` setting is enabled, the value for the `es6` setting is ignored (as if it was `false`).
 
 ```js
 // By default, the `es6` option is disabled:
@@ -257,7 +257,7 @@ This setting has no effect on the output for strings.
 
 #### `json`
 
-The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](http://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](http://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore.
+The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](https://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](https://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore.
 
 ```js
 jsesc('foo\x00bar\xFF\uFFFDbaz', {
@@ -352,9 +352,9 @@ See `jsesc --help` for the full list of options.
 
 ## Support
 
-This library has been tested in at least Chrome 27-29, Firefox 3-22, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.9, PhantomJS 1.9.0, and Rhino 1.7RC4.
+This library has been tested in at least Chrome 27-29, Firefox 3-22, Safari 4-6, Opera 10-12, IE 6-10, Node.js v0.10.0, Narwhal 0.3.2, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7RC4.
 
-**Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
+**Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](https://bestiejs.github.io/json3/).
 
 ## Unit tests & code coverage
 
@@ -368,8 +368,8 @@ To generate the code coverage report, use `grunt cover`.
 
 | [![twitter/mathias](https://gravatar.com/avatar/24e08a9ea84deb17ae121074d0f17125?s=70)](https://twitter.com/mathias "Follow @mathias on Twitter") |
 |---|
-| [Mathias Bynens](http://mathiasbynens.be/) |
+| [Mathias Bynens](https://mathiasbynens.be/) |
 
 ## License
 
-This library is available under the [MIT](http://mths.be/mit) license.
+This library is available under the [MIT](https://mths.be/mit) license.

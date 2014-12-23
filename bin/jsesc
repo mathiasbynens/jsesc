@@ -16,7 +16,7 @@
 
 		if (/^(?:-h|--help|undefined)$/.test(option)) {
 			log(
-				'jsesc v%s - http://mths.be/jsesc',
+				'jsesc v%s - https://mths.be/jsesc',
 				stringEscape.version
 			);
 			log([

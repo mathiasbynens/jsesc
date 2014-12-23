@@ -299,7 +299,7 @@
 				return array;
 			};
 
-			// taken from http://mths.be/punycode
+			// taken from https://mths.be/punycode
 			var stringFromCharCode = String.fromCharCode;
 			var ucs2encode = function(value) {
 				var output = '';
@@ -316,7 +316,7 @@
 			var codePoint;
 			var symbol = '';
 			// Generate strings based on code points. Trickier than it seems:
-			// http://mathiasbynens.be/notes/javascript-encoding
+			// https://mathiasbynens.be/notes/javascript-encoding
 			for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint++) {
 				symbol = ucs2encode(codePoint);
 				// ok(
