@@ -8,7 +8,7 @@
 	var freeModule = typeof module == 'object' && module &&
 		module.exports == freeExports && module;
 
-	// Detect free variable `global`, from Node.js or Browserified code,
+	// Detect free variable `global`, from Node.js/io.js or Browserified code,
 	// and use it as `root`
 	var freeGlobal = typeof global == 'object' && global;
 	if (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal) {
@@ -253,7 +253,7 @@
 			return jsesc;
 		});
 	}	else if (freeExports && !freeExports.nodeType) {
-		if (freeModule) { // in Node.js or RingoJS v0.8.0+
+		if (freeModule) { // in Node.js, io.js, or RingoJS v0.8.0+
 			freeModule.exports = jsesc;
 		} else { // in Narwhal or RingoJS v0.7.0-
 			freeExports.jsesc = jsesc;
