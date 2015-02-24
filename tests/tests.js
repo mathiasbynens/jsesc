@@ -317,7 +317,7 @@
 			var symbol = '';
 			// Generate strings based on code points. Trickier than it seems:
 			// https://mathiasbynens.be/notes/javascript-encoding
-			for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint++) {
+			for (codePoint = 0x000000; codePoint <= 0x10FFFF; codePoint += 0xF) {
 				symbol = ucs2encode(codePoint);
 				// ok(
 				// 	eval('\'' + jsesc(symbol) + '\'') == symbol,
