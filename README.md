@@ -290,6 +290,18 @@ jsesc([ undefined, -Infinity ], {
 
 **Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.stringify()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).
 
+#### `lowercaseHex`
+
+The `lowercaseHex` option takes a boolean value (`true` or `false`), and defaults to `false`. When enabled, the hexadecimal values in the output are in lower case.
+
+```js
+jsesc('Ich ♥ Bücher', {
+  'lowercaseHex': true,
+});
+// → 'Ich \\u2665 B\\xfccher'
+
+```
+
 ### `jsesc.version`
 
 A string representing the semantic version number.
