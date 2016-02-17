@@ -287,6 +287,68 @@
 			'{"hello":"world","\\uD83D\\uDCA9":"foo","pile":"\\uD83D\\uDCA9"}',
 			'`toJSON` methods are not called when `json: false`'
 		);
+		equal(
+			jsesc('\u2192\xE9', {
+				'lowercaseHex': true
+			}),
+			'\\u2192\\xe9',
+			'Alphabetical hexadecimal digits are lowercase when `lowercaseHex: true`'
+		);
+		equal(
+			jsesc('\u2192\xE9', {
+				'lowercaseHex': false
+			}),
+			'\\u2192\\xE9',
+			'Alphabetical hexadecimal digits are uppercase when `lowercaseHex: false`'
+		);
+		equal(
+			jsesc('\u2192\xE9', {
+				'lowercaseHex': true,
+				'json': true
+			}),
+			'"\\u2192\\u00e9"',
+			'Alphabetical hexadecimal digits are lowercase when `lowercaseHex: false` and `json: true`'
+		);
+		equal(
+			jsesc('\u2192\xe9', {
+				'lowercaseHex': false,
+				'json': true
+			}),
+			'"\\u2192\\u00E9"',
+			'Alphabetical hexadecimal digits are uppercase when `lowercaseHex: false` and `json: true`'
+		);
+		equal(
+			jsesc('\xE7\xE7a\xE7\xE7', {
+				'lowercaseHex': true,
+				'escapeEverything': true
+			}),
+			'\\xe7\\xe7\\x61\\xe7\\xe7',
+			'Alphabetical hexadecimal digits are lowercase when `lowercaseHex: true` and `escapeEverything: true`'
+		);
+		equal(
+			jsesc('\xE7\xE7a\xE7\xE7', {
+				'lowercaseHex': false,
+				'escapeEverything': true
+			}),
+			'\\xE7\\xE7\\x61\\xE7\\xE7',
+			'Alphabetical hexadecimal digits are uppercase when `lowercaseHex: false` and `escapeEverything: true`'
+		);
+		equal(
+			jsesc('\u2192\xE9\uD83D\uDCA9', {
+				'lowercaseHex': true,
+				'es6': true
+			}),
+			'\\u2192\\xe9\\u{1f4a9}',
+			'Alphabetical hexadecimal digits are lowercase when `lowercaseHex: true` and `es6: true`'
+		);
+		equal(
+			jsesc('\u2192\xE9\uD83D\uDCA9', {
+				'lowercaseHex': false,
+				'es6': true
+			}),
+			'\\u2192\\xE9\\u{1F4A9}',
+			'Alphabetical hexadecimal digits are uppercase when `lowercaseHex: false` and `es6: true`'
+		);
 	});
 
 	if (runExtendedTests) {
