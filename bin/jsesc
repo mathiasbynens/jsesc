@@ -27,10 +27,10 @@
 				'\tjsesc [-w | --wrap] [string]',
 				'\tjsesc [-e | --escape-everything] [string]',
 				'\tjsesc [-6 | --es6] [string]',
+				'\tjsesc [-l | --lowercase-hex] [string]',
 				'\tjsesc [-j | --json] [string]',
 				'\tjsesc [-o | --object] [stringified_object]', // `JSON.parse()` the argument
 				'\tjsesc [-p | --pretty] [string]', // `compact: false`
-				'\tjsesc [-l | --lowercase-hex] [string]',
 				'\tjsesc [-v | --version]',
 				'\tjsesc [-h | --help]',
 				'\nExamples:\n',
@@ -62,12 +62,16 @@
 				options.wrap = true;
 				return;
 			}
+			if (/^(?:-e|--escape-everything)$/.test(string)) {
+				options.escapeEverything = true;
+				return;
+			}
 			if (/^(?:-6|--es6)$/.test(string)) {
 				options.es6 = true;
 				return;
 			}
-			if (/^(?:-e|--escape-everything)$/.test(string)) {
-				options.escapeEverything = true;
+			if (/^(?:-l|--lowercase-hex)$/.test(string)) {
+				options.lowercaseHex = true;
 				return;
 			}
 			if (/^(?:-j|--json)$/.test(string)) {
@@ -81,10 +85,6 @@
 			if (/^(?:-p|--pretty)$/.test(string)) {
 				isObject = true;
 				options.compact = false;
-				return;
-			}
-			if (/^(?:-l|--lowercase-hex)$/.test(string)) {
-				options.lowercaseHex = true;
 				return;
 			}
 

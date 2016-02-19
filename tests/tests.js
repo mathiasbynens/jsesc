@@ -35,7 +35,7 @@
 
 	// Quick and dirty test to see if we’re in PhantomJS or Node
 	var isNode = typeof process != 'undefined' && process.argv &&
-		process.argv[0] == 'node';
+		process.argv[0].slice(-4) == 'node';
 	var runExtendedTests = root.phantom || isNode;
 
 	// explicitly call `QUnit.module()` instead of `module()`
@@ -703,6 +703,42 @@
 					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --escape-everything',
 					'expected': {
 						'stdout': '\\x66\\xF6\\x6F\\x20\\u2665\\x20\\\'\\"\\\'\\"\\x20\\x62\\xE5\\x72\\x20\\uD834\\uDF06\\x20\\x62\\x61\\x7A\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-l option',
+					'command': './bin/jsesc -l a\uD834\uDF06b\uD83D\uDCA9c',
+					'expected': {
+						'stdout': 'a\\ud834\\udf06b\\ud83d\\udca9c\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-l option, piping content',
+					'command': 'echo a\uD834\uDF06b\uD83D\uDCA9c | ./bin/jsesc -l',
+					'expected': {
+						'stdout': 'a\\ud834\\udf06b\\ud83d\\udca9c\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--lowercase-hex option',
+					'command': './bin/jsesc --lowercase-hex a\uD834\uDF06b\uD83D\uDCA9c',
+					'expected': {
+						'stdout': 'a\\ud834\\udf06b\\ud83d\\udca9c\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--lowercase-hex option, piping content',
+					'command': 'echo a\uD834\uDF06b\uD83D\uDCA9c | ./bin/jsesc --lowercase-hex',
+					'expected': {
+						'stdout': 'a\\ud834\\udf06b\\ud83d\\udca9c\n',
 						'stderr': '',
 						'exitStatus': 0
 					}
