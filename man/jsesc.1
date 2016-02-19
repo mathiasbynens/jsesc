@@ -21,6 +21,8 @@
 .br
 .Op Fl p | -pretty Ar string
 .br
+.Op Fl u | -uppercase-hex Ar string
+.br
 .Op Fl v | -version
 .br
 .Op Fl h | -help
@@ -53,6 +55,8 @@ settings.
 Treat the input as a JavaScript object rather than a string. Accepted values are flat arrays containing only string values, and flat objects containing only string values.
 .It Sy "-p, --pretty"
 Pretty-print the output for objects, using whitespace to make it more readable. Setting this flag enables the
+.It Sy "-u, --lowercase-hex"
+Convert the hexadecimal values to lowercase.
 .Ar -o | --object
 setting.
 .It Sy "-v, --version"

@@ -30,6 +30,7 @@
 				'\tjsesc [-j | --json] [string]',
 				'\tjsesc [-o | --object] [stringified_object]', // `JSON.parse()` the argument
 				'\tjsesc [-p | --pretty] [string]', // `compact: false`
+				'\tjsesc [-l | --lowercase-hex] [string]',
 				'\tjsesc [-v | --version]',
 				'\tjsesc [-h | --help]',
 				'\nExamples:\n',
@@ -80,6 +81,10 @@
 			if (/^(?:-p|--pretty)$/.test(string)) {
 				isObject = true;
 				options.compact = false;
+				return;
+			}
+			if (/^(?:-l|--lowercase-hex)$/.test(string)) {
+				options.lowercaseHex = true;
 				return;
 			}
 
