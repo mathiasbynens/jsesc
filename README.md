@@ -100,7 +100,7 @@ The optional `options` argument accepts an object with the following options:
 
 #### `quotes`
 
-The default value for the `quotes` option is `'single'`. This means that any occurences of `'` in the input string will be escaped as `\'`, so that the output can be used in a string literal wrapped in single quotes.
+The default value for the `quotes` option is `'single'`. This means that any occurrences of `'` in the input string will be escaped as `\'`, so that the output can be used in a string literal wrapped in single quotes.
 
 ```js
 jsesc('Lorem ipsum "dolor" sit \'amet\' etc.');
