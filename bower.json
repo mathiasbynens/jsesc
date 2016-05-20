@@ -1,6 +1,6 @@
 {
 	"name": "jsesc",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"main": "jsesc.js",
 	"ignore": [
 		"bin",
