@@ -90,6 +90,7 @@
 		// Handle options
 		var defaults = {
 			'escapeEverything': false,
+			'escapeEtago': false,
 			'quotes': 'single',
 			'wrap': false,
 			'es6': false,
@@ -242,6 +243,10 @@
 		}
 		if (options.wrap) {
 			result = quote + result + quote;
+		}
+		if (options.escapeEtago) {
+			// https://mathiasbynens.be/notes/etago
+			return result.replace(/<\/(script|style)/gi, '<\\/$1');
 		}
 		return result;
 	};

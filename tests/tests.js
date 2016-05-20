@@ -103,6 +103,20 @@
 			'escapeEverything'
 		);
 		equal(
+			jsesc('foo</script>bar</style>baz</script>qux', {
+				'escapeEtago': true
+			}),
+			'foo<\\/script>bar<\\/style>baz<\\/script>qux',
+			'escapeEtago'
+		);
+		equal(
+			jsesc('foo</sCrIpT>bar</STYLE>baz</SCRIPT>qux', {
+				'escapeEtago': true
+			}),
+			'foo<\\/sCrIpT>bar<\\/STYLE>baz<\\/SCRIPT>qux',
+			'escapeEtago'
+		);
+		equal(
 			jsesc('a\uD834\uDF06b', {
 				'es6': true
 			}),
@@ -703,6 +717,42 @@
 					'command': 'echo f\xF6o\\ \u2665\\ \\\'\\"\\\'\\"\\ b\xE5r\\ \uD834\uDF06\\ baz | ./bin/jsesc --escape-everything',
 					'expected': {
 						'stdout': '\\x66\\xF6\\x6F\\x20\\u2665\\x20\\\'\\"\\\'\\"\\x20\\x62\\xE5\\x72\\x20\\uD834\\uDF06\\x20\\x62\\x61\\x7A\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-t option',
+					'command': './bin/jsesc -t "foo</script>bar"',
+					'expected': {
+						'stdout': 'foo<\\/script>bar\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '-t option, piping content',
+					'command': 'echo "foo</script>bar" | ./bin/jsesc -t',
+					'expected': {
+						'stdout': 'foo<\\/script>bar\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--escape-etago option',
+					'command': './bin/jsesc --escape-etago "foo</script>bar"',
+					'expected': {
+						'stdout': 'foo<\\/script>bar\n',
+						'stderr': '',
+						'exitStatus': 0
+					}
+				},
+				{
+					'description': '--escape-etago option, piping content',
+					'command': 'echo "foo</script>bar" | ./bin/jsesc --escape-etago',
+					'expected': {
+						'stdout': 'foo<\\/script>bar\n',
 						'stderr': '',
 						'exitStatus': 0
 					}
