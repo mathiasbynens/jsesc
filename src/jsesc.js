@@ -65,6 +65,12 @@
 		return typeof value == 'function' ||
 			toString.call(value) == '[object Function]';
 	};
+	var isMap = function(value) {
+		return toString.call(value) == '[object Map]';
+	};
+	var isSet = function(value) {
+		return toString.call(value) == '[object Set]';
+	};
 
 	/*--------------------------------------------------------------------------*/
 
@@ -122,6 +128,18 @@
 		}
 
 		if (!isString(argument)) {
+			if (isMap(argument)) {
+				if (argument.size == 0) {
+					return 'new Map()';
+				}
+				return 'new Map(' + jsesc(Array.from(argument), options) + ')';
+			}
+			if (isSet(argument)) {
+				if (argument.size == 0) {
+					return 'new Set()';
+				}
+				return 'new Set(' + jsesc(Array.from(argument), options) + ')';
+			}
 			if (isArray(argument)) {
 				result = [];
 				options.wrap = true;

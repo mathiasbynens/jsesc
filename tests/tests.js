@@ -216,6 +216,79 @@
 			'[\n\t\'foo\\0bar\\uFFFDbaz\',\n\t\'\\xA9\'\n]',
 			'Stringifying a flat array with `compact: false`'
 		);
+		// Maps
+		if (typeof Map != 'undefined') {
+			equal(
+				jsesc(
+					new Map([])
+				),
+				'new Map()',
+				'Stringifying an empty Map'
+			);
+			equal(
+				jsesc(
+					new Map([
+						['a', 1],
+						['b', 2]
+					]),
+					{
+						'compact': true
+					}
+				),
+				'new Map([[\'a\',1],[\'b\',2]])',
+				'Stringifying a Map with `compact: true`'
+			);
+			equal(
+				jsesc(
+					new Map([
+						['a', 1],
+						['b', 2]
+					]),
+					{
+						'compact': false
+					}
+				),
+				'new Map([\n\t[\n\t\t\'a\',\n\t\t1\n\t],\n\t[\n\t\t\'b\',\n\t\t2\n\t]\n])',
+				'Stringifying a Map with `compact: false`'
+			);
+		}
+		if (typeof Set != 'undefined') {
+			equal(
+				jsesc(
+					new Set([])
+				),
+				'new Set()',
+				'Stringifying an empty Set'
+			);
+			equal(
+				jsesc(
+					new Set([
+						['a'],
+						'b',
+						{}
+					]),
+					{
+						'compact': true
+					}
+				),
+				'new Set([[\'a\'],\'b\',{}])',
+				'Stringifying a Set with `compact: true`'
+			);
+			equal(
+				jsesc(
+					new Set([
+						['a'],
+						'b',
+						{}
+					]),
+					{
+						'compact': false
+					}
+				),
+				'new Set([\n\t[\n\t\t\'a\'\n\t],\n\t\'b\',\n\t{}\n])',
+				'Stringifying a Set with `compact: false`'
+			);
+		}
 		// JSON
 		equal(
 			jsesc('foo\x00bar\xFF\uFFFDbaz', {

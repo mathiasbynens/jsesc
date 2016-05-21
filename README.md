@@ -80,7 +80,7 @@ jsesc('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
 ```
 
-Instead of a string, the `value` can also be an array, or an object. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
+Instead of a string, the `value` can also be an array, an object, a map, or a set. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
 
 ```js
 // Escaping an array
@@ -375,7 +375,7 @@ See `jsesc --help` for the full list of options.
 
 ## Support
 
-This library has been tested in at least Chrome 27, Firefox 3, Safari 4, Opera 10, IE 6, Node.js v0.10.0, io.js v1.0.0, Narwhal 0.3.2, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7RC4.
+This library has been tested in at least Chrome 27, Firefox 3, Safari 4, Opera 10, IE 6, Node.js v6.0.0, Narwhal 0.3.2, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7RC4.
 
 **Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](https://bestiejs.github.io/json3/).
 
