@@ -117,6 +117,42 @@
 			'escapeEtago'
 		);
 		equal(
+			jsesc([0x42, 0x1337], {
+				'numbers': 'decimal'
+			}),
+			'[66,4919]',
+			'`numbers: \'decimal\'` (default)'
+		);
+		equal(
+			jsesc([0x42, 0x1337], {
+				'numbers': 'binary'
+			}),
+			'[0b1000010,0b1001100110111]',
+			'`numbers: \'binary\'`'
+		);
+		equal(
+			jsesc([0x42, 0x1337, NaN, Infinity], {
+				'numbers': 'binary',
+				'json': true
+			}),
+			'[66,4919,null,null]',
+			'`json: true` takes precedence over `numbers: \'binary\'`'
+		);
+		equal(
+			jsesc([0x42, 0x1337], {
+				'numbers': 'octal'
+			}),
+			'[0o102,0o11467]',
+			'`numbers: \'octal\'`'
+		);
+		equal(
+			jsesc([0x42, 0x1337], {
+				'numbers': 'hexadecimal'
+			}),
+			'[0x42,0x1337]',
+			'`numbers: \'hexadecimal\'`'
+		);
+		equal(
 			jsesc('a\uD834\uDF06b', {
 				'es6': true
 			}),
@@ -390,6 +426,14 @@
 			jsesc(tmp),
 			'{"hello":"world","\\uD83D\\uDCA9":"foo","pile":"\\uD83D\\uDCA9"}',
 			'`toJSON` methods are not called when `json: false`'
+		);
+		equal(
+			jsesc(42, {
+				'numbers': 'hexadecimal',
+				'lowercaseHex': true
+			}),
+			'0x2a',
+			'Hexadecimal integeral literals are lowercase when `lowercaseHex: true`'
 		);
 		equal(
 			jsesc('\u2192\xE9', {

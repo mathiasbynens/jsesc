@@ -58,6 +58,10 @@
 		return typeof value == 'string' ||
 			toString.call(value) == '[object String]';
 	};
+	var isNumber = function(value) {
+		return typeof value == 'number' ||
+			toString.call(value) == '[object Number]';
+	};
 	var isFunction = function(value) {
 		// In a perfect world, the `typeof` check would be sufficient. However,
 		// in Chrome 1–12, `typeof /x/ == 'object'`, and in IE 6–8
@@ -103,8 +107,11 @@
 			'json': false,
 			'compact': true,
 			'lowercaseHex': false,
+			'numbers': 'decimal',
 			'indent': '\t',
-			'__indent__': ''
+			'__indent__': '',
+			'__inline1__': false,
+			'__inline2__': false
 		};
 		var json = options && options.json;
 		if (json) {
@@ -118,12 +125,17 @@
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
 		var indent = options.indent;
+		var lowercaseHex = options.lowercaseHex;
 		var oldIndent = '';
 		var inline1 = options.__inline1__;
 		var inline2 = options.__inline2__;
 		var newLine = compact ? '' : '\n';
 		var result;
 		var isEmpty = true;
+		var useBinNumbers = options.numbers == 'binary';
+		var useOctNumbers = options.numbers == 'octal';
+		var useDecNumbers = options.numbers == 'decimal';
+		var useHexNumbers = options.numbers == 'hexadecimal';
 
 		if (json && argument && isFunction(argument.toJSON)) {
 			argument = argument.toJSON();
@@ -174,6 +186,27 @@
 				}
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';
+			} else if (isNumber(argument)) {
+				if (json) {
+					// Some number values (e.g. `Infinity`) cannot be represented in JSON.
+					return JSON.stringify(argument);
+				}
+				if (useDecNumbers) {
+					return String(argument);
+				}
+				if (useHexNumbers) {
+					var tmp = argument.toString(16);
+					if (!lowercaseHex) {
+						tmp = tmp.toUpperCase();
+					}
+					return '0x' + tmp;
+				}
+				if (useBinNumbers) {
+					return '0b' + argument.toString(2);
+				}
+				if (useOctNumbers) {
+					return '0o' + argument.toString(8);
+				}
 			} else if (!isObject(argument)) {
 				if (json) {
 					// For some values (e.g. `undefined`, `function` objects),
@@ -226,7 +259,7 @@
 						// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
 						codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
 						var hexadecimal = codePoint.toString(16);
-						if (!options.lowercaseHex) {
+						if (!lowercaseHex) {
 							hexadecimal = hexadecimal.toUpperCase();
 						}
 						result += '\\u{' + hexadecimal + '}';
@@ -266,7 +299,7 @@
 			}
 			var charCode = character.charCodeAt(0);
 			var hexadecimal = charCode.toString(16);
-			if (!options.lowercaseHex) {
+			if (!lowercaseHex) {
 				hexadecimal = hexadecimal.toUpperCase();
 			}
 			var longhand = hexadecimal.length > 2 || json;

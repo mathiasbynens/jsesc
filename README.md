@@ -137,6 +137,32 @@ jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 // → '["Ich \\u2665 B\\xFCcher","foo \\uD834\\uDF06 bar"]'
 ```
 
+#### `numbers`
+
+The default value for the `numbers` option is `'decimal'`. This means that any numeric values will be represented using decimal integer literals. Other valid options are `binary`, `octal`, and `hexadecimal`, which result in binary integer literals, octal integer literals, and hexadecimal integer literals, respectively.
+
+```js
+jsesc(42, {
+  'numbers': 'binary'
+});
+// → '0b101010'
+
+jsesc(42, {
+  'numbers': 'octal'
+});
+// → '0o52'
+
+jsesc(42, {
+  'numbers': 'decimal'
+});
+// → '42'
+
+jsesc(42, {
+  'numbers': 'hexadecimal'
+});
+// → '0x2A'
+```
+
 #### `wrap`
 
 The `wrap` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output will be a valid JavaScript string literal wrapped in quotes. The type of quotes can be specified through the `quotes` setting.
@@ -303,14 +329,21 @@ jsesc([ undefined, -Infinity ], {
 
 #### `lowercaseHex`
 
-The `lowercaseHex` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the alphabetical hexadecimal digits in escape sequences in the output are in lowercase.
+The `lowercaseHex` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, any alphabetical hexadecimal digits in escape sequences as well as any hexadecimal integer literals (see [the `numbers` option](#numbers)) in the output are in lowercase.
 
 ```js
 jsesc('Ich ♥ Bücher', {
-  'lowercaseHex': true,
+  'lowercaseHex': true
 });
 // → 'Ich \\u2665 B\\xfccher'
 //                    ^^
+
+jsesc(42, {
+  'numbers': 'hexadecimal',
+  'lowercaseHex': true
+});
+// → '0x2a'
+//      ^^
 ```
 
 ### `jsesc.version`
