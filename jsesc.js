@@ -1,6 +1,8 @@
 /*! https://mths.be/jsesc v1.3.0 by @mathias */
 ;(function(root) {
 
+	require('string.prototype.repeat');
+
 	// Detect free variables `exports`
 	var freeExports = typeof exports == 'object' && exports;
 
@@ -97,6 +99,11 @@
 	var regexWhitelist = /[ !#-&\(-\[\]-~]/;
 
 	var jsesc = function(argument, options) {
+		var increaseIndentation = function() {
+			oldIndent = indent;
+			++options.__indentLevel__;
+			indent = options.indent.repeat(options.__indentLevel__)
+		};
 		// Handle options
 		var defaults = {
 			'escapeEverything': false,
@@ -109,7 +116,7 @@
 			'lowercaseHex': false,
 			'numbers': 'decimal',
 			'indent': '\t',
-			'__indent__': '',
+			'__indentLevel__': 0,
 			'__inline1__': false,
 			'__inline2__': false
 		};
@@ -124,7 +131,7 @@
 		}
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
-		var indent = options.indent;
+		var indent = options.indent.repeat(options.__indentLevel__);
 		var lowercaseHex = options.lowercaseHex;
 		var oldIndent = '';
 		var inline1 = options.__inline1__;
@@ -148,6 +155,7 @@
 				}
 				if (!compact) {
 					options.__inline1__ = true;
+					options.__inline2__ = false;
 				}
 				return 'new Map(' + jsesc(Array.from(argument), options) + ')';
 			}
@@ -163,10 +171,9 @@
 				if (inline1) {
 					options.__inline1__ = false;
 					options.__inline2__ = true;
-				} else {
-					oldIndent = options.__indent__;
-					indent += oldIndent;
-					options.__indent__ = indent;
+				}
+				if (!inline2) {
+					increaseIndentation();
 				}
 				forEach(argument, function(value) {
 					isEmpty = false;
@@ -218,9 +225,7 @@
 			} else { // it’s an object
 				result = [];
 				options.wrap = true;
-				oldIndent = options.__indent__;
-				indent += oldIndent;
-				options.__indent__ = indent;
+				increaseIndentation();
 				forOwn(argument, function(key, value) {
 					isEmpty = false;
 					result.push(

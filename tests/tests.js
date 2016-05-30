@@ -304,6 +304,22 @@
 				'new Map([\n\t[\'a\', 1],\n\t[\'b\', [\n\t\t\'a\',\n\t\t\'nested\',\n\t\t\'array\'\n\t]]\n])',
 				'Stringifying a Map with `compact: false`'
 			);
+			equal(
+				jsesc(
+					new Map([
+						['a', 1],
+						['b', new Map([
+							['x', 2],
+							['y', 3]
+						])]
+					]),
+					{
+						'compact': false
+					}
+				),
+				'new Map([\n\t[\'a\', 1],\n\t[\'b\', new Map([\n\t\t[\'x\', 2],\n\t\t[\'y\', 3]\n\t])]\n])',
+				'Stringifying a Map with `compact: false`'
+			);
 		}
 		if (typeof Set != 'undefined') {
 			equal(
