@@ -118,7 +118,9 @@
 		var quote = options.quotes == 'double' ? '"' : '\'';
 		var compact = options.compact;
 		var indent = options.indent;
-		var oldIndent;
+		var oldIndent = '';
+		var inline1 = options.__inline1__;
+		var inline2 = options.__inline2__;
 		var newLine = compact ? '' : '\n';
 		var result;
 		var isEmpty = true;
@@ -132,6 +134,9 @@
 				if (argument.size == 0) {
 					return 'new Map()';
 				}
+				if (!compact) {
+					options.__inline1__ = true;
+				}
 				return 'new Map(' + jsesc(Array.from(argument), options) + ')';
 			}
 			if (isSet(argument)) {
@@ -143,18 +148,29 @@
 			if (isArray(argument)) {
 				result = [];
 				options.wrap = true;
-				oldIndent = options.__indent__;
-				indent += oldIndent;
-				options.__indent__ = indent;
+				if (inline1) {
+					options.__inline1__ = false;
+					options.__inline2__ = true;
+				} else {
+					oldIndent = options.__indent__;
+					indent += oldIndent;
+					options.__indent__ = indent;
+				}
 				forEach(argument, function(value) {
 					isEmpty = false;
+					if (inline2) {
+						options.__inline2__ = false;
+					}
 					result.push(
-						(compact ? '' : indent) +
+						(compact || inline2 ? '' : indent) +
 						jsesc(value, options)
 					);
 				});
 				if (isEmpty) {
 					return '[]';
+				}
+				if (inline2) {
+					return '[' + result.join(', ') + ']';
 				}
 				return '[' + newLine + result.join(',' + newLine) + newLine +
 					(compact ? '' : oldIndent) + ']';

@@ -248,7 +248,24 @@
 						'compact': false
 					}
 				),
-				'new Map([\n\t[\n\t\t\'a\',\n\t\t1\n\t],\n\t[\n\t\t\'b\',\n\t\t2\n\t]\n])',
+				'new Map([\n\t[\'a\', 1],\n\t[\'b\', 2]\n])',
+				'Stringifying a Map with `compact: false`'
+			);
+			equal(
+				jsesc(
+					new Map([
+						['a', 1],
+						['b', [
+							'a',
+							'nested',
+							'array'
+						]]
+					]),
+					{
+						'compact': false
+					}
+				),
+				'new Map([\n\t[\'a\', 1],\n\t[\'b\', [\n\t\t\'a\',\n\t\t\'nested\',\n\t\t\'array\'\n\t]]\n])',
 				'Stringifying a Map with `compact: false`'
 			);
 		}
