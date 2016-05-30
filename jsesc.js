@@ -1,4 +1,4 @@
-/*! https://mths.be/jsesc v1.2.0 by @mathias */
+/*! https://mths.be/jsesc v1.2.1 by @mathias */
 ;(function(root) {
 
 	// Detect free variables `exports`
@@ -285,7 +285,7 @@
 		return result;
 	};
 
-	jsesc.version = '1.2.0';
+	jsesc.version = '1.2.1';
 
 	/*--------------------------------------------------------------------------*/
 
