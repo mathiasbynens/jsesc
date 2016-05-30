@@ -1,7 +1,9 @@
-var regenerate = require('regenerate');
-var fs = require('fs');
+'use strict';
 
-var set = regenerate()
+const regenerate = require('regenerate');
+const fs = require('fs');
+
+const set = regenerate()
 	.addRange(0x20, 0x7E) // printable ASCII symbols
 	.remove('"')          // not `"`
 	.remove('\'')         // not `'`

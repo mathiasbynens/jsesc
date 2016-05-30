@@ -8,62 +8,16 @@ Feel free to fork if you see possible improvements!
 
 ## Installation
 
-Via [Bower](http://bower.io/):
-
-```bash
-bower install jsesc
-```
-
-Via [Component](https://github.com/component/component):
-
-```bash
-component install mathiasbynens/jsesc
-```
-
 Via [npm](https://www.npmjs.com/):
 
 ```bash
 npm install jsesc
 ```
 
-In a browser:
-
-```html
-<script src="jsesc.js"></script>
-```
-
-In [Node.js](https://nodejs.org/) and [RingoJS](http://ringojs.org/):
+In [Node.js](https://nodejs.org/):
 
 ```js
-var jsesc = require('jsesc');
-```
-
-In [Narwhal](http://narwhaljs.org/):
-
-```js
-var jsesc = require('jsesc').jsesc;
-```
-
-In [Rhino](http://www.mozilla.org/rhino/):
-
-```js
-load('jsesc.js');
-```
-
-Using an AMD loader like [RequireJS](http://requirejs.org/):
-
-```js
-require(
-  {
-    'paths': {
-      'jsesc': 'path/to/jsesc'
-    }
-  },
-  ['jsesc'],
-  function(jsesc) {
-    console.log(jsesc);
-  }
-);
+const jsesc = require('jsesc');
 ```
 
 ## API
@@ -408,17 +362,9 @@ See `jsesc --help` for the full list of options.
 
 ## Support
 
-This library has been tested in at least Chrome 27, Firefox 3, Safari 4, Opera 10, IE 6, Node.js v6.0.0, Narwhal 0.3.2, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7RC4.
+As of v2.0.0, jsesc supports Node.js v4+ only.
 
-**Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](https://bestiejs.github.io/json3/).
-
-## Unit tests & code coverage
-
-After cloning this repository, run `npm install` to install the dependencies needed for development and testing. You may want to install Istanbul _globally_ using `npm install istanbul -g`.
-
-Once that’s done, you can run the unit tests in Node using `npm test` or `node tests/tests.js`. To run the tests in Rhino, Ringo, Narwhal, and web browsers as well, use `grunt test`.
-
-To generate the code coverage report, use `grunt cover`.
+Older versions (up to jsesc v1.3.0) support Chrome 27, Firefox 3, Safari 4, Opera 10, IE 6, Node.js v6.0.0, Narwhal 0.3.2, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7RC4. **Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](https://bestiejs.github.io/json3/).
 
 ## Author
 

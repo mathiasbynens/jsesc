@@ -3,6 +3,9 @@
   "version": "1.3.0",
   "description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
   "homepage": "https://mths.be/jsesc",
+  "engines": {
+    "node": ">=4"
+  },
   "main": "jsesc.js",
   "bin": "bin/jsesc",
   "man": "man/jsesc.1",
@@ -29,20 +32,17 @@
     "man/"
   ],
   "scripts": {
-    "test": "node tests/tests.js",
-    "build": "grunt template"
-  },
-  "dependencies": {
-    "string.prototype.repeat": "^0.2.0"
+    "build": "grunt template",
+    "coveralls": "istanbul cover --verbose --dir 'coverage' 'tests/tests.js' && coveralls < coverage/lcov.info'",
+    "cover": "istanbul cover --report 'html' --verbose --dir 'coverage' 'tests/tests.js'",
+    "test": "mocha tests"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
     "grunt": "^0.4.5",
-    "grunt-shell": "^1.1.2",
     "grunt-template": "^0.2.3",
     "istanbul": "^0.4.2",
-    "qunit-extras": "^1.4.5",
-    "qunitjs": "~1.11.0",
+    "mocha": "*",
     "regenerate": "^1.3.0",
     "requirejs": "^2.1.22"
   }
