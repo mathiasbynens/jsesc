@@ -246,6 +246,24 @@ jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 
 This setting has no effect on the output for strings.
 
+#### `indentLevel`
+
+The `indentLevel` option takes a numeric value, and defaults to `0`. It represents the current indentation level, i.e. the number of times the value of [the `indent` option](#indent) is repeated.
+
+```js
+jsesc(['a', 'b', 'c'], {
+  'compact': false,
+  'indentLevel': 1
+});
+// → '[\n\t\t\'a\',\n\t\t\'b\',\n\t\t\'c\'\n\t]'
+
+jsesc(['a', 'b', 'c'], {
+  'compact': false,
+  'indentLevel': 2
+});
+// → '[\n\t\t\t\'a\',\n\t\t\t\'b\',\n\t\t\t\'c\'\n\t\t]'
+```
+
 #### `json`
 
 The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](https://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](https://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore.

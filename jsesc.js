@@ -75,8 +75,8 @@ const regexWhitelist = /[ !#-&\(-\[\]-~]/;
 const jsesc = function(argument, options) {
 	const increaseIndentation = function() {
 		oldIndent = indent;
-		++options.__indentLevel__;
-		indent = options.indent.repeat(options.__indentLevel__)
+		++options.indentLevel;
+		indent = options.indent.repeat(options.indentLevel)
 	};
 	// Handle options
 	const defaults = {
@@ -90,7 +90,7 @@ const jsesc = function(argument, options) {
 		'lowercaseHex': false,
 		'numbers': 'decimal',
 		'indent': '\t',
-		'__indentLevel__': 0,
+		'indentLevel': 0,
 		'__inline1__': false,
 		'__inline2__': false
 	};
@@ -106,7 +106,7 @@ const jsesc = function(argument, options) {
 	const quote = options.quotes == 'double' ? '"' : '\'';
 	const compact = options.compact;
 	const lowercaseHex = options.lowercaseHex;
-	let indent = options.indent.repeat(options.__indentLevel__);
+	let indent = options.indent.repeat(options.indentLevel);
 	let oldIndent = '';
 	const inline1 = options.__inline1__;
 	const inline2 = options.__inline2__;

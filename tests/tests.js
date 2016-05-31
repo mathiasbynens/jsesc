@@ -185,6 +185,22 @@ describe('common usage', function() {
 			'Stringifying a flat object with `compact: false`'
 		);
 		assert.equal(
+			jsesc(['a', 'b', 'c'], {
+				'compact': false,
+				'indentLevel': 1
+			}),
+			'[\n\t\t\'a\',\n\t\t\'b\',\n\t\t\'c\'\n\t]',
+			'`indentLevel: 1`'
+		);
+		assert.equal(
+			jsesc(['a', 'b', 'c'], {
+				'compact': false,
+				'indentLevel': 2
+			}),
+			'[\n\t\t\t\'a\',\n\t\t\t\'b\',\n\t\t\t\'c\'\n\t\t]',
+			'`indentLevel: 2`'
+		);
+		assert.equal(
 			jsesc({ 'foo\x00bar\uFFFDbaz': 'foo\x00bar\uFFFDbaz' }, {
 				'compact': false,
 				'indent': '  '
