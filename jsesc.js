@@ -294,6 +294,6 @@ const jsesc = function(argument, options) {
 	return result;
 };
 
-jsesc.version = '2.0.0';
+jsesc.version = '2.1.0';
 
 module.exports = jsesc;
