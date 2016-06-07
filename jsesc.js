@@ -30,6 +30,7 @@ const forEach = function(array, callback) {
 
 const toString = object.toString;
 const isArray = Array.isArray;
+const isBuffer = Buffer.isBuffer;
 const isObject = function(value) {
 	// This is a very simple check, but it’s good enough for what we need.
 	return toString.call(value) == '[object Object]';
@@ -138,6 +139,12 @@ const jsesc = function(argument, options) {
 				return 'new Set()';
 			}
 			return 'new Set(' + jsesc(Array.from(argument), options) + ')';
+		}
+		if (isBuffer(argument)) {
+			if (argument.length == 0) {
+				return 'Buffer()';
+			}
+			return 'Buffer(' + jsesc(Array.from(argument), options) + ')';
 		}
 		if (isArray(argument)) {
 			result = [];

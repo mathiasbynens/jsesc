@@ -34,7 +34,7 @@ jsesc('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
 ```
 
-Instead of a string, the `value` can also be an array, an object, a map, or a set. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
+Instead of a string, the `value` can also be an array, an object, a map, a set, or a buffer. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
 
 ```js
 // Escaping an array

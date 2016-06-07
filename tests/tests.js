@@ -331,6 +331,24 @@ describe('common usage', function() {
 			'new Set([\n\t[\n\t\t\'a\'\n\t],\n\t\'b\',\n\t{}\n])',
 			'Stringifying a Set with `compact: false`'
 		);
+		// Buffer
+		assert.equal(
+			jsesc(
+				Buffer([0x13, 0x37, 0x42])
+			),
+			'Buffer([19,55,66])',
+			'Stringifying a Buffer'
+		);
+		assert.equal(
+			jsesc(
+				Buffer([0x13, 0x37, 0x42]),
+				{
+					'compact': false
+				}
+			),
+			'Buffer([\n\t19,\n\t55,\n\t66\n])',
+			'Stringifying a Buffer with `compact: false`'
+		);
 		// JSON
 		assert.equal(
 			jsesc('foo\x00bar\xFF\uFFFDbaz', {
