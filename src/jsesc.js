@@ -82,7 +82,7 @@ const jsesc = function(argument, options) {
 	// Handle options
 	const defaults = {
 		'escapeEverything': false,
-		'escapeEtago': false,
+		'isScriptContext': false,
 		'quotes': 'single',
 		'wrap': false,
 		'es6': false,
@@ -294,9 +294,11 @@ const jsesc = function(argument, options) {
 	if (options.wrap) {
 		result = quote + result + quote;
 	}
-	if (options.escapeEtago) {
+	if (options.isScriptContext) {
 		// https://mathiasbynens.be/notes/etago
-		return result.replace(/<\/(script|style)/gi, '<\\/$1');
+		return result
+			.replace(/<\/(script|style)/gi, '<\\/$1')
+			.replace(/<!--/g, json ? '\\u003C!--' : '\\x3C!--');
 	}
 	return result;
 };

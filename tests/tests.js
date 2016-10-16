@@ -66,17 +66,32 @@ describe('common usage', function() {
 		);
 		assert.equal(
 			jsesc('foo</script>bar</style>baz</script>qux', {
-				'escapeEtago': true
+				'isScriptContext': true
 			}),
 			'foo<\\/script>bar<\\/style>baz<\\/script>qux',
-			'escapeEtago'
+			'isScriptContext'
 		);
 		assert.equal(
 			jsesc('foo</sCrIpT>bar</STYLE>baz</SCRIPT>qux', {
-				'escapeEtago': true
+				'isScriptContext': true
 			}),
 			'foo<\\/sCrIpT>bar<\\/STYLE>baz<\\/SCRIPT>qux',
-			'escapeEtago'
+			'isScriptContext'
+		);
+		assert.equal(
+			jsesc('"<!--<script></script>";alert(1);', {
+				'isScriptContext': true
+			}),
+			'"\\x3C!--<script><\\/script>";alert(1);',
+			'isScriptContext'
+		);
+		assert.equal(
+			jsesc('"<!--<script></script>";alert(1);', {
+				'isScriptContext': true,
+				'json': true
+			}),
+			'"\\"\\u003C!--<script><\\/script>\\";alert(1);"',
+			'isScriptContext'
 		);
 		assert.equal(
 			jsesc([0x42, 0x1337], {

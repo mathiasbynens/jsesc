@@ -186,13 +186,13 @@ jsesc([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
 // → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
 ```
 
-#### `escapeEtago`
+#### `isScriptContext`
 
-The `escapeEtago` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, occurrences of [`</script` and `</style`](https://mathiasbynens.be/notes/etago) in the output are escaped as `<\/script` and `<\/style`. This setting is useful when jsesc’s output ends up as part of a `<script>` or `<style>` element in an HTML document.
+The `isScriptContext` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, occurrences of [`</script` and `</style`](https://mathiasbynens.be/notes/etago) in the output are escaped as `<\/script` and `<\/style`, and [`<!--`](https://mathiasbynens.be/notes/etago#comment-8) is escaped as `\x3C!--` (or `\u003C!--` when the `json` option is enabled). This setting is useful when jsesc’s output ends up as part of a `<script>` or `<style>` element in an HTML document.
 
 ```js
 jsesc('foo</script>bar', {
-  'escapeEtago': true
+  'isScriptContext': true
 });
 // → 'foo<\\/script>bar'
 ```
