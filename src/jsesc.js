@@ -100,6 +100,7 @@
 		// Handle options
 		var defaults = {
 			'escapeEverything': false,
+			'minimal': false,
 			'escapeEtago': false,
 			'quotes': 'single',
 			'wrap': false,
@@ -298,6 +299,10 @@
 				continue;
 			}
 			var charCode = character.charCodeAt(0);
+			if (options.minimal && charCode != 0x2028 && charCode != 0x2029) {
+				result += character;
+				continue;
+			}
 			var hexadecimal = charCode.toString(16);
 			if (!lowercaseHex) {
 				hexadecimal = hexadecimal.toUpperCase();

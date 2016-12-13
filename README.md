@@ -232,6 +232,31 @@ jsesc([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
 // → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
 ```
 
+
+#### `minimal`
+
+The `minimal` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, only a limited set of symbols in the output are escaped:
+
+* U+0000 `\0`
+* U+0008 `\b`
+* U+0009 `\t`
+* U+000A `\n`
+* U+000C `\f`
+* U+000D `\r`
+* U+005C `\\`
+* U+2028 `\u2028`
+* U+2029 `\u2029`
+* whatever symbol is being used for wrapping string literals (based on [the `quotes` option](#quotes))
+
+Note: with this option enabled, jsesc output is no longer guaranteed to be ASCII-safe.
+
+```js
+jsesc('foo\u2029bar\nbaz©qux𝌆flops', {
+  'minimal': false
+});
+// → 'foo\\u2029bar\\nbaz©qux𝌆flops'
+```
+
 #### `escapeEtago`
 
 The `escapeEtago` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, occurrences of [`</script` and `</style`](https://mathiasbynens.be/notes/etago) in the output are escaped as `<\/script` and `<\/style`. This setting is useful when jsesc’s output ends up as part of a `<script>` or `<style>` element in an HTML document.
