@@ -34,7 +34,7 @@ jsesc('foo 𝌆 bar');
 // → 'foo \\uD834\\uDF06 bar'
 ```
 
-Instead of a string, the `value` can also be an array, an object, a map, a set, or a buffer. In such cases, `jsesc` will return a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
+Instead of a string, the `value` can also be an array, an object, a map, a set, or a buffer. In such cases, `jsesc` returns a stringified version of the value where any characters that are not printable ASCII symbols are escaped in the same way.
 
 ```js
 // Escaping an array
@@ -54,7 +54,7 @@ The optional `options` argument accepts an object with the following options:
 
 #### `quotes`
 
-The default value for the `quotes` option is `'single'`. This means that any occurrences of `'` in the input string will be escaped as `\'`, so that the output can be used in a string literal wrapped in single quotes.
+The default value for the `quotes` option is `'single'`. This means that any occurrences of `'` in the input string are escaped as `\'`, so that the output can be used in a string literal wrapped in single quotes.
 
 ```js
 jsesc('Lorem ipsum "dolor" sit \'amet\' etc.');
@@ -93,7 +93,7 @@ jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 
 #### `numbers`
 
-The default value for the `numbers` option is `'decimal'`. This means that any numeric values will be represented using decimal integer literals. Other valid options are `binary`, `octal`, and `hexadecimal`, which result in binary integer literals, octal integer literals, and hexadecimal integer literals, respectively.
+The default value for the `numbers` option is `'decimal'`. This means that any numeric values are represented using decimal integer literals. Other valid options are `binary`, `octal`, and `hexadecimal`, which result in binary integer literals, octal integer literals, and hexadecimal integer literals, respectively.
 
 ```js
 jsesc(42, {
@@ -119,7 +119,7 @@ jsesc(42, {
 
 #### `wrap`
 
-The `wrap` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output will be a valid JavaScript string literal wrapped in quotes. The type of quotes can be specified through the `quotes` setting.
+The `wrap` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is a valid JavaScript string literal wrapped in quotes. The type of quotes can be specified through the `quotes` setting.
 
 ```js
 jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
@@ -139,7 +139,7 @@ jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
 
 #### `es6`
 
-The `es6` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, any astral Unicode symbols in the input will be escaped using [ECMAScript 6 Unicode code point escape sequences](https://mathiasbynens.be/notes/javascript-escapes#unicode-code-point) instead of using separate escape sequences for each surrogate half. If backwards compatibility with ES5 environments is a concern, don’t enable this setting. If the `json` setting is enabled, the value for the `es6` setting is ignored (as if it was `false`).
+The `es6` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, any astral Unicode symbols in the input are escaped using [ECMAScript 6 Unicode code point escape sequences](https://mathiasbynens.be/notes/javascript-escapes#unicode-code-point) instead of using separate escape sequences for each surrogate half. If backwards compatibility with ES5 environments is a concern, don’t enable this setting. If the `json` setting is enabled, the value for the `es6` setting is ignored (as if it was `false`).
 
 ```js
 // By default, the `es6` option is disabled:
@@ -161,7 +161,7 @@ jsesc('foo 𝌆 bar 💩 baz', {
 
 #### `escapeEverything`
 
-The `escapeEverything` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, all the symbols in the output will be escaped, even printable ASCII symbols.
+The `escapeEverything` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, all the symbols in the output are escaped — even printable ASCII symbols.
 
 ```js
 jsesc('lolwat"foo\'bar', {
@@ -171,19 +171,30 @@ jsesc('lolwat"foo\'bar', {
 // → "\\x6C\\x6F\\x6C\\x77\\x61\\x74\\\"\\x66\\x6F\\x6F\\'\\x62\\x61\\x72"
 ```
 
-This setting also affects the output for arrays and objects:
+This setting also affects the output for string literals within arrays and objects.
+
+#### `minimal`
+
+The `minimal` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, only a limited set of symbols in the output are escaped:
+
+* U+0000 `\0`
+* U+0008 `\b`
+* U+0009 `\t`
+* U+000A `\n`
+* U+000C `\f`
+* U+000D `\r`
+* U+005C `\\`
+* U+2028 `\u2028`
+* U+2029 `\u2029`
+* whatever symbol is being used for wrapping string literals (based on [the `quotes` option](#quotes))
+
+Note: with this option enabled, jsesc output is no longer guaranteed to be ASCII-safe.
 
 ```js
-jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
-  'escapeEverything': true
+jsesc('foo\u2029bar\nbaz©qux𝌆flops', {
+  'minimal': false
 });
-// → '{\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\':\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\'}'
-// → "{'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72':'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72'}"
-
-jsesc([ 'Ich ♥ Bücher': 'foo 𝌆 bar' ], {
-  'escapeEverything': true
-});
-// → '[\'\x49\x63\x68\x20\u2665\x20\x42\xFC\x63\x68\x65\x72\',\'\x66\x6F\x6F\x20\uD834\uDF06\x20\x62\x61\x72\']'
+// → 'foo\\u2029bar\\nbaz©qux𝌆flops'
 ```
 
 #### `isScriptContext`
@@ -199,7 +210,7 @@ jsesc('foo</script>bar', {
 
 #### `compact`
 
-The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for arrays and objects will be as compact as possible; it won’t be formatted nicely.
+The `compact` option takes a boolean value (`true` or `false`), and defaults to `true` (enabled). When enabled, the output for arrays and objects is as compact as possible; it’s not formatted nicely.
 
 ```js
 jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
@@ -266,7 +277,7 @@ jsesc(['a', 'b', 'c'], {
 
 #### `json`
 
-The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](https://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](https://mathiasbynens.be/notes/javascript-escapes#single) will not be used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore.
+The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](https://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](https://mathiasbynens.be/notes/javascript-escapes#single) are not used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore.
 
 ```js
 jsesc('foo\x00bar\xFF\uFFFDbaz', {
@@ -330,7 +341,7 @@ To use the `jsesc` binary in your shell, simply install jsesc globally using npm
 npm install -g jsesc
 ```
 
-After that you will be able to escape strings from the command line:
+After that you’re able to escape strings from the command line:
 
 ```bash
 $ jsesc 'föo ♥ bår 𝌆 baz'

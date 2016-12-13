@@ -82,6 +82,7 @@ const jsesc = function(argument, options) {
 	// Handle options
 	const defaults = {
 		'escapeEverything': false,
+		'minimal': false,
 		'isScriptContext': false,
 		'quotes': 'single',
 		'wrap': false,
@@ -281,6 +282,10 @@ const jsesc = function(argument, options) {
 			continue;
 		}
 		const charCode = character.charCodeAt(0);
+		if (options.minimal && charCode != 0x2028 && charCode != 0x2029) {
+			result += character;
+			continue;
+		}
 		let hexadecimal = charCode.toString(16);
 		if (!lowercaseHex) {
 			hexadecimal = hexadecimal.toUpperCase();

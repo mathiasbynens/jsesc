@@ -65,6 +65,13 @@ describe('common usage', function() {
 			'escapeEverything'
 		);
 		assert.equal(
+			jsesc('\0foo\u2029bar\nbaz\xA9qux\uD834\uDF06flops', {
+				'minimal': true
+			}),
+			'\\0foo\\u2029bar\\nbaz\xA9qux\uD834\uDF06flops',
+			'minimal'
+		);
+		assert.equal(
 			jsesc('foo</script>bar</style>baz</script>qux', {
 				'isScriptContext': true
 			}),
