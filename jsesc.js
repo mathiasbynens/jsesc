@@ -308,6 +308,6 @@ const jsesc = function(argument, options) {
 	return result;
 };
 
-jsesc.version = '2.3.0';
+jsesc.version = '2.4.0';
 
 module.exports = jsesc;
