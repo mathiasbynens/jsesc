@@ -102,10 +102,19 @@ const jsesc = function(argument, options) {
 		defaults.wrap = true;
 	}
 	options = extend(defaults, options);
-	if (options.quotes != 'single' && options.quotes != 'double') {
+	if (
+		options.quotes != 'single' &&
+		options.quotes != 'double' &&
+		options.quotes != 'backtick'
+	) {
 		options.quotes = 'single';
 	}
-	const quote = options.quotes == 'double' ? '"' : '\'';
+	const quote = options.quotes == 'double' ?
+		'"' :
+		(options.quotes == 'backtick' ?
+			'`' :
+			'\''
+		);
 	const compact = options.compact;
 	const lowercaseHex = options.lowercaseHex;
 	let indent = options.indent.repeat(options.indentLevel);
@@ -263,6 +272,10 @@ const jsesc = function(argument, options) {
 				result += quote == character ? '\\"' : character;
 				continue;
 			}
+			if (character == '`') {
+				result += quote == character ? '\\`' : character;
+				continue;
+			}
 			if (character == '\'') {
 				result += quote == character ? '\\\'' : character;
 				continue;
@@ -298,6 +311,9 @@ const jsesc = function(argument, options) {
 	}
 	if (options.wrap) {
 		result = quote + result + quote;
+	}
+	if (quote == '`') {
+		result = result.replace(/\$\{/g, '\\\$\{');
 	}
 	if (options.isScriptContext) {
 		// https://mathiasbynens.be/notes/etago

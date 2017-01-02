@@ -57,24 +57,35 @@ The optional `options` argument accepts an object with the following options:
 The default value for the `quotes` option is `'single'`. This means that any occurrences of `'` in the input string are escaped as `\'`, so that the output can be used in a string literal wrapped in single quotes.
 
 ```js
-jsesc('Lorem ipsum "dolor" sit \'amet\' etc.');
+jsesc('`Lorem` ipsum "dolor" sit \'amet\' etc.');
 // → 'Lorem ipsum "dolor" sit \\\'amet\\\' etc.'
 
-jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
+jsesc('`Lorem` ipsum "dolor" sit \'amet\' etc.', {
   'quotes': 'single'
 });
-// → 'Lorem ipsum "dolor" sit \\\'amet\\\' etc.'
-// → "Lorem ipsum \"dolor\" sit \\'amet\\' etc."
+// → '`Lorem` ipsum "dolor" sit \\\'amet\\\' etc.'
+// → "`Lorem` ipsum \"dolor\" sit \\'amet\\' etc."
 ```
 
 If you want to use the output as part of a string literal wrapped in double quotes, set the `quotes` option to `'double'`.
 
 ```js
-jsesc('Lorem ipsum "dolor" sit \'amet\' etc.', {
+jsesc('`Lorem` ipsum "dolor" sit \'amet\' etc.', {
   'quotes': 'double'
 });
-// → 'Lorem ipsum \\"dolor\\" sit \'amet\' etc.'
-// → "Lorem ipsum \\\"dolor\\\" sit 'amet' etc."
+// → '`Lorem` ipsum \\"dolor\\" sit \'amet\' etc.'
+// → "`Lorem` ipsum \\\"dolor\\\" sit 'amet' etc."
+```
+
+If you want to use the output as part of a template literal (i.e. wrapped in backticks), set the `quotes` option to `'backtick'`.
+
+```js
+jsesc('`Lorem` ipsum "dolor" sit \'amet\' etc.', {
+  'quotes': 'backtick'
+});
+// → '\\`Lorem\\` ipsum "dolor" sit \'amet\' etc.'
+// → "\\`Lorem\\` ipsum \"dolor\" sit 'amet' etc."
+// → `\\\`Lorem\\\` ipsum "dolor" sit 'amet' etc.`
 ```
 
 This setting also affects the output for arrays and objects:

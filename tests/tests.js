@@ -38,6 +38,30 @@ describe('common usage', function() {
 			'Invalid `quotes` setting'
 		);
 		assert.equal(
+			jsesc('foo${1+1}', {
+				'quotes': 'backtick'
+			}),
+			'foo\\${1+1}',
+			'`quotes: \'backtick\'`'
+		);
+		assert.equal(
+			jsesc('foo${1+1}', {
+				'quotes': 'backtick',
+				'wrap': true
+			}),
+			'`foo\\${1+1}`',
+			'`quotes: \'backtick\'` + `wrap: true`'
+		);
+		assert.equal(
+			jsesc('foo${1+1}</script>', {
+				'quotes': 'backtick',
+				'wrap': true,
+				'isScriptContext': true
+			}),
+			'`foo\\${1+1}<\\/script>`',
+			'`quotes: \'backtick\'` + `wrap: true` + `isScriptContext: true`'
+		);
+		assert.equal(
 			jsesc('\\x00'),
 			'\\\\x00',
 			'`\\\\x00` shouldn’t be changed to `\\\\0`'
@@ -553,6 +577,12 @@ describe('advanced tests', function() {
 			'All Unicode symbols, space-separated, single quotes'
 		);
 		assert.ok(
+			eval('`' + jsesc(allSymbols, {
+				'quotes': 'backtick'
+			}) + '`') == allSymbols,
+			'All Unicode symbols, space-separated, template literal'
+		);
+		assert.ok(
 			eval(jsesc(allSymbols, {
 				'quotes': 'single',
 				'wrap': true
@@ -605,5 +635,5 @@ describe('advanced tests', function() {
 			'[\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
 			'Escaping a non-flat array with all kinds of values, with `json: true, compact: false`'
 		);
-	}).timeout(15000);
+	}).timeout(25000);
 });
