@@ -1,7 +1,7 @@
 {
   "name": "jsesc",
   "version": "2.4.0",
-  "description": "A JavaScript library for escaping JavaScript strings while generating the shortest possible valid output.",
+  "description": "Given some data, jsesc returns the shortest possible stringified & ASCII-safe representation of that data.",
   "homepage": "https://mths.be/jsesc",
   "engines": {
     "node": ">=4"
@@ -10,9 +10,14 @@
   "bin": "bin/jsesc",
   "man": "man/jsesc.1",
   "keywords": [
-    "string",
+    "buffer",
     "escape",
     "javascript",
+    "json",
+    "map",
+    "set",
+    "string",
+    "stringify",
     "tool"
   ],
   "license": "MIT",
