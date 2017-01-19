@@ -1,10 +1,14 @@
 # jsesc [![Build status](https://travis-ci.org/mathiasbynens/jsesc.svg?branch=master)](https://travis-ci.org/mathiasbynens/jsesc) [![Code coverage status](https://coveralls.io/repos/mathiasbynens/jsesc/badge.svg)](https://coveralls.io/r/mathiasbynens/jsesc) [![Dependency status](https://gemnasium.com/mathiasbynens/jsesc.svg)](https://gemnasium.com/mathiasbynens/jsesc)
 
-This is a JavaScript library for [escaping JavaScript strings](https://mathiasbynens.be/notes/javascript-escapes) while generating the shortest possible valid ASCII-only output. [Here’s an online demo.](https://mothereff.in/js-escapes)
+Given some data, _jsesc_ returns a stringified representation of that data. jsesc is similar to `JSON.stringify()` except:
 
-This can be used to avoid [mojibake](https://en.wikipedia.org/wiki/Mojibake) and other encoding issues, or even to [avoid errors](https://twitter.com/annevk/status/380000829643571200) when passing JSON-formatted data (which may contain U+2028 LINE SEPARATOR, U+2029 PARAGRAPH SEPARATOR, or [lone surrogates](https://esdiscuss.org/topic/code-points-vs-unicode-scalar-values#content-14)) to a JavaScript parser or an UTF-8 encoder, respectively.
+1. it outputs JavaScript instead of JSON [by default](#json), enabling support for data structures like ES6 maps and sets;
+2. it offers [many options](#api) to customize the output;
+3. its output is ASCII-safe [by default](#minimal), thanks to its use of [escape sequences](https://mathiasbynens.be/notes/javascript-escapes) where needed.
 
-Feel free to fork if you see possible improvements!
+For any input, jsesc generates the shortest possible valid printable-ASCII-only output. [Here’s an online demo.](https://mothereff.in/js-escapes)
+
+jsesc’s output can be used instead of `JSON.stringify`’s to avoid [mojibake](https://en.wikipedia.org/wiki/Mojibake) and other encoding issues, or even to [avoid errors](https://twitter.com/annevk/status/380000829643571200) when passing JSON-formatted data (which may contain U+2028 LINE SEPARATOR, U+2029 PARAGRAPH SEPARATOR, or [lone surrogates](https://esdiscuss.org/topic/code-points-vs-unicode-scalar-values#content-14)) to a JavaScript parser or an UTF-8 encoder.
 
 ## Installation
 
