@@ -2,7 +2,7 @@
 
 const object = {};
 const hasOwnProperty = object.hasOwnProperty;
-const forOwn = function(object, callback) {
+const forOwn = (object, callback) => {
 	for (const key in object) {
 		if (hasOwnProperty.call(object, key)) {
 			callback(key, object[key]);
@@ -10,17 +10,17 @@ const forOwn = function(object, callback) {
 	}
 };
 
-const extend = function(destination, source) {
+const extend = (destination, source) => {
 	if (!source) {
 		return destination;
 	}
-	forOwn(source, function(key, value) {
+	forOwn(source, (key, value) => {
 		destination[key] = value;
 	});
 	return destination;
 };
 
-const forEach = function(array, callback) {
+const forEach = (array, callback) => {
 	const length = array.length;
 	let index = -1;
 	while (++index < length) {
@@ -31,25 +31,25 @@ const forEach = function(array, callback) {
 const toString = object.toString;
 const isArray = Array.isArray;
 const isBuffer = Buffer.isBuffer;
-const isObject = function(value) {
+const isObject = (value) => {
 	// This is a very simple check, but it’s good enough for what we need.
 	return toString.call(value) == '[object Object]';
 };
-const isString = function(value) {
+const isString = (value) => {
 	return typeof value == 'string' ||
 		toString.call(value) == '[object String]';
 };
-const isNumber = function(value) {
+const isNumber = (value) => {
 	return typeof value == 'number' ||
 		toString.call(value) == '[object Number]';
 };
-const isFunction = function(value) {
+const isFunction = (value) => {
 	return typeof value == 'function';
 };
-const isMap = function(value) {
+const isMap = (value) => {
 	return toString.call(value) == '[object Map]';
 };
-const isSet = function(value) {
+const isSet = (value) => {
 	return toString.call(value) == '[object Set]';
 };
 
@@ -73,8 +73,8 @@ const regexSingleEscape = /["'\\\b\f\n\r\t]/;
 const regexDigit = /[0-9]/;
 const regexWhitelist = /<%= whitelist %>/;
 
-const jsesc = function(argument, options) {
-	const increaseIndentation = function() {
+const jsesc = (argument, options) => {
+	const increaseIndentation = () => {
 		oldIndent = indent;
 		++options.indentLevel;
 		indent = options.indent.repeat(options.indentLevel)
@@ -166,7 +166,7 @@ const jsesc = function(argument, options) {
 			if (!inline2) {
 				increaseIndentation();
 			}
-			forEach(argument, function(value) {
+			forEach(argument, (value) => {
 				isEmpty = false;
 				if (inline2) {
 					options.__inline2__ = false;
@@ -217,7 +217,7 @@ const jsesc = function(argument, options) {
 			result = [];
 			options.wrap = true;
 			increaseIndentation();
-			forOwn(argument, function(key, value) {
+			forOwn(argument, (key, value) => {
 				isEmpty = false;
 				result.push(
 					(compact ? '' : indent) +
