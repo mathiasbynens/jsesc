@@ -152,9 +152,9 @@ const jsesc = (argument, options) => {
 		}
 		if (isBuffer(argument)) {
 			if (argument.length == 0) {
-				return 'Buffer()';
+				return 'Buffer.from([])';
 			}
-			return 'Buffer(' + jsesc(Array.from(argument), options) + ')';
+			return 'Buffer.from(' + jsesc(Array.from(argument), options) + ')';
 		}
 		if (isArray(argument)) {
 			result = [];

@@ -382,7 +382,7 @@ describe('common usage', function() {
 			jsesc(
 				Buffer([0x13, 0x37, 0x42])
 			),
-			'Buffer([19,55,66])',
+			'Buffer.from([19,55,66])',
 			'Stringifying a Buffer'
 		);
 		assert.equal(
@@ -392,7 +392,7 @@ describe('common usage', function() {
 					'compact': false
 				}
 			),
-			'Buffer([\n\t19,\n\t55,\n\t66\n])',
+			'Buffer.from([\n\t19,\n\t55,\n\t66\n])',
 			'Stringifying a Buffer with `compact: false`'
 		);
 		// JSON
