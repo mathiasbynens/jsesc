@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-
 	grunt.initConfig({
 		'template': {
 			'build': {
@@ -13,11 +12,8 @@ module.exports = function(grunt) {
 			}
 		}
 	});
-
 	grunt.loadNpmTasks('grunt-template');
-
 	grunt.registerTask('default', [
 		'template'
 	]);
-
 };
