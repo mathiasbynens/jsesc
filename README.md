@@ -344,6 +344,24 @@ jsesc(42, {
 //      ^^
 ```
 
+#### `forceLonghand`
+
+The `forceLonghand` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). It will make sure replaced characters will use the longer unicode format (`\u00YY`) instead of shortened one (`\xYY`).
+
+```js
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'forceLonghand': false // this is the default
+});
+// → '{\n\t\'Ich \u2665 B\xFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+//                        ^^^
+
+jsesc({ 'Ich ♥ Bücher': 'foo 𝌆 bar' }, {
+  'forceLonghand': true 
+});
+// → '{\n\t\'Ich \u2665 B\uOOFCcher\': \'foo \uD834\uDF06 bar\'\n}'
+//                        ^^^^^
+```
+
 ### `jsesc.version`
 
 A string representing the semantic version number.

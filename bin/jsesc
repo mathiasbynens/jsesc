@@ -29,6 +29,7 @@
 				'\tjsesc [-t | --escape-etago] [string]',
 				'\tjsesc [-6 | --es6] [string]',
 				'\tjsesc [-l | --lowercase-hex] [string]',
+				'\tjsesc [-f | --force-longhand] [string]',
 				'\tjsesc [-j | --json] [string]',
 				'\tjsesc [-o | --object] [stringified_object]', // `JSON.parse()` the argument
 				'\tjsesc [-p | --pretty] [string]', // `compact: false`
@@ -77,6 +78,10 @@
 			}
 			if (/^(?:-l|--lowercase-hex)$/.test(string)) {
 				options.lowercaseHex = true;
+				return;
+			}
+			if (/^(?:-f|--force-longhand)$/.test(string)) {
+				options.forceLonghand = true;
 				return;
 			}
 			if (/^(?:-j|--json)$/.test(string)) {
