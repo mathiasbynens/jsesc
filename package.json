@@ -7,6 +7,7 @@
     "node": ">=4"
   },
   "main": "jsesc.js",
+  "module": "jsesc.mjs",
   "bin": "bin/jsesc",
   "man": "man/jsesc.1",
   "keywords": [
@@ -37,12 +38,15 @@
     "man/"
   ],
   "scripts": {
-    "build": "grunt template",
+    "build": "grunt template; babel jsesc.mjs --presets babel-preset-es2015 -o jsesc.js",
     "coveralls": "istanbul cover --verbose --dir 'coverage' 'tests/tests.js' && coveralls < coverage/lcov.info'",
     "cover": "istanbul cover --report 'html' --verbose --dir 'coverage' 'tests/tests.js'",
     "test": "mocha tests"
   },
   "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "coveralls": "^2.11.6",
     "grunt": "^0.4.5",
     "grunt-template": "^0.2.3",

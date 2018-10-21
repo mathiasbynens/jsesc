@@ -1,60 +1,62 @@
 'use strict';
 
-var object = {};
-var hasOwnProperty = object.hasOwnProperty;
-var forOwn = function forOwn(object, callback) {
-	for (var key in object) {
+const object = {};
+const hasOwnProperty = object.hasOwnProperty;
+const forOwn = (object, callback) => {
+	for (const key in object) {
 		if (hasOwnProperty.call(object, key)) {
 			callback(key, object[key]);
 		}
 	}
 };
 
-var extend = function extend(destination, source) {
+const extend = (destination, source) => {
 	if (!source) {
 		return destination;
 	}
-	forOwn(source, function (key, value) {
+	forOwn(source, (key, value) => {
 		destination[key] = value;
 	});
 	return destination;
 };
 
-var forEach = function forEach(array, callback) {
-	var length = array.length;
-	var index = -1;
+const forEach = (array, callback) => {
+	const length = array.length;
+	let index = -1;
 	while (++index < length) {
 		callback(array[index]);
 	}
 };
 
-var toString = object.toString;
-var isArray = Array.isArray;
-var isBuffer = Buffer.isBuffer;
-var isObject = function isObject(value) {
+const toString = object.toString;
+const isArray = Array.isArray;
+const isBuffer = Buffer.isBuffer;
+const isObject = (value) => {
 	// This is a very simple check, but it’s good enough for what we need.
 	return toString.call(value) == '[object Object]';
 };
-var isString = function isString(value) {
-	return typeof value == 'string' || toString.call(value) == '[object String]';
+const isString = (value) => {
+	return typeof value == 'string' ||
+		toString.call(value) == '[object String]';
 };
-var isNumber = function isNumber(value) {
-	return typeof value == 'number' || toString.call(value) == '[object Number]';
+const isNumber = (value) => {
+	return typeof value == 'number' ||
+		toString.call(value) == '[object Number]';
 };
-var isFunction = function isFunction(value) {
+const isFunction = (value) => {
 	return typeof value == 'function';
 };
-var isMap = function isMap(value) {
+const isMap = (value) => {
 	return toString.call(value) == '[object Map]';
 };
-var isSet = function isSet(value) {
+const isSet = (value) => {
 	return toString.call(value) == '[object Set]';
 };
 
 /*--------------------------------------------------------------------------*/
 
 // https://mathiasbynens.be/notes/javascript-escapes#single
-var singleEscapes = {
+const singleEscapes = {
 	'"': '\\"',
 	'\'': '\\\'',
 	'\\': '\\\\',
@@ -66,19 +68,19 @@ var singleEscapes = {
 	// `\v` is omitted intentionally, because in IE < 9, '\v' == 'v'.
 	// '\v': '\\x0B'
 };
-var regexSingleEscape = /["'\\\b\f\n\r\t]/;
+const regexSingleEscape = /["'\\\b\f\n\r\t]/;
 
-var regexDigit = /[0-9]/;
-var regexWhitelist = /[ !#-&\(-\[\]-~]/;
+const regexDigit = /[0-9]/;
+const regexWhitelist = /[ !#-&\(-\[\]-~]/;
 
-var jsesc = function jsesc(argument, options) {
-	var increaseIndentation = function increaseIndentation() {
+const jsesc = (argument, options) => {
+	const increaseIndentation = () => {
 		oldIndent = indent;
 		++options.indentLevel;
-		indent = options.indent.repeat(options.indentLevel);
+		indent = options.indent.repeat(options.indentLevel)
 	};
 	// Handle options
-	var defaults = {
+	const defaults = {
 		'escapeEverything': false,
 		'minimal': false,
 		'isScriptContext': false,
@@ -94,29 +96,38 @@ var jsesc = function jsesc(argument, options) {
 		'__inline1__': false,
 		'__inline2__': false
 	};
-	var json = options && options.json;
+	const json = options && options.json;
 	if (json) {
 		defaults.quotes = 'double';
 		defaults.wrap = true;
 	}
 	options = extend(defaults, options);
-	if (options.quotes != 'single' && options.quotes != 'double' && options.quotes != 'backtick') {
+	if (
+		options.quotes != 'single' &&
+		options.quotes != 'double' &&
+		options.quotes != 'backtick'
+	) {
 		options.quotes = 'single';
 	}
-	var quote = options.quotes == 'double' ? '"' : options.quotes == 'backtick' ? '`' : '\'';
-	var compact = options.compact;
-	var lowercaseHex = options.lowercaseHex;
-	var indent = options.indent.repeat(options.indentLevel);
-	var oldIndent = '';
-	var inline1 = options.__inline1__;
-	var inline2 = options.__inline2__;
-	var newLine = compact ? '' : '\n';
-	var result = void 0;
-	var isEmpty = true;
-	var useBinNumbers = options.numbers == 'binary';
-	var useOctNumbers = options.numbers == 'octal';
-	var useDecNumbers = options.numbers == 'decimal';
-	var useHexNumbers = options.numbers == 'hexadecimal';
+	const quote = options.quotes == 'double' ?
+		'"' :
+		(options.quotes == 'backtick' ?
+			'`' :
+			'\''
+		);
+	const compact = options.compact;
+	const lowercaseHex = options.lowercaseHex;
+	let indent = options.indent.repeat(options.indentLevel);
+	let oldIndent = '';
+	const inline1 = options.__inline1__;
+	const inline2 = options.__inline2__;
+	const newLine = compact ? '' : '\n';
+	let result;
+	let isEmpty = true;
+	const useBinNumbers = options.numbers == 'binary';
+	const useOctNumbers = options.numbers == 'octal';
+	const useDecNumbers = options.numbers == 'decimal';
+	const useHexNumbers = options.numbers == 'hexadecimal';
 
 	if (json && argument && isFunction(argument.toJSON)) {
 		argument = argument.toJSON();
@@ -155,12 +166,15 @@ var jsesc = function jsesc(argument, options) {
 			if (!inline2) {
 				increaseIndentation();
 			}
-			forEach(argument, function (value) {
+			forEach(argument, (value) => {
 				isEmpty = false;
 				if (inline2) {
 					options.__inline2__ = false;
 				}
-				result.push((compact || inline2 ? '' : indent) + jsesc(value, options));
+				result.push(
+					(compact || inline2 ? '' : indent) +
+					jsesc(value, options)
+				);
 			});
 			if (isEmpty) {
 				return '[]';
@@ -168,7 +182,8 @@ var jsesc = function jsesc(argument, options) {
 			if (inline2) {
 				return '[' + result.join(', ') + ']';
 			}
-			return '[' + newLine + result.join(',' + newLine) + newLine + (compact ? '' : oldIndent) + ']';
+			return '[' + newLine + result.join(',' + newLine) + newLine +
+				(compact ? '' : oldIndent) + ']';
 		} else if (isNumber(argument)) {
 			if (json) {
 				// Some number values (e.g. `Infinity`) cannot be represented in JSON.
@@ -178,7 +193,7 @@ var jsesc = function jsesc(argument, options) {
 				return String(argument);
 			}
 			if (useHexNumbers) {
-				var hexadecimal = argument.toString(16);
+				let hexadecimal = argument.toString(16);
 				if (!lowercaseHex) {
 					hexadecimal = hexadecimal.toUpperCase();
 				}
@@ -198,49 +213,53 @@ var jsesc = function jsesc(argument, options) {
 				return JSON.stringify(argument) || 'null';
 			}
 			return String(argument);
-		} else {
-			// it’s an object
+		} else { // it’s an object
 			result = [];
 			options.wrap = true;
 			increaseIndentation();
-			forOwn(argument, function (key, value) {
+			forOwn(argument, (key, value) => {
 				isEmpty = false;
-				result.push((compact ? '' : indent) + jsesc(key, options) + ':' + (compact ? '' : ' ') + jsesc(value, options));
+				result.push(
+					(compact ? '' : indent) +
+					jsesc(key, options) + ':' +
+					(compact ? '' : ' ') +
+					jsesc(value, options)
+				);
 			});
 			if (isEmpty) {
 				return '{}';
 			}
-			return '{' + newLine + result.join(',' + newLine) + newLine + (compact ? '' : oldIndent) + '}';
+			return '{' + newLine + result.join(',' + newLine) + newLine +
+				(compact ? '' : oldIndent) + '}';
 		}
 	}
 
-	var string = argument;
+	const string = argument;
 	// Loop over each code unit in the string and escape it
-	var index = -1;
-	var length = string.length;
+	let index = -1;
+	const length = string.length;
 	result = '';
 	while (++index < length) {
-		var character = string.charAt(index);
+		const character = string.charAt(index);
 		if (options.es6) {
-			var first = string.charCodeAt(index);
+			const first = string.charCodeAt(index);
 			if ( // check if it’s the start of a surrogate pair
-			first >= 0xD800 && first <= 0xDBFF && // high surrogate
-			length > index + 1 // there is a next code unit
+				first >= 0xD800 && first <= 0xDBFF && // high surrogate
+				length > index + 1 // there is a next code unit
 			) {
-					var second = string.charCodeAt(index + 1);
-					if (second >= 0xDC00 && second <= 0xDFFF) {
-						// low surrogate
-						// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-						var codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
-						var _hexadecimal2 = codePoint.toString(16);
-						if (!lowercaseHex) {
-							_hexadecimal2 = _hexadecimal2.toUpperCase();
-						}
-						result += '\\u{' + _hexadecimal2 + '}';
-						++index;
-						continue;
+				const second = string.charCodeAt(index + 1);
+				if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
+					// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+					const codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
+					let hexadecimal = codePoint.toString(16);
+					if (!lowercaseHex) {
+						hexadecimal = hexadecimal.toUpperCase();
 					}
+					result += '\\u{' + hexadecimal + '}';
+					++index;
+					continue;
 				}
+			}
 		}
 		if (!options.escapeEverything) {
 			if (regexWhitelist.test(character)) {
@@ -262,7 +281,11 @@ var jsesc = function jsesc(argument, options) {
 				continue;
 			}
 		}
-		if (character == '\0' && !json && !regexDigit.test(string.charAt(index + 1))) {
+		if (
+			character == '\0' &&
+			!json &&
+			!regexDigit.test(string.charAt(index + 1))
+		) {
 			result += '\\0';
 			continue;
 		}
@@ -271,17 +294,18 @@ var jsesc = function jsesc(argument, options) {
 			result += singleEscapes[character];
 			continue;
 		}
-		var charCode = character.charCodeAt(0);
+		const charCode = character.charCodeAt(0);
 		if (options.minimal && charCode != 0x2028 && charCode != 0x2029) {
 			result += character;
 			continue;
 		}
-		var _hexadecimal = charCode.toString(16);
+		let hexadecimal = charCode.toString(16);
 		if (!lowercaseHex) {
-			_hexadecimal = _hexadecimal.toUpperCase();
+			hexadecimal = hexadecimal.toUpperCase();
 		}
-		var longhand = _hexadecimal.length > 2 || json;
-		var escaped = '\\' + (longhand ? 'u' : 'x') + ('0000' + _hexadecimal).slice(longhand ? -4 : -2);
+		const longhand = hexadecimal.length > 2 || json;
+		const escaped = '\\' + (longhand ? 'u' : 'x') +
+			('0000' + hexadecimal).slice(longhand ? -4 : -2);
 		result += escaped;
 		continue;
 	}
@@ -293,7 +317,9 @@ var jsesc = function jsesc(argument, options) {
 	}
 	if (options.isScriptContext) {
 		// https://mathiasbynens.be/notes/etago
-		return result.replace(/<\/(script|style)/gi, '<\\/$1').replace(/<!--/g, json ? '\\u003C!--' : '\\x3C!--');
+		return result
+			.replace(/<\/(script|style)/gi, '<\\/$1')
+			.replace(/<!--/g, json ? '\\u003C!--' : '\\x3C!--');
 	}
 	return result;
 };

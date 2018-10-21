@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 					'data': require('./src/data.js')
 				},
 				'files': {
-					'jsesc.js': ['src/jsesc.js']
+					'jsesc.mjs': ['src/jsesc.js']
 				}
 			}
 		}
