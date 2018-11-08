@@ -324,6 +324,6 @@ const jsesc = (argument, options) => {
 	return result;
 };
 
-jsesc.version = '2.5.1';
+jsesc.version = '2.5.2';
 
 module.exports = jsesc;

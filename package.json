@@ -1,6 +1,6 @@
 {
   "name": "jsesc",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "Given some data, jsesc returns the shortest possible stringified & ASCII-safe representation of that data.",
   "homepage": "https://mths.be/jsesc",
   "engines": {
