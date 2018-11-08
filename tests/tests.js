@@ -38,18 +38,18 @@ describe('common usage', function() {
 			'Invalid `quotes` setting'
 		);
 		assert.equal(
-			jsesc('foo${1+1}', {
+			jsesc('foo${1+1} `bar`', {
 				'quotes': 'backtick'
 			}),
-			'foo\\${1+1}',
+			'foo\\${1+1} \\`bar\\`',
 			'`quotes: \'backtick\'`'
 		);
 		assert.equal(
-			jsesc('foo${1+1}', {
+			jsesc('foo${1+1} `bar`', {
 				'quotes': 'backtick',
 				'wrap': true
 			}),
-			'`foo\\${1+1}`',
+			'`foo\\${1+1} \\`bar\\``',
 			'`quotes: \'backtick\'` + `wrap: true`'
 		);
 		assert.equal(

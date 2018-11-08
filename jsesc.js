@@ -71,7 +71,7 @@ const singleEscapes = {
 const regexSingleEscape = /["'\\\b\f\n\r\t]/;
 
 const regexDigit = /[0-9]/;
-const regexWhitelist = /[ !#-&\(-\[\]-~]/;
+const regexWhitelist = /[ !#-&\(-\[\]-_a-~]/;
 
 const jsesc = (argument, options) => {
 	const increaseIndentation = () => {
