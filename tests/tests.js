@@ -16,9 +16,19 @@ describe('common usage', function() {
 			'`\\0` followed by `1`'
 		);
 		assert.equal(
+			jsesc('\0\x31', {extended: true}),
+			'\\x001',
+			'`\\0` followed by `1` extended mode'
+		);
+		assert.equal(
 			jsesc('\0\x38'),
 			'\\x008',
 			'`\\0` followed by `8`'
+		);
+		assert.equal(
+			jsesc('\0\x38', {extended: true}),
+			'\\x008',
+			'`\\0` followed by `8` extended mode'
 		);
 		assert.equal(
 			jsesc('\0\x39'),
@@ -26,9 +36,19 @@ describe('common usage', function() {
 			'`\\0` followed by `9`'
 		);
 		assert.equal(
+			jsesc('\0\x39', {extended: true}),
+			'\\x009',
+			'`\\0` followed by `9` extended mode'
+		);
+		assert.equal(
 			jsesc('\0a'),
 			'\\0a',
 			'`\\0` followed by `a`'
+		);
+		assert.equal(
+			jsesc('\0a', {extended: true}),
+			'\\0a',
+			'`\\0` followed by `a` extended mode'
 		);
 		assert.equal(
 			jsesc('foo"bar\'baz', {
@@ -36,6 +56,13 @@ describe('common usage', function() {
 			}),
 			'foo"bar\\\'baz',
 			'Invalid `quotes` setting'
+		);
+		assert.equal(
+			jsesc('foo"bar\'baz', {
+				'quotes': false
+			}),
+			'foo"bar\'baz',
+			'disabled `quotes` setting'
 		);
 		assert.equal(
 			jsesc('foo${1+1} `bar`', {
@@ -80,6 +107,18 @@ describe('common usage', function() {
 			jsesc('\\\\x00'),
 			'\\\\\\\\x00',
 			'`\\\\\\\\x00` shouldn’t be changed to `\\\\\\\\0`'
+		);
+		assert.equal(
+			jsesc('habitación𝌆', {
+				'extended': true
+			}),
+			'habitación\\uD834\\uDF06',
+			'extended mode do not escape extended ASCII chaarchters'
+		);
+		assert.equal(
+			jsesc('habitación𝌆'),
+			'habitaci\\xF3n\\uD834\\uDF06',
+			'escape extended ASCII chaarchters'
 		);
 		assert.equal(
 			jsesc('lolwat"foo\'bar', {
@@ -571,10 +610,20 @@ describe('advanced tests', function() {
 			'All Unicode symbols, space-separated, default quote type (single quotes)'
 		);
 		assert.ok(
+			eval('\'' + jsesc(allSymbols) + '\'', {extended: true}) == allSymbols,
+			'All Unicode symbols, space-separated, default quote type (single quotes) extended mode'
+		);
+		assert.ok(
 			eval('\'' + jsesc(allSymbols, {
 				'quotes': 'single'
 			}) + '\'') == allSymbols,
 			'All Unicode symbols, space-separated, single quotes'
+		);
+		assert.ok(
+			eval('\'' + jsesc(allSymbols, {
+				'quotes': false
+			}) + '\'') == allSymbols,
+			'All Unicode symbols, space-separated, disabled quotes'
 		);
 		assert.ok(
 			eval('`' + jsesc(allSymbols, {
@@ -635,5 +684,5 @@ describe('advanced tests', function() {
 			'[\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
 			'Escaping a non-flat array with all kinds of values, with `json: true, compact: false`'
 		);
-	}).timeout(25000);
+	}).timeout(35000);
 });

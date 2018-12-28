@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 (function() {
 
-	var fs = require('fs');
 	var stringEscape = require('../jsesc.js');
 	var strings = process.argv.splice(2);
 	var stdin = process.stdin;
@@ -22,9 +21,11 @@
 			log([
 				'\nUsage:\n',
 				'\tjsesc [string]',
+				'\tjsesc [-k | --skip-quotes] [string]',
 				'\tjsesc [-s | --single-quotes] [string]',
 				'\tjsesc [-d | --double-quotes] [string]',
 				'\tjsesc [-w | --wrap] [string]',
+				'\tjsesc [-x | --extended] [string]',
 				'\tjsesc [-e | --escape-everything] [string]',
 				'\tjsesc [-t | --escape-etago] [string]',
 				'\tjsesc [-6 | --es6] [string]',
@@ -51,6 +52,10 @@
 
 		strings.forEach(function(string) {
 			// Process options
+			if (/^(?:-k|--skip-quotes)$/.test(string)) {
+				options.quotes = false;
+				return;
+			}
 			if (/^(?:-s|--single-quotes)$/.test(string)) {
 				options.quotes = 'single';
 				return;
@@ -61,6 +66,10 @@
 			}
 			if (/^(?:-w|--wrap)$/.test(string)) {
 				options.wrap = true;
+				return;
+			}
+			if (/^(?:-x|--extended)$/.test(string)) {
+				options.extended = true;
 				return;
 			}
 			if (/^(?:-e|--escape-everything)$/.test(string)) {
