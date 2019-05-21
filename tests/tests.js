@@ -550,6 +550,14 @@ describe('common usage', function() {
 			'\\u2192\\xE9\\u{1F4A9}',
 			'Alphabetical hexadecimal digits are uppercase when `lowercaseHex: false` and `es6: true`'
 		);
+		// EXCLUDE
+		assert.equal(
+			jsesc('käfer', {
+				'exclude': 'ä'
+			}),
+			"käfer",
+			'Excluding a character a string'
+		);
 	});
 });
 
@@ -617,7 +625,7 @@ describe('advanced tests', function() {
 			jsesc(testArray, {
 				'json': false
 			}),
-			'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,function anonymous() {\n\n},\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'hah\':[1,2,3,{\'foo\':42}]}]',
+			'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,function anonymous(\n) {\n\n},\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'hah\':[1,2,3,{\'foo\':42}]}]',
 			'Escaping a non-flat array with all kinds of values'
 		);
 		assert.equal(

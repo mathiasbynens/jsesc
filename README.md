@@ -344,6 +344,18 @@ jsesc(42, {
 //      ^^
 ```
 
+#### `exclude`
+
+The `exclude` option takes a String value for example "ä", and ignores any characters when doing ght escaping.
+
+```js
+jsesc('käfer', {
+  'isScriptContext': true,
+  'exclude': 'ä'
+});
+// → 'käfer'
+```
+
 ### `jsesc.version`
 
 A string representing the semantic version number.
