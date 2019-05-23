@@ -94,7 +94,8 @@ const jsesc = (argument, options) => {
 		'indent': '\t',
 		'indentLevel': 0,
 		'__inline1__': false,
-		'__inline2__': false
+		'__inline2__': false,
+		'exclude': ''
 	};
 	const json = options && options.json;
 	if (json) {
@@ -235,12 +236,17 @@ const jsesc = (argument, options) => {
 	}
 
 	const string = argument;
+	const ignoredCharacters = options.exclude;
 	// Loop over each code unit in the string and escape it
 	let index = -1;
 	const length = string.length;
 	result = '';
 	while (++index < length) {
 		const character = string.charAt(index);
+		if (ignoredCharacters.includes(character)) {
+			result += character;
+			continue;
+		}
 		if (options.es6) {
 			const first = string.charCodeAt(index);
 			if ( // check if it’s the start of a surrogate pair
