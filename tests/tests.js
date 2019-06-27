@@ -624,7 +624,7 @@ describe('advanced tests', function() {
 			jsesc(testArray, {
 				'json': true
 			}),
-			'[null,{"foo":null},null,null,null,null,0,0,0,0,0,0,null,"str",null,null,true,true,false,false,{"foo":42,"hah":[1,2,3,{"foo":42}]}]',
+			'[null,{},null,null,null,null,0,0,0,0,0,0,null,"str",null,null,true,true,false,false,{"foo":42,"hah":[1,2,3,{"foo":42}]}]',
 			'Escaping a non-flat array with all kinds of values, with `json: true`'
 		);
 		assert.equal(
@@ -632,7 +632,7 @@ describe('advanced tests', function() {
 				'json': true,
 				'compact': false
 			}),
-			'[\n\tnull,\n\t{\n\t\t"foo": null\n\t},\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
+			'[\n\tnull,\n\t{},\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
 			'Escaping a non-flat array with all kinds of values, with `json: true, compact: false`'
 		);
 	}).timeout(25000);
