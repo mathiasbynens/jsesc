@@ -2,9 +2,11 @@
 
 const object = {};
 const hasOwnProperty = object.hasOwnProperty;
-const forOwn = (object, callback) => {
+const forOwn = (object, callback, noUndefined) => {
 	for (const key in object) {
-		if (hasOwnProperty.call(object, key)) {
+		if (hasOwnProperty.call(object, key) &&
+        (!noUndefined || (typeof object[key] !== 'undefined'))
+		) {
 			callback(key, object[key]);
 		}
 	}
@@ -225,7 +227,7 @@ const jsesc = (argument, options) => {
 					(compact ? '' : ' ') +
 					jsesc(value, options)
 				);
-			});
+			}, !!json);
 			if (isEmpty) {
 				return '{}';
 			}
