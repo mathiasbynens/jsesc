@@ -92,6 +92,15 @@ jsesc('`Lorem` ipsum "dolor" sit \'amet\' etc.', {
 // → `\\\`Lorem\\\` ipsum "dolor" sit 'amet' etc.`
 ```
 
+If you want to disable escaping quotes, set the `quotes` option to `false`.
+
+```js
+jsesc('`Lorem` ipsum "dolor" sit \'amet\' etc.', {
+  'quotes': false
+});
+// → '`Lorem` ipsum "dolor" sit \'amet\' etc.'
+```
+
 This setting also affects the output for arrays and objects:
 
 ```js
@@ -210,6 +219,19 @@ jsesc('foo\u2029bar\nbaz©qux𝌆flops', {
   'minimal': false
 });
 // → 'foo\\u2029bar\\nbaz©qux𝌆flops'
+```
+
+#### `extended`
+
+The `extended` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, extended ASCII characters are not escaped:
+
+* 0x80 - 0xFE
+
+```js
+jsesc('habitación𝌆', {
+  'extended': true
+});
+// → 'habitación\\uD834\\uDF06'
 ```
 
 #### `isScriptContext`

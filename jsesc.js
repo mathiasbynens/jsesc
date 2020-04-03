@@ -72,6 +72,7 @@ const regexSingleEscape = /["'\\\b\f\n\r\t]/;
 
 const regexDigit = /[0-9]/;
 const regexWhitelist = /[ !#-&\(-\[\]-_a-~]/;
+const regexWhitelistExtended = /[ !#-&\(-\[\]-_a-~\x80-\xFE]/;
 
 const jsesc = (argument, options) => {
 	const increaseIndentation = () => {
@@ -83,6 +84,7 @@ const jsesc = (argument, options) => {
 	const defaults = {
 		'escapeEverything': false,
 		'minimal': false,
+		'extended': false,
 		'isScriptContext': false,
 		'quotes': 'single',
 		'wrap': false,
@@ -104,17 +106,19 @@ const jsesc = (argument, options) => {
 	options = extend(defaults, options);
 	if (
 		options.quotes != 'single' &&
+		options.quotes != 'backtick' &&
 		options.quotes != 'double' &&
-		options.quotes != 'backtick'
+		options.quotes != false
 	) {
 		options.quotes = 'single';
 	}
-	const quote = options.quotes == 'double' ?
+	const quote = options.quotes == false ? undefined :
+		(options.quotes == 'double' ?
 		'"' :
 		(options.quotes == 'backtick' ?
 			'`' :
 			'\''
-		);
+		));
 	const compact = options.compact;
 	const lowercaseHex = options.lowercaseHex;
 	let indent = options.indent.repeat(options.indentLevel);
@@ -262,11 +266,20 @@ const jsesc = (argument, options) => {
 			}
 		}
 		if (!options.escapeEverything) {
-			if (regexWhitelist.test(character)) {
-				// It’s a printable ASCII character that is not `"`, `'` or `\`,
-				// so don’t escape it.
-				result += character;
-				continue;
+			if (!options.extended) {
+				if (regexWhitelist.test(character)) {
+					// It’s a printable ASCII character that is not `"`, `'` or `\`,
+					// so don’t escape it.
+					result += character;
+					continue;
+				}
+			} else {
+				if (regexWhitelistExtended.test(character)) {
+					// It’s a printable extended ASCII character that is not `"`, `'` or `\`,
+					// so don’t escape it.
+					result += character;
+					continue;
+				}
 			}
 			if (character == '"') {
 				result += quote == character ? '\\"' : character;
