@@ -395,6 +395,31 @@ describe('common usage', function() {
 			'Buffer.from([\n\t19,\n\t55,\n\t66\n])',
 			'Stringifying a Buffer with `compact: false`'
 		);
+		// Date
+		assert.equal(
+			jsesc(
+				new Date('2020-04-03T15:34:00Z')
+			),
+			'new Date(1585928040000)'
+		);
+		assert.equal(
+			jsesc(
+				new Date('2020-04-03T15:34:00Z'),
+				{
+					'numbers': 'hexadecimal'
+				}
+			),
+			'new Date(0x17140AD6E40)'
+		);
+		assert.equal(
+			jsesc(
+				new Date('2020-04-03T15:34:00Z'),
+				{
+					'json': true
+				}
+			),
+			'"2020-04-03T15:34:00.000Z"'
+		);
 		// JSON
 		assert.equal(
 			jsesc('foo\x00bar\xFF\uFFFDbaz', {

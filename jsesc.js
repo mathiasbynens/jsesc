@@ -35,6 +35,9 @@ const isObject = (value) => {
 	// This is a very simple check, but it’s good enough for what we need.
 	return toString.call(value) == '[object Object]';
 };
+const isDate = (value) => {
+	return toString.call(value) == '[object Date]';
+};
 const isString = (value) => {
 	return typeof value == 'string' ||
 		toString.call(value) == '[object String]';
@@ -205,6 +208,9 @@ const jsesc = (argument, options) => {
 			if (useOctNumbers) {
 				return '0o' + argument.toString(8);
 			}
+		} else if (isDate(argument)) {
+			// Date objects have a toJSON method, which implies json: false here.
+			return 'new Date(' + jsesc(argument.valueOf(), options) + ')';
 		} else if (!isObject(argument)) {
 			if (json) {
 				// For some values (e.g. `undefined`, `function` objects),
