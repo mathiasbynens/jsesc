@@ -316,6 +316,11 @@ jsesc([ 'foo\x00bar', [1, '©', { 'foo': true, 'qux': null }], 42 ], {
   'json': true
 });
 // → '["foo\\u0000bar",[1,"\\u00A9",{"foo":true,"qux":null}],42]'
+// Undefined object properties are skipped, similarily to `JSON.stringify()`:
+jsesc({ foo: undefined, bar: null }, {
+  'json': true
+});
+// → '{"bar": null}'
 // Values that aren’t allowed in JSON are run through `JSON.stringify()`:
 jsesc([ undefined, -Infinity ], {
   'json': true
