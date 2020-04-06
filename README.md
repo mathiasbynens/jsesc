@@ -292,7 +292,7 @@ jsesc(['a', 'b', 'c'], {
 
 #### `json`
 
-The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](https://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](https://mathiasbynens.be/notes/javascript-escapes#single) are not used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore.
+The `json` option takes a boolean value (`true` or `false`), and defaults to `false` (disabled). When enabled, the output is valid JSON. [Hexadecimal character escape sequences](https://mathiasbynens.be/notes/javascript-escapes#hexadecimal) and [the `\v` or `\0` escape sequences](https://mathiasbynens.be/notes/javascript-escapes#single) are not used. Setting `json: true` implies `quotes: 'double', wrap: true, es6: false`, although these values can still be overridden if needed — but in such cases, the output won’t be valid JSON anymore. In general, the `json` flag attempts to mimick the coercion behavior of `JSON.stringify` - `Date` objects will be formatted as strings, `Set` objects will become empty objects `{}`, and `undefined` values in an array will become `null`.
 
 ```js
 jsesc('foo\x00bar\xFF\uFFFDbaz', {
@@ -321,6 +321,9 @@ jsesc([ undefined, -Infinity ], {
   'json': true
 });
 // → '[null,null]'
+
+jsesc({ '!date': new Date(), '!set': new Set([1, 2])) });
+// → {"!date":"2020-04-03T15:34:00.000Z","!set":{}}
 ```
 
 **Note:** Using this option on objects or arrays that contain non-string values relies on `JSON.stringify()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](http://bestiejs.github.io/json3/).

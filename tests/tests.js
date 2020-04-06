@@ -344,6 +344,18 @@ describe('common usage', function() {
 		);
 		assert.equal(
 			jsesc(
+				new Map([
+					['a', 1]
+				]),
+				{
+					'json': true
+				}
+			),
+			'{}',
+			'Stringifying a Map with `json: true`'
+		);
+		assert.equal(
+			jsesc(
 				new Set([])
 			),
 			'new Set()',
@@ -376,6 +388,19 @@ describe('common usage', function() {
 			),
 			'new Set([\n\t[\n\t\t\'a\'\n\t],\n\t\'b\',\n\t{}\n])',
 			'Stringifying a Set with `compact: false`'
+		);
+		assert.equal(
+			jsesc(
+				new Set([
+					['a'],
+					'b'
+				]),
+				{
+					'json': true
+				}
+			),
+			'{}',
+			'Stringifying a Set with `json: true`'
 		);
 		// Buffer
 		assert.equal(

@@ -137,7 +137,7 @@ const jsesc = (argument, options) => {
 	}
 
 	if (!isString(argument)) {
-		if (isMap(argument)) {
+		if (!json && isMap(argument)) {
 			if (argument.size == 0) {
 				return 'new Map()';
 			}
@@ -147,7 +147,7 @@ const jsesc = (argument, options) => {
 			}
 			return 'new Map(' + jsesc(Array.from(argument), options) + ')';
 		}
-		if (isSet(argument)) {
+		if (!json && isSet(argument)) {
 			if (argument.size == 0) {
 				return 'new Set()';
 			}
