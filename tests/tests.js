@@ -89,10 +89,10 @@ describe('common usage', function() {
 			'escapeEverything'
 		);
 		assert.equal(
-			jsesc('\0foo\u2029bar\nbaz\xA9qux\uD834\uDF06flops\uD834_\uDF06_\uDF06\uD834', {
+			jsesc('\0foo\u2029bar\nbaz\xA9qux\uD834\uDF06flops', {
 				'minimal': true
 			}),
-			'\\0foo\\u2029bar\\nbaz\xA9qux\uD834\uDF06flops\\uD834_\\uDF06_\\uDF06\\uD834',
+			'\\0foo\\u2029bar\\nbaz\xA9qux\uD834\uDF06flops',
 			'minimal'
 		);
 		assert.equal(

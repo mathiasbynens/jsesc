@@ -241,6 +241,26 @@ const jsesc = (argument, options) => {
 	result = '';
 	while (++index < length) {
 		const character = string.charAt(index);
+		if (options.es6) {
+			const first = string.charCodeAt(index);
+			if ( // check if it’s the start of a surrogate pair
+				first >= 0xD800 && first <= 0xDBFF && // high surrogate
+				length > index + 1 // there is a next code unit
+			) {
+				const second = string.charCodeAt(index + 1);
+				if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
+					// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+					const codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
+					let hexadecimal = codePoint.toString(16);
+					if (!lowercaseHex) {
+						hexadecimal = hexadecimal.toUpperCase();
+					}
+					result += '\\u{' + hexadecimal + '}';
+					++index;
+					continue;
+				}
+			}
+		}
 		if (!options.escapeEverything) {
 			if (regexWhitelist.test(character)) {
 				// It’s a printable ASCII character that is not `"`, `'` or `\`,
@@ -248,8 +268,16 @@ const jsesc = (argument, options) => {
 				result += character;
 				continue;
 			}
-			if (character === quote) {
-				result += '\\' + character;
+			if (character == '"') {
+				result += quote == character ? '\\"' : character;
+				continue;
+			}
+			if (character == '`') {
+				result += quote == character ? '\\`' : character;
+				continue;
+			}
+			if (character == '\'') {
+				result += quote == character ? '\\\'' : character;
 				continue;
 			}
 		}
@@ -267,30 +295,7 @@ const jsesc = (argument, options) => {
 			continue;
 		}
 		const charCode = character.charCodeAt(0);
-		if ( // check if it’s the start of a surrogate pair
-			charCode >= 0xD800 && charCode <= 0xDBFF && // high surrogate
-			length > index + 1 // there is a next code unit
-		) {
-			const second = string.charCodeAt(index + 1);
-			if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
-				if (options.es6) {
-					// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-					const codePoint = (charCode - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
-					let hexadecimal = codePoint.toString(16);
-					if (!lowercaseHex) {
-						hexadecimal = hexadecimal.toUpperCase();
-					}
-					result += '\\u{' + hexadecimal + '}';
-					++index;
-					continue;
-				} else if (options.minimal) {
-					result += character;
-					result += string.charAt(++index);
-					continue;
-				}
-			}
-		}
-		if (options.minimal && charCode != 0x2028 && charCode != 0x2029 && (charCode < 0xD800 || charCode > 0xDFFF)) {
+		if (options.minimal && charCode != 0x2028 && charCode != 0x2029) {
 			result += character;
 			continue;
 		}
@@ -308,7 +313,7 @@ const jsesc = (argument, options) => {
 		result = quote + result + quote;
 	}
 	if (quote == '`') {
-		result = result.replace(/\$\{/g, '\\${');
+		result = result.replace(/\$\{/g, '\\\$\{');
 	}
 	if (options.isScriptContext) {
 		// https://mathiasbynens.be/notes/etago

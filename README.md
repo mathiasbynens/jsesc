@@ -202,7 +202,6 @@ The `minimal` option takes a boolean value (`true` or `false`), and defaults to 
 * U+2028 `\u2028`
 * U+2029 `\u2029`
 * whatever symbol is being used for wrapping string literals (based on [the `quotes` option](#quotes))
-* [lone surrogates](https://esdiscuss.org/topic/code-points-vs-unicode-scalar-values#content-14)
 
 Note: with this option enabled, jsesc output is no longer guaranteed to be ASCII-safe.
 
