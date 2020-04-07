@@ -250,7 +250,7 @@ const jsesc = (argument, options) => {
 			}
 			if (character == '"' || character == '`' || character == '\'') {
 				result += quote == character ? '\\' + character : character;
-				continue
+				continue;
 			}
 		}
 		if (
