@@ -4,7 +4,7 @@
   "description": "Given some data, jsesc returns the shortest possible stringified & ASCII-safe representation of that data.",
   "homepage": "https://mths.be/jsesc",
   "engines": {
-    "node": ">=4"
+    "node": ">=10"
   },
   "main": "jsesc.js",
   "bin": "bin/jsesc",
