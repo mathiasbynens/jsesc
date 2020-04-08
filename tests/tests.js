@@ -380,14 +380,14 @@ describe('common usage', function() {
 		// Buffer
 		assert.equal(
 			jsesc(
-				Buffer([0x13, 0x37, 0x42])
+				Buffer.from([0x13, 0x37, 0x42])
 			),
 			'Buffer.from([19,55,66])',
 			'Stringifying a Buffer'
 		);
 		assert.equal(
 			jsesc(
-				Buffer([0x13, 0x37, 0x42]),
+				Buffer.from([0x13, 0x37, 0x42]),
 				{
 					'compact': false
 				}
