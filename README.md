@@ -407,7 +407,7 @@ See `jsesc --help` for the full list of options.
 
 ## Support
 
-As of v3.0.0, jsesc supports Node.js v10+ only.
+As of v3.0.0, jsesc supports Node.js v6+ only.
 
 Older versions (up to jsesc v1.3.0) support Chrome 27, Firefox 3, Safari 4, Opera 10, IE 6, Node.js v6.0.0, Narwhal 0.3.2, RingoJS 0.8-0.11, PhantomJS 1.9.0, and Rhino 1.7RC4. **Note:** Using the `json` option on objects or arrays that contain non-string values relies on `JSON.parse()`. For legacy environments like IE ≤ 7, use [a `JSON` polyfill](https://bestiejs.github.io/json3/).
 

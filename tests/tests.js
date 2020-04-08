@@ -607,9 +607,8 @@ describe('advanced tests', function() {
 		const testArray = [
 			undefined, Infinity, new Number(Infinity), -Infinity,
 			new Number(-Infinity), 0, new Number(0), -0, new Number(-0), +0,
-			new Number(+0), new Function(), 'str',
-			function zomg() { return 'desu'; }, null, true, new Boolean(true),
-			false, new Boolean(false), {
+			new Number(+0), 'str', function zomg() { return 'desu'; }, null,
+			true, new Boolean(true), false, new Boolean(false), {
 				"foo": 42, "hah": [ 1, 2, 3, { "foo" : 42 } ]
 			}
 		];
@@ -617,14 +616,14 @@ describe('advanced tests', function() {
 			jsesc(testArray, {
 				'json': false
 			}),
-			'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,function anonymous(\n) {\n\n},\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'hah\':[1,2,3,{\'foo\':42}]}]',
+			'[undefined,Infinity,Infinity,-Infinity,-Infinity,0,0,0,0,0,0,\'str\',function zomg() { return \'desu\'; },null,true,true,false,false,{\'foo\':42,\'hah\':[1,2,3,{\'foo\':42}]}]',
 			'Escaping a non-flat array with all kinds of values'
 		);
 		assert.equal(
 			jsesc(testArray, {
 				'json': true
 			}),
-			'[null,null,null,null,null,0,0,0,0,0,0,null,"str",null,null,true,true,false,false,{"foo":42,"hah":[1,2,3,{"foo":42}]}]',
+			'[null,null,null,null,null,0,0,0,0,0,0,"str",null,null,true,true,false,false,{"foo":42,"hah":[1,2,3,{"foo":42}]}]',
 			'Escaping a non-flat array with all kinds of values, with `json: true`'
 		);
 		assert.equal(
@@ -632,7 +631,7 @@ describe('advanced tests', function() {
 				'json': true,
 				'compact': false
 			}),
-			'[\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\tnull,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
+			'[\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\tnull,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t0,\n\t"str",\n\tnull,\n\tnull,\n\ttrue,\n\ttrue,\n\tfalse,\n\tfalse,\n\t{\n\t\t"foo": 42,\n\t\t"hah": [\n\t\t\t1,\n\t\t\t2,\n\t\t\t3,\n\t\t\t{\n\t\t\t\t"foo": 42\n\t\t\t}\n\t\t]\n\t}\n]',
 			'Escaping a non-flat array with all kinds of values, with `json: true, compact: false`'
 		);
 	});
