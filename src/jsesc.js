@@ -28,6 +28,16 @@ const forEach = (array, callback) => {
 	}
 };
 
+const fourHexEscape = (hex) => {
+	return '\\u' + ('0000' + hex).slice(-4);
+}
+
+const hexadecimal = (code, lowercase) => {
+	let hexadecimal = code.toString(16);
+	if (lowercase) return hexadecimal;
+	return hexadecimal.toUpperCase();
+};
+
 const toString = object.toString;
 const isArray = Array.isArray;
 const isBuffer = Buffer.isBuffer;
@@ -57,8 +67,6 @@ const isSet = (value) => {
 
 // https://mathiasbynens.be/notes/javascript-escapes#single
 const singleEscapes = {
-	'"': '\\"',
-	'\'': '\\\'',
 	'\\': '\\\\',
 	'\b': '\\b',
 	'\f': '\\f',
@@ -68,10 +76,12 @@ const singleEscapes = {
 	// `\v` is omitted intentionally, because in IE < 9, '\v' == 'v'.
 	// '\v': '\\x0B'
 };
-const regexSingleEscape = /["'\\\b\f\n\r\t]/;
+const regexSingleEscape = /[\\\b\f\n\r\t]/;
 
 const regexDigit = /[0-9]/;
-const regexWhitelist = /<%= whitelist %>/;
+
+const escapeEverythingRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])|([\uD800-\uDFFF])|(['"`])|[^]/g;
+const escapeNonAsciiRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])|([\uD800-\uDFFF])|(['"`])|[^<%= whitelist %>]/g;
 
 const jsesc = (argument, options) => {
 	const increaseIndentation = () => {
@@ -234,92 +244,68 @@ const jsesc = (argument, options) => {
 		}
 	}
 
-	const string = argument;
-	// Loop over each code unit in the string and escape it
-	let index = -1;
-	const length = string.length;
-	result = '';
-	while (++index < length) {
-		const character = string.charAt(index);
-		if (options.es6) {
-			const first = string.charCodeAt(index);
-			if ( // check if it’s the start of a surrogate pair
-				first >= 0xD800 && first <= 0xDBFF && // high surrogate
-				length > index + 1 // there is a next code unit
-			) {
-				const second = string.charCodeAt(index + 1);
-				if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
-					// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-					const codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
-					let hexadecimal = codePoint.toString(16);
-					if (!lowercaseHex) {
-						hexadecimal = hexadecimal.toUpperCase();
-					}
-					result += '\\u{' + hexadecimal + '}';
-					++index;
-					continue;
-				}
+	const regex = options.escapeEverything ? escapeEverythingRegex : escapeNonAsciiRegex;
+	result = argument.replace(regex, (char, pair, lone, quoteChar, index, string) => {
+		if (pair) {
+			if (options.minimal) return pair;
+			const first = pair.charCodeAt(0);
+			const second = pair.charCodeAt(1);
+			if (options.es6) {
+				// https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+				const codePoint = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
+				const hex = hexadecimal(codePoint, lowercaseHex);
+				return '\\u{' + hex + '}';
 			}
+			return fourHexEscape(hexadecimal(first, lowercaseHex)) + fourHexEscape(hexadecimal(second, lowercaseHex));
 		}
-		if (!options.escapeEverything) {
-			if (regexWhitelist.test(character)) {
-				// It’s a printable ASCII character that is not `"`, `'` or `\`,
-				// so don’t escape it.
-				result += character;
-				continue;
-			}
-			if (character == '"') {
-				result += quote == character ? '\\"' : character;
-				continue;
-			}
-			if (character == '`') {
-				result += quote == character ? '\\`' : character;
-				continue;
-			}
-			if (character == '\'') {
-				result += quote == character ? '\\\'' : character;
-				continue;
-			}
+
+		if (lone) {
+			return fourHexEscape(hexadecimal(lone.charCodeAt(0), lowercaseHex));
 		}
+
 		if (
-			character == '\0' &&
+			char == '\0' &&
 			!json &&
 			!regexDigit.test(string.charAt(index + 1))
 		) {
-			result += '\\0';
-			continue;
+			return '\\0';
 		}
-		if (regexSingleEscape.test(character)) {
+
+		if (quoteChar) {
+			if (quoteChar == quote || options.escapeEverything) {
+				return '\\' + quoteChar;
+			}
+			return quoteChar;
+		}
+
+		if (regexSingleEscape.test(char)) {
 			// no need for a `hasOwnProperty` check here
-			result += singleEscapes[character];
-			continue;
+			return singleEscapes[char];
 		}
-		const charCode = character.charCodeAt(0);
-		if (options.minimal && charCode != 0x2028 && charCode != 0x2029) {
-			result += character;
-			continue;
+
+		if (options.minimal && char != '\u2028' && char != '\u2029') {
+			return char;
 		}
-		let hexadecimal = charCode.toString(16);
-		if (!lowercaseHex) {
-			hexadecimal = hexadecimal.toUpperCase();
+
+		const hex = hexadecimal(char.charCodeAt(0), lowercaseHex);
+		if (json || hex.length > 2) {
+			return fourHexEscape(hex);
 		}
-		const longhand = hexadecimal.length > 2 || json;
-		const escaped = '\\' + (longhand ? 'u' : 'x') +
-			('0000' + hexadecimal).slice(longhand ? -4 : -2);
-		result += escaped;
-		continue;
-	}
-	if (options.wrap) {
-		result = quote + result + quote;
-	}
+
+		return '\\x' + ('00' + hex).slice(-2);
+	});
+
 	if (quote == '`') {
-		result = result.replace(/\$\{/g, '\\\$\{');
+		result = result.replace(/\$\{/g, '\\${');
 	}
 	if (options.isScriptContext) {
 		// https://mathiasbynens.be/notes/etago
-		return result
+		result = result
 			.replace(/<\/(script|style)/gi, '<\\/$1')
 			.replace(/<!--/g, json ? '\\u003C!--' : '\\x3C!--');
+	}
+	if (options.wrap) {
+		result = quote + result + quote;
 	}
 	return result;
 };
