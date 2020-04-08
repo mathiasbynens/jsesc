@@ -36,7 +36,7 @@ const hexadecimal = (code, lowercase) => {
 	let hexadecimal = code.toString(16);
 	if (lowercase) return hexadecimal;
 	return hexadecimal.toUpperCase();
-}
+};
 
 const toString = object.toString;
 const isArray = Array.isArray;
