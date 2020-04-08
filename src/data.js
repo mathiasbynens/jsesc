@@ -11,6 +11,6 @@ const set = regenerate()
 	.remove('`');         // not '`'
 
 module.exports = {
-	'whitelist': set.toString(),
+	'whitelist': set.toString().slice(1, -1),
 	'version': require('../package.json').version
 };
