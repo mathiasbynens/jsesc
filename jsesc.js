@@ -79,6 +79,7 @@ const singleEscapes = {
 const regexSingleEscape = /[\\\b\f\n\r\t]/;
 
 const regexDigit = /[0-9]/;
+const regexWhitespace = /[\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/;
 
 const escapeEverythingRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])|([\uD800-\uDFFF])|(['"`])|[^]/g;
 const escapeNonAsciiRegex = /([\uD800-\uDBFF][\uDC00-\uDFFF])|([\uD800-\uDFFF])|(['"`])|[^ !#-&\(-\[\]-_a-~]/g;
@@ -283,7 +284,7 @@ const jsesc = (argument, options) => {
 			return singleEscapes[char];
 		}
 
-		if (options.minimal && char != '\u2028' && char != '\u2029') {
+		if (options.minimal && !regexWhitespace.test(char)) {
 			return char;
 		}
 
