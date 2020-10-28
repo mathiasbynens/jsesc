@@ -41,7 +41,7 @@ const hexadecimal = (code, lowercase) => {
 const toString = object.toString;
 const isArray = Array.isArray;
 const isBuffer = (value) => {
-	return typeof Buffer !== 'undefined' && Buffer.isBuffer(value);
+	return typeof Buffer === 'function' && Buffer.isBuffer(value);
 };
 const isObject = (value) => {
 	// This is a very simple check, but it’s good enough for what we need.
