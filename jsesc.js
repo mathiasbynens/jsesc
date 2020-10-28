@@ -313,6 +313,6 @@ const jsesc = (argument, options) => {
 	return result;
 };
 
-jsesc.version = '3.0.1';
+jsesc.version = '3.0.2';
 
 module.exports = jsesc;
