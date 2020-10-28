@@ -40,7 +40,9 @@ const hexadecimal = (code, lowercase) => {
 
 const toString = object.toString;
 const isArray = Array.isArray;
-const isBuffer = Buffer.isBuffer;
+const isBuffer = (value) => {
+	return typeof Buffer === 'function' && Buffer.isBuffer(value);
+};
 const isObject = (value) => {
 	// This is a very simple check, but it’s good enough for what we need.
 	return toString.call(value) == '[object Object]';
