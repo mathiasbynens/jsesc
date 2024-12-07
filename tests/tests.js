@@ -597,6 +597,61 @@ describe('common usage', function() {
 			'\\u2192\\xE9\\u{1F4A9}',
 			'Alphabetical hexadecimal digits are uppercase when `lowercaseHex: false` and `es6: true`'
 		);
+    assert.equal(
+      jsesc([new Uint8Array(), new Uint8Array([1, 2, 3])]),
+      '[new Uint8Array(),new Uint8Array([1,2,3])]',
+      'Uint8Array'
+    );
+    assert.equal(
+      jsesc([new Uint8ClampedArray(), new Uint8ClampedArray([1, 2, 3])]),
+      '[new Uint8ClampedArray(),new Uint8ClampedArray([1,2,3])]',
+      'Uint8ClampedArray'
+    );
+    assert.equal(
+      jsesc([new Uint16Array(), new Uint16Array([1, 2, 3])]),
+      '[new Uint16Array(),new Uint16Array([1,2,3])]',
+      'Uint16Array'
+    );
+    assert.equal(
+      jsesc([new Uint32Array(), new Uint32Array([1, 2, 3])]),
+      '[new Uint32Array(),new Uint32Array([1,2,3])]',
+      'Uint32Array'
+    );
+    assert.equal(
+      jsesc([new BigUint64Array(), new BigUint64Array([1n, 2n, 3n])]),
+      '[new BigUint64Array(),new BigUint64Array([1n,2n,3n])]',
+      'BigUint64Array'
+    );
+    assert.equal(
+      jsesc([new Int8Array(), new Int8Array([-1, 2, 3])]),
+      '[new Int8Array(),new Int8Array([-1,2,3])]',
+      'Int8Array'
+    );
+    assert.equal(
+      jsesc([new Int16Array(), new Int16Array([-1, 2, 3])]),
+      '[new Int16Array(),new Int16Array([-1,2,3])]',
+      'Int16Array'
+    );
+    assert.equal(
+      jsesc([new Int32Array(), new Int32Array([-1, 2, 3])]),
+      '[new Int32Array(),new Int32Array([-1,2,3])]',
+      'Int32Array'
+    );
+    assert.equal(
+      jsesc([new BigInt64Array(), new BigInt64Array([-1n, 2n, 3n])]),
+      '[new BigInt64Array(),new BigInt64Array([-1n,2n,3n])]',
+      'BigInt64Array'
+    );
+    assert.equal(
+      jsesc([new Float32Array(), new Float32Array([1.5, 2.5, 4.5])]),
+      '[new Float32Array(),new Float32Array([1.5,2.5,4.5])]',
+      'Float32Array'
+    );
+    assert.equal(
+      jsesc([new Float64Array(), new Float64Array([1.5, 2.5, 4.5])]),
+      '[new Float64Array(),new Float64Array([1.5,2.5,4.5])]',
+      'Float64Array'
+    );
 	});
 });
 
