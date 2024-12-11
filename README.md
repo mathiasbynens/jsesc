@@ -1,4 +1,4 @@
-# jsesc [![Build status](https://travis-ci.org/mathiasbynens/jsesc.svg?branch=master)](https://travis-ci.org/mathiasbynens/jsesc) [![Code coverage status](https://coveralls.io/repos/mathiasbynens/jsesc/badge.svg)](https://coveralls.io/r/mathiasbynens/jsesc)
+# jsesc
 
 Given some data, _jsesc_ returns a stringified representation of that data. jsesc is similar to `JSON.stringify()` except:
 
