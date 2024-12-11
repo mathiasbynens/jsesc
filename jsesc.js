@@ -55,6 +55,9 @@ const isNumber = (value) => {
 	return typeof value == 'number' ||
 		toString.call(value) == '[object Number]';
 };
+const isBigInt = (value) => {
+  return typeof value == 'bigint';
+};
 const isFunction = (value) => {
 	return typeof value == 'function';
 };
@@ -197,28 +200,44 @@ const jsesc = (argument, options) => {
 			}
 			return '[' + newLine + result.join(',' + newLine) + newLine +
 				(compact ? '' : oldIndent) + ']';
-		} else if (isNumber(argument)) {
+		} else if (isNumber(argument) || isBigInt(argument)) {
 			if (json) {
 				// Some number values (e.g. `Infinity`) cannot be represented in JSON.
-				return JSON.stringify(argument);
+				// `BigInt` values less than `-Number.MAX_VALUE` or greater than
+        // `Number.MAX_VALUE` cannot be represented in JSON so they will become
+        // `-Infinity` or `Infinity`, respectively, and then become `null` when
+        // stringified.
+				return JSON.stringify(Number(argument));
 			}
+
+      let result;
 			if (useDecNumbers) {
-				return String(argument);
-			}
-			if (useHexNumbers) {
+				result = String(argument);
+			} else if (useHexNumbers) {
 				let hexadecimal = argument.toString(16);
 				if (!lowercaseHex) {
 					hexadecimal = hexadecimal.toUpperCase();
 				}
-				return '0x' + hexadecimal;
+				result = '0x' + hexadecimal;
+			} else if (useBinNumbers) {
+				result = '0b' + argument.toString(2);
+			} else if (useOctNumbers) {
+				result = '0o' + argument.toString(8);
 			}
-			if (useBinNumbers) {
-				return '0b' + argument.toString(2);
+
+      if (isBigInt(argument)) {
+        return result + 'n';
+      }
+      return result;
+		} else if (isBigInt(argument)) {
+			if (json) {
+				// `BigInt` values less than `-Number.MAX_VALUE` or greater than
+        // `Number.MAX_VALUE` will become `-Infinity` or `Infinity`,
+        // respectively, and cannot be represented in JSON.
+				return JSON.stringify(Number(argument));
 			}
-			if (useOctNumbers) {
-				return '0o' + argument.toString(8);
-			}
-		} else if (!isObject(argument)) {
+      return argument + 'n';
+    } else if (!isObject(argument)) {
 			if (json) {
 				// For some values (e.g. `undefined`, `function` objects),
 				// `JSON.stringify(value)` returns `undefined` (which isn’t valid
