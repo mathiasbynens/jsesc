@@ -70,6 +70,20 @@ const isSet = (value) => {
 
 /*--------------------------------------------------------------------------*/
 
+const typedArrayClassNames = [
+  'Uint8Array',
+  'Uint8ClampedArray',
+  'Uint16Array',
+  'Uint32Array',
+  'BigUint64Array',
+  'Int8Array',
+  'Int16Array',
+  'Int32Array',
+  'BigInt64Array',
+  'Float32Array',
+  'Float64Array'
+]
+
 // https://mathiasbynens.be/notes/javascript-escapes#single
 const singleEscapes = {
 	'\\': '\\\\',
@@ -172,6 +186,16 @@ const jsesc = (argument, options) => {
 			}
 			return 'Buffer.from(' + jsesc(Array.from(argument), options) + ')';
 		}
+    const typedArrayClassName = typedArrayClassNames.find(
+      typedArray => toString.call(argument) == '[object ' + typedArray + ']'
+    );
+    if (typedArrayClassName) {
+      if (argument.length == 0) {
+        return 'new ' + typedArrayClassName + '()';
+      }
+      return 'new ' + typedArrayClassName + '(' +
+        jsesc(Array.from(argument), options) + ')';
+    }
 		if (isArray(argument)) {
 			result = [];
 			options.wrap = true;
@@ -332,6 +356,6 @@ const jsesc = (argument, options) => {
 	return result;
 };
 
-jsesc.version = '3.0.2';
+jsesc.version = '3.1.0';
 
 module.exports = jsesc;
