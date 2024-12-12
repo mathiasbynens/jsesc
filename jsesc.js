@@ -210,6 +210,14 @@ const jsesc = (argument, options) => {
 				return JSON.stringify(Number(argument));
 			}
 
+      let negative = false;
+      if (argument < 0) {
+        negative = true;
+        // Use the BigInt constructor instead of `-1n` so that we still support
+        // older node versions.
+        argument *= isBigInt(argument) ? BigInt('-1') : -1;
+      }
+
       let result;
 			if (useDecNumbers) {
 				result = String(argument);
@@ -226,18 +234,15 @@ const jsesc = (argument, options) => {
 			}
 
       if (isBigInt(argument)) {
-        return result + 'n';
+        result += 'n';
       }
+
+      if (negative) {
+        result = '-' + result;
+      }
+
       return result;
-		} else if (isBigInt(argument)) {
-			if (json) {
-				// `BigInt` values less than `-Number.MAX_VALUE` or greater than
-        // `Number.MAX_VALUE` will become `-Infinity` or `Infinity`,
-        // respectively, and cannot be represented in JSON.
-				return JSON.stringify(Number(argument));
-			}
-      return argument + 'n';
-    } else if (!isObject(argument)) {
+		} else if (!isObject(argument)) {
 			if (json) {
 				// For some values (e.g. `undefined`, `function` objects),
 				// `JSON.stringify(value)` returns `undefined` (which isn’t valid
@@ -332,6 +337,6 @@ const jsesc = (argument, options) => {
 	return result;
 };
 
-jsesc.version = '3.0.2';
+jsesc.version = '3.1.0';
 
 module.exports = jsesc;
