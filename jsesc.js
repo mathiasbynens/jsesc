@@ -213,16 +213,23 @@ const jsesc = (argument, options) => {
       let result;
 			if (useDecNumbers) {
 				result = String(argument);
-			} else if (useHexNumbers) {
-				let hexadecimal = argument.toString(16);
-				if (!lowercaseHex) {
-					hexadecimal = hexadecimal.toUpperCase();
+			} else {
+				// `toString(radix)` keeps the minus sign next to the digits, which
+				// would leave it after the radix prefix (e.g. `0x-2A`, invalid JS).
+				// Hoist the sign so the result is a valid signed numeric literal.
+				const sign = argument < 0 ? '-' : '';
+				const magnitude = argument < 0 ? -argument : argument;
+				if (useHexNumbers) {
+					let hexadecimal = magnitude.toString(16);
+					if (!lowercaseHex) {
+						hexadecimal = hexadecimal.toUpperCase();
+					}
+					result = sign + '0x' + hexadecimal;
+				} else if (useBinNumbers) {
+					result = sign + '0b' + magnitude.toString(2);
+				} else if (useOctNumbers) {
+					result = sign + '0o' + magnitude.toString(8);
 				}
-				result = '0x' + hexadecimal;
-			} else if (useBinNumbers) {
-				result = '0b' + argument.toString(2);
-			} else if (useOctNumbers) {
-				result = '0o' + argument.toString(8);
 			}
 
       if (isBigInt(argument)) {
