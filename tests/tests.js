@@ -3,6 +3,28 @@
 const assert = require('assert');
 const jsesc = require('../jsesc.js');
 
+describe('JSON collections', function() {
+	[new Map([['entry', 'ignored']]), new Set(['ignored'])].forEach(function(collection) {
+		it('serializes ' + collection.constructor.name + ' as a JSON object', function() {
+			assert.strictEqual(jsesc(collection, { 'json': true }), '{}');
+			collection.title = 'caf\u00E9';
+			collection.child = new Map([['entry', 'ignored']]);
+			Object.defineProperty(collection, 'hidden', { 'value': 'ignored' });
+			const output = jsesc({ 'collection': collection }, { 'json': true });
+			assert.deepStrictEqual(JSON.parse(output), {
+				'collection': { 'title': 'caf\u00E9', 'child': {} }
+			});
+			assert.strictEqual(output.includes('\u00E9'), false);
+			collection.toJSON = function() { return 'custom'; };
+			assert.strictEqual(jsesc(collection, { 'json': true }), '"custom"');
+		});
+	});
+	it('keeps JavaScript Map and Set constructors outside JSON mode', function() {
+		assert.strictEqual(jsesc(new Map([[1, 2]])), 'new Map([[1,2]])');
+		assert.strictEqual(jsesc(new Set([1, 2])), 'new Set([1,2])');
+	});
+});
+
 describe('common usage', function() {
 	it('works correctly for common operations', function() {
 		assert.equal(

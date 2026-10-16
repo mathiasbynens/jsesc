@@ -150,7 +150,7 @@ const jsesc = (argument, options) => {
 	}
 
 	if (!isString(argument)) {
-		if (isMap(argument)) {
+		if (!json && isMap(argument)) {
 			if (argument.size == 0) {
 				return 'new Map()';
 			}
@@ -160,7 +160,7 @@ const jsesc = (argument, options) => {
 			}
 			return 'new Map(' + jsesc(Array.from(argument), options) + ')';
 		}
-		if (isSet(argument)) {
+		if (!json && isSet(argument)) {
 			if (argument.size == 0) {
 				return 'new Set()';
 			}
@@ -237,7 +237,7 @@ const jsesc = (argument, options) => {
 				return JSON.stringify(Number(argument));
 			}
       return argument + 'n';
-    } else if (!isObject(argument)) {
+    } else if (!isObject(argument) && !(json && (isMap(argument) || isSet(argument)))) {
 			if (json) {
 				// For some values (e.g. `undefined`, `function` objects),
 				// `JSON.stringify(value)` returns `undefined` (which isn’t valid
