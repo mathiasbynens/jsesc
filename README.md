@@ -109,6 +109,7 @@ jsesc([ 'Ich ♥ Bücher', 'foo 𝌆 bar' ], {
 #### `numbers`
 
 The default value for the `numbers` option is `'decimal'`. This means that any numeric values are represented using decimal integer literals. Other valid options are `binary`, `octal`, and `hexadecimal`, which result in binary integer literals, octal integer literals, and hexadecimal integer literals, respectively.
+Number values that are not finite integers use the default representation instead.
 
 ```js
 jsesc(42, {

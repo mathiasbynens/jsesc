@@ -211,7 +211,7 @@ const jsesc = (argument, options) => {
 			}
 
       let result;
-			if (useDecNumbers) {
+			if (useDecNumbers || (isNumber(argument) && !Number.isInteger(Number.prototype.valueOf.call(argument)))) {
 				result = String(argument);
 			} else if (useHexNumbers) {
 				let hexadecimal = argument.toString(16);
